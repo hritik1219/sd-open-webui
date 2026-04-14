@@ -12,6 +12,8 @@
 	import MicSolid from '$lib/components/icons/MicSolid.svelte';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import VoiceRecording from '$lib/components/chat/MessageInput/VoiceRecording.svelte';
+	import { theme } from '$lib/stores';
+	import { getDialogPrimaryButtonClasses } from '$lib/utils/theme';
 	export let show = false;
 
 	let name = $i18n.t('Untitled');
@@ -134,7 +136,9 @@
 				<div class=" shrink-0">
 					<Tooltip content={$i18n.t('Save')}>
 						<button
-							class=" px-3.5 py-2 bg-black text-white dark:bg-white dark:text-black transition rounded-full"
+							class={$theme === 'snapdeal'
+								? `px-3.5 py-2 transition rounded-full ${getDialogPrimaryButtonClasses($theme)}`
+								: 'px-3.5 py-2 bg-black text-white dark:bg-white dark:text-black transition rounded-full'}
 							type="submit"
 						>
 							{$i18n.t('Save')}

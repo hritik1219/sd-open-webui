@@ -46,7 +46,8 @@
 		selectedTerminalId,
 		showFileNavPath,
 		showFileNavDir,
-		chatRequestQueues
+		chatRequestQueues,
+		theme
 	} from '$lib/stores';
 
 	import { WEBUI_API_BASE_URL } from '$lib/constants';
@@ -107,6 +108,7 @@
 	import Sidebar from '../icons/Sidebar.svelte';
 	import Image from '../common/Image.svelte';
 	import { getBanners } from '$lib/apis/configs';
+	import { isSnapdealTheme } from '$lib/utils/theme';
 
 	export let chatIdProp = '';
 
@@ -2711,13 +2713,17 @@
 />
 
 <div
-	class="h-screen max-h-[100dvh] transition-width duration-200 ease-in-out {$showSidebar
+	class="relative overflow-hidden h-screen max-h-[100dvh] transition-[max-width] duration-300 ease-out {$showSidebar
 		? '  md:max-w-[calc(100%-var(--sidebar-width))]'
 		: ' '} w-full max-w-full flex flex-col"
 	id="chat-container"
 >
 	{#if !loading}
 		<div in:fade={{ duration: 50 }} class="w-full h-full flex flex-col">
+			{#if isSnapdealTheme($theme) && !($selectedFolder && $selectedFolder?.meta?.background_image_url) && !($settings?.backgroundImageUrl ?? $config?.license_metadata?.background_image_url ?? null)}
+				<div class="absolute inset-0 snapdeal-chat-canvas z-0" />
+			{/if}
+
 			{#if $selectedFolder && $selectedFolder?.meta?.background_image_url}
 				<div
 					class="absolute top-0 left-0 w-full h-full bg-cover bg-center bg-no-repeat"

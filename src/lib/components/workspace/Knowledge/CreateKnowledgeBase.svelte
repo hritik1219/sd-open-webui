@@ -10,6 +10,8 @@
 
 	import AccessControl from '../common/AccessControl.svelte';
 	import Spinner from '$lib/components/common/Spinner.svelte';
+	import { theme } from '$lib/stores';
+	import { getPrimaryButtonClasses } from '$lib/utils/theme';
 
 	let loading = false;
 
@@ -123,9 +125,9 @@
 		<div class="flex justify-end mt-2">
 			<div>
 				<button
-					class=" text-sm px-4 py-2 transition rounded-lg {loading
-						? ' cursor-not-allowed bg-gray-100 dark:bg-gray-800'
-						: ' bg-gray-50 hover:bg-gray-100 dark:bg-gray-850 dark:hover:bg-gray-800'} flex"
+					class={$theme === 'snapdeal'
+						? `text-sm px-4 py-2 transition rounded-lg flex items-center ${loading ? 'cursor-not-allowed' : ''} ${getPrimaryButtonClasses($theme)}`
+						: `text-sm px-4 py-2 transition rounded-lg flex items-center ${loading ? ' cursor-not-allowed bg-gray-100 dark:bg-gray-800' : ' bg-gray-50 hover:bg-gray-100 dark:bg-gray-850 dark:hover:bg-gray-800'}`}
 					type="submit"
 					disabled={loading}
 				>

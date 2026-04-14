@@ -15,6 +15,8 @@
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import LockClosed from '$lib/components/icons/LockClosed.svelte';
 	import AccessControlModal from '../common/AccessControlModal.svelte';
+	import { theme } from '$lib/stores';
+	import { getDialogPrimaryButtonClasses } from '$lib/utils/theme';
 
 	let formElement = null;
 	let loading = false;
@@ -333,7 +335,9 @@ class Tools:
 					</div>
 
 					<button
-						class="px-3.5 py-1.5 text-sm font-medium bg-black hover:bg-gray-900 text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full"
+						class={$theme === 'snapdeal'
+							? `px-3.5 py-1.5 text-sm font-medium transition rounded-full ${getDialogPrimaryButtonClasses($theme)}`
+							: 'px-3.5 py-1.5 text-sm font-medium bg-black hover:bg-gray-900 text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full'}
 						type="submit"
 					>
 						{$i18n.t('Save')}

@@ -2,9 +2,17 @@
 	import { onMount, getContext } from 'svelte';
 	import { goto } from '$app/navigation';
 
-	import { WEBUI_NAME, config, mobile, showSidebar, user } from '$lib/stores';
+	import { WEBUI_NAME, config, mobile, showSidebar, theme, user } from '$lib/stores';
 	import { page } from '$app/stores';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
+	import {
+		getTopBarActionClasses,
+		getTopBarActiveTabClasses,
+		getTopBarInactiveTabClasses,
+		getTopBarRailClasses,
+		getTopBarShellClasses,
+		isSnapdealTheme
+	} from '$lib/utils/theme';
 
 	import Sidebar from '$lib/components/icons/Sidebar.svelte';
 
@@ -28,12 +36,16 @@
 
 {#if loaded}
 	<div
-		class=" flex flex-col h-screen max-h-[100dvh] flex-1 transition-width duration-200 ease-in-out {$showSidebar
+		class=" flex flex-col h-screen max-h-[100dvh] flex-1 transition-[max-width] duration-300 ease-out {$showSidebar
 			? 'md:max-w-[calc(100%-var(--sidebar-width))]'
 			: ' md:max-w-[calc(100%-49px)]'}  w-full max-w-full"
 	>
-		<nav class="   px-2.5 pt-1.5 backdrop-blur-xl drag-region select-none">
-			<div class=" flex items-center gap-1">
+		<nav class="px-2 pt-1.5 backdrop-blur-xl drag-region select-none">
+			<div
+				class="flex items-center gap-1 {getTopBarShellClasses($theme)} {isSnapdealTheme($theme)
+					? 'px-2 py-1'
+					: ''}"
+			>
 				{#if $mobile}
 					<div class="{$showSidebar ? 'md:hidden' : ''} flex flex-none items-center self-end">
 						<Tooltip
@@ -42,7 +54,7 @@
 						>
 							<button
 								id="sidebar-toggle-button"
-								class=" cursor-pointer flex rounded-lg hover:bg-gray-100 dark:hover:bg-gray-850 transition cursor-"
+								class="cursor-pointer flex rounded-xl transition {getTopBarActionClasses($theme)}"
 								on:click={() => {
 									showSidebar.set(!$showSidebar);
 								}}
@@ -57,13 +69,17 @@
 
 				<div class=" flex w-full">
 					<div
-						class="flex gap-1 scrollbar-none overflow-x-auto w-fit text-center text-sm font-medium rounded-full bg-transparent pt-1"
+						class="flex gap-1 scrollbar-none overflow-x-auto w-fit text-center text-sm font-medium {isSnapdealTheme(
+							$theme
+						)
+							? `pt-1 px-1.5 py-1 ${getTopBarRailClasses($theme)}`
+							: 'rounded-full bg-transparent pt-1'}"
 					>
 						<a
 							draggable="false"
 							class="min-w-fit p-1.5 {$page.url.pathname.includes('/admin/users')
-								? ''
-								: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'} transition select-none"
+								? getTopBarActiveTabClasses($theme)
+								: getTopBarInactiveTabClasses($theme)} transition select-none"
 							href="/admin">{$i18n.t('Users')}</a
 						>
 
@@ -71,8 +87,8 @@
 							<a
 								draggable="false"
 								class="min-w-fit p-1.5 {$page.url.pathname.includes('/admin/analytics')
-									? ''
-									: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'} transition select-none"
+									? getTopBarActiveTabClasses($theme)
+									: getTopBarInactiveTabClasses($theme)} transition select-none"
 								href="/admin/analytics">{$i18n.t('Analytics')}</a
 							>
 						{/if}
@@ -80,24 +96,24 @@
 						<a
 							draggable="false"
 							class="min-w-fit p-1.5 {$page.url.pathname.includes('/admin/evaluations')
-								? ''
-								: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'} transition select-none"
+								? getTopBarActiveTabClasses($theme)
+								: getTopBarInactiveTabClasses($theme)} transition select-none"
 							href="/admin/evaluations">{$i18n.t('Evaluations')}</a
 						>
 
 						<a
 							draggable="false"
 							class="min-w-fit p-1.5 {$page.url.pathname.includes('/admin/functions')
-								? ''
-								: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'} transition select-none"
+								? getTopBarActiveTabClasses($theme)
+								: getTopBarInactiveTabClasses($theme)} transition select-none"
 							href="/admin/functions">{$i18n.t('Functions')}</a
 						>
 
 						<a
 							draggable="false"
 							class="min-w-fit p-1.5 {$page.url.pathname.includes('/admin/settings')
-								? ''
-								: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'} transition select-none"
+								? getTopBarActiveTabClasses($theme)
+								: getTopBarInactiveTabClasses($theme)} transition select-none"
 							href="/admin/settings">{$i18n.t('Settings')}</a
 						>
 					</div>

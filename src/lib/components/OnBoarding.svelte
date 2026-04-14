@@ -1,8 +1,11 @@
 <script>
-	import { getContext, onMount } from 'svelte';
+	import { getContext } from 'svelte';
 	const i18n = getContext('i18n');
 
 	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { theme } from '$lib/stores';
+	import SnapdealWordmark from '$lib/components/branding/SnapdealWordmark.svelte';
+	import { isSnapdealTheme } from '$lib/utils/theme';
 
 	import Marquee from './common/Marquee.svelte';
 	import SlideShow from './common/SlideShow.svelte';
@@ -43,13 +46,23 @@
 		<div class="fixed m-10 z-50">
 			<div class="flex space-x-2">
 				<div class=" self-center">
-					<img
-						id="logo"
-						crossorigin="anonymous"
-						src="{WEBUI_BASE_URL}/static/favicon.png"
-						class=" w-6 rounded-full"
-						alt="logo"
-					/>
+					{#if isSnapdealTheme($theme)}
+						<div class="snapdeal-brand-shell px-3 py-2">
+							<SnapdealWordmark
+								compact
+								iconClassName="h-[1.45rem] w-auto"
+								textClassName="h-[1.22rem] w-auto"
+							/>
+						</div>
+					{:else}
+						<img
+							id="logo"
+							crossorigin="anonymous"
+							src="{WEBUI_BASE_URL}/static/favicon.png"
+							class=" w-6 rounded-full"
+							alt="logo"
+						/>
+					{/if}
 				</div>
 			</div>
 		</div>

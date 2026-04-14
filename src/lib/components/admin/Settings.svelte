@@ -4,8 +4,14 @@
 	import { goto } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
 
-	import { config } from '$lib/stores';
+	import { config, theme } from '$lib/stores';
 	import { getBackendConfig } from '$lib/apis';
+	import {
+		getActiveTabClasses,
+		getInactiveTabClasses,
+		getSearchShellClasses,
+		isSnapdealTheme
+	} from '$lib/utils/theme';
 	import Database from './Settings/Database.svelte';
 
 	import General from './Settings/General.svelte';
@@ -291,7 +297,11 @@
 		class="tabs mx-[16px] lg:mx-0 lg:px-[16px] flex flex-row overflow-x-auto gap-2.5 max-w-full lg:gap-1 lg:flex-col lg:flex-none lg:w-50 dark:text-gray-200 text-sm font-medium text-left scrollbar-none"
 	>
 		<div
-			class="hidden md:flex w-full rounded-full px-2.5 gap-2 bg-gray-100/80 dark:bg-gray-850/80 backdrop-blur-2xl my-1 -mx-1 mt-1.5"
+			class="hidden md:flex w-full rounded-full px-2.5 gap-2 backdrop-blur-2xl my-1 -mx-1 mt-1.5 {isSnapdealTheme(
+				$theme
+			)
+				? getSearchShellClasses($theme)
+				: 'bg-gray-100/80 dark:bg-gray-850/80'}"
 			id="settings-search"
 		>
 			<div class="self-center rounded-l-xl bg-transparent">
@@ -327,8 +337,8 @@
 				draggable="false"
 				class="px-0.5 py-1 min-w-fit rounded-lg flex-1 lg:flex-none flex text-right transition select-none {selectedTab ===
 				tab.id
-					? ''
-					: ' text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'}"
+					? getActiveTabClasses($theme)
+					: getInactiveTabClasses($theme)}"
 			>
 				<div class=" self-center mr-2">
 					{#if tab.id === 'general'}

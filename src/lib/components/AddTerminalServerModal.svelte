@@ -3,7 +3,7 @@
 	import { getContext, onMount } from 'svelte';
 	const i18n = getContext('i18n');
 
-	import { settings } from '$lib/stores';
+	import { settings, theme } from '$lib/stores';
 
 	import Modal from '$lib/components/common/Modal.svelte';
 	import SensitiveInput from '$lib/components/common/SensitiveInput.svelte';
@@ -12,6 +12,7 @@
 	import LockClosed from '$lib/components/icons/LockClosed.svelte';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import ConfirmDialog from '$lib/components/common/ConfirmDialog.svelte';
+	import { getDialogPrimaryButtonClasses } from '$lib/utils/theme';
 	import {
 		detectTerminalServerType,
 		verifyTerminalServerConnection,
@@ -725,7 +726,9 @@
 							</div>
 
 							<button
-								class="px-3.5 py-1.5 text-sm font-medium bg-black hover:bg-gray-900 text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full flex flex-row space-x-1 items-center"
+								class="px-3.5 py-1.5 text-sm font-medium transition rounded-full flex flex-row space-x-1 items-center {getDialogPrimaryButtonClasses(
+									$theme
+								)}"
 								type="submit"
 							>
 								{$i18n.t('Save')}

@@ -2,6 +2,11 @@
 	import { getContext, tick, onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { theme } from '$lib/stores';
+	import {
+		getActiveTabClasses,
+		getInactiveTabClasses
+	} from '$lib/utils/theme';
 
 	import Leaderboard from './Evaluations/Leaderboard.svelte';
 	import Feedbacks from './Evaluations/Feedbacks.svelte';
@@ -60,8 +65,8 @@
 				draggable="false"
 				class="px-0.5 py-1 min-w-fit rounded-lg lg:flex-none flex text-right transition select-none {selectedTab ===
 				'leaderboard'
-					? ''
-					: ' text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'}"
+					? getActiveTabClasses($theme)
+					: getInactiveTabClasses($theme)}"
 			>
 				<div class=" self-center mr-2">
 					<svg
@@ -86,8 +91,8 @@
 				draggable="false"
 				class="px-0.5 py-1 min-w-fit rounded-lg lg:flex-none flex text-right transition select-none {selectedTab ===
 				'feedback'
-					? ''
-					: ' text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'}"
+					? getActiveTabClasses($theme)
+					: getInactiveTabClasses($theme)}"
 			>
 				<div class=" self-center mr-2">
 					<svg

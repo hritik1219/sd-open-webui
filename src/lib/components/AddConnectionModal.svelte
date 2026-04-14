@@ -19,6 +19,8 @@
 	import Spinner from '$lib/components/common/Spinner.svelte';
 	import XMark from '$lib/components/icons/XMark.svelte';
 	import Textarea from './common/Textarea.svelte';
+	import { theme } from '$lib/stores';
+	import { getDialogPrimaryButtonClasses } from '$lib/utils/theme';
 
 	export let onSubmit: Function = () => {};
 	export let onDelete: Function = () => {};
@@ -701,13 +703,13 @@
 							{/if}
 						</div>
 
-						<button
-							class="px-3.5 py-1.5 text-sm font-medium bg-black hover:bg-gray-900 text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full flex items-center gap-2 whitespace-nowrap {loading
-								? ' cursor-not-allowed'
-								: ''}"
-							type="submit"
-							disabled={loading}
-						>
+					<button
+						class={$theme === 'snapdeal'
+							? `px-3.5 py-1.5 text-sm font-medium transition rounded-full flex items-center gap-2 whitespace-nowrap ${getDialogPrimaryButtonClasses($theme)} ${loading ? 'cursor-not-allowed' : ''}`
+							: `px-3.5 py-1.5 text-sm font-medium bg-black hover:bg-gray-900 text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full flex items-center gap-2 whitespace-nowrap ${loading ? ' cursor-not-allowed' : ''}`}
+						type="submit"
+						disabled={loading}
+					>
 							{$i18n.t('Save')}
 
 							{#if loading}

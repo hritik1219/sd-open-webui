@@ -11,6 +11,8 @@
 	import { generateInitialsImage } from '$lib/utils';
 	import XMark from '$lib/components/icons/XMark.svelte';
 	import SensitiveInput from '$lib/components/common/SensitiveInput.svelte';
+	import { theme } from '$lib/stores';
+	import { getDialogPrimaryButtonClasses } from '$lib/utils/theme';
 
 	const i18n = getContext('i18n');
 	const dispatch = createEventDispatcher();
@@ -285,9 +287,9 @@
 
 					<div class="flex justify-end pt-3 text-sm font-medium">
 						<button
-							class="px-3.5 py-1.5 text-sm font-medium bg-black hover:bg-gray-900 text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full flex items-center gap-2 whitespace-nowrap {loading
-								? ' cursor-not-allowed'
-								: ''}"
+							class={$theme === 'snapdeal'
+								? `px-3.5 py-1.5 text-sm font-medium transition rounded-full flex items-center gap-2 whitespace-nowrap ${getDialogPrimaryButtonClasses($theme)} ${loading ? 'cursor-not-allowed' : ''}`
+								: `px-3.5 py-1.5 text-sm font-medium bg-black hover:bg-gray-900 text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full flex items-center gap-2 whitespace-nowrap ${loading ? ' cursor-not-allowed' : ''}`}
 							type="submit"
 							disabled={loading}
 						>

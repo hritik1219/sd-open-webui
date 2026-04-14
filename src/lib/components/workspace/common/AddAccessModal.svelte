@@ -5,6 +5,8 @@
 	import Modal from '$lib/components/common/Modal.svelte';
 	import XMark from '$lib/components/icons/XMark.svelte';
 	import MemberSelector from '$lib/components/workspace/common/MemberSelector.svelte';
+	import { theme } from '$lib/stores';
+	import { getDialogPrimaryButtonClasses } from '$lib/utils/theme';
 
 	export let show = false;
 	export let shareUsers = true;
@@ -63,7 +65,9 @@
 
 					<div class="flex justify-end pt-3 text-sm font-medium gap-1.5">
 						<button
-							class="px-3.5 py-1.5 text-sm font-medium bg-black hover:bg-gray-950 text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full flex flex-row space-x-1 items-center"
+							class={$theme === 'snapdeal'
+								? `px-3.5 py-1.5 text-sm font-medium transition rounded-full flex flex-row space-x-1 items-center ${getDialogPrimaryButtonClasses($theme)}`
+								: 'px-3.5 py-1.5 text-sm font-medium bg-black hover:bg-gray-950 text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full flex flex-row space-x-1 items-center'}
 							type="submit"
 						>
 							{$i18n.t('Add')}

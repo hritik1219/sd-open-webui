@@ -7,9 +7,24 @@
 	import { getUsage } from '$lib/apis';
 	import { getSessionUser, userSignOut } from '$lib/apis/auths';
 
-	import { showSettings, mobile, showSidebar, showShortcuts, user, config } from '$lib/stores';
+	import {
+		showSettings,
+		mobile,
+		showSidebar,
+		showShortcuts,
+		user,
+		config,
+		theme
+	} from '$lib/stores';
 
 	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import SnapdealWordmark from '$lib/components/branding/SnapdealWordmark.svelte';
+	import {
+		getMenuItemClasses,
+		getMenuPanelClasses,
+		getSoftButtonClasses,
+		isSnapdealTheme
+	} from '$lib/utils/theme';
 
 	import Dropdown from '$lib/components/common/Dropdown.svelte';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
@@ -83,14 +98,24 @@
 
 	<div slot="content">
 		<div
-			class="{className} rounded-2xl px-1 py-1 border border-gray-100 dark:border-gray-800 z-50 bg-white dark:bg-gray-850 dark:text-white shadow-lg text-sm"
+			class="{className} rounded-2xl px-1 py-1 border z-50 shadow-lg text-sm {getMenuPanelClasses(
+				$theme
+			)}"
 		>
 			{#if profile}
 				<div class=" flex gap-3.5 w-full p-2.5 items-center">
+					{#if isSnapdealTheme($theme)}
+						<div class="snapdeal-brand-shell px-2.5 py-1.5 shrink-0">
+							<SnapdealWordmark compact iconOnly iconClassName="h-[1.1rem] w-auto" />
+						</div>
+					{/if}
+
 					<div class=" items-center flex shrink-0">
 						<img
 							src={`${WEBUI_API_BASE_URL}/users/${$user?.id}/profile/image`}
-							class=" size-10 object-cover rounded-full"
+							class="{isSnapdealTheme($theme)
+								? 'size-10 border-2 border-white shadow-sm'
+								: 'size-10'} object-cover rounded-full"
 							alt="profile"
 						/>
 					</div>
@@ -125,7 +150,9 @@
 				{#if $user?.status_emoji || $user?.status_message}
 					<div class="mx-1">
 						<button
-							class="mb-1 w-full gap-2 px-2.5 py-1.5 rounded-xl bg-gray-50 dark:text-white dark:bg-gray-900/50 text-black transition text-xs flex items-center"
+							class="mb-1 w-full gap-2 px-2.5 py-1.5 rounded-xl transition text-xs flex items-center {getSoftButtonClasses(
+								$theme
+							)}"
 							type="button"
 							on:click={() => {
 								show = false;
@@ -176,7 +203,9 @@
 				{:else}
 					<div class="mx-1">
 						<button
-							class="mb-1 w-full px-3 py-1.5 gap-1 rounded-xl bg-gray-50 dark:text-white dark:bg-gray-900/50 text-black transition text-xs flex items-center justify-center"
+							class="mb-1 w-full px-3 py-1.5 gap-1 rounded-xl transition text-xs flex items-center justify-center {getSoftButtonClasses(
+								$theme
+							)}"
 							type="button"
 							on:click={() => {
 								show = false;
@@ -191,11 +220,17 @@
 					</div>
 				{/if}
 
-				<hr class=" border-gray-50/30 dark:border-gray-800/30 my-1.5 p-0" />
+				<hr
+					class="my-1.5 p-0 {isSnapdealTheme($theme)
+						? 'snapdeal-divider'
+						: 'border-gray-50/30 dark:border-gray-800/30'}"
+				/>
 			{/if}
 
 			<button
-				class="flex rounded-xl py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition cursor-pointer select-none"
+				class="flex rounded-xl py-1.5 px-3 w-full transition cursor-pointer select-none {getMenuItemClasses(
+					$theme
+				)}"
 				type="button"
 				on:click={async () => {
 					show = false;
@@ -215,7 +250,9 @@
 			</button>
 
 			<button
-				class="flex rounded-xl py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition cursor-pointer select-none"
+				class="flex rounded-xl py-1.5 px-3 w-full transition cursor-pointer select-none {getMenuItemClasses(
+					$theme
+				)}"
 				type="button"
 				on:click={async () => {
 					show = false;
@@ -239,7 +276,9 @@
 				<a
 					href="/playground"
 					draggable="false"
-					class="flex rounded-xl py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition cursor-pointer select-none"
+					class="flex rounded-xl py-1.5 px-3 w-full transition cursor-pointer select-none {getMenuItemClasses(
+						$theme
+					)}"
 					on:click={async (e) => {
 						if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) {
 							return;
@@ -261,7 +300,9 @@
 				<a
 					href="/admin"
 					draggable="false"
-					class="flex rounded-xl py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition cursor-pointer select-none"
+					class="flex rounded-xl py-1.5 px-3 w-full transition cursor-pointer select-none {getMenuItemClasses(
+						$theme
+					)}"
 					on:click={async (e) => {
 						if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) {
 							return;
@@ -283,7 +324,11 @@
 			{/if}
 
 			{#if help}
-				<hr class=" border-gray-50/30 dark:border-gray-800/30 my-1 p-0" />
+				<hr
+					class="my-1 p-0 {isSnapdealTheme($theme)
+						? 'snapdeal-divider'
+						: 'border-gray-50/30 dark:border-gray-800/30'}"
+				/>
 
 				<!-- {$i18n.t('Help')} -->
 
@@ -292,7 +337,9 @@
 						href="https://docs.openwebui.com"
 						target="_blank"
 						draggable="false"
-						class="flex rounded-xl py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition cursor-pointer select-none"
+						class="flex rounded-xl py-1.5 px-3 w-full transition cursor-pointer select-none {getMenuItemClasses(
+							$theme
+						)}"
 						id="chat-share-button"
 						on:click={() => {
 							show = false;
@@ -309,7 +356,9 @@
 						href="https://github.com/open-webui/open-webui/releases"
 						target="_blank"
 						draggable="false"
-						class="flex rounded-xl py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition cursor-pointer select-none"
+						class="flex rounded-xl py-1.5 px-3 w-full transition cursor-pointer select-none {getMenuItemClasses(
+							$theme
+						)}"
 						id="chat-share-button"
 						on:click={() => {
 							show = false;
@@ -323,7 +372,9 @@
 				{/if}
 
 				<button
-					class="flex rounded-xl py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition cursor-pointer select-none"
+					class="flex rounded-xl py-1.5 px-3 w-full transition cursor-pointer select-none {getMenuItemClasses(
+						$theme
+					)}"
 					type="button"
 					id="chat-share-button"
 					on:click={async () => {
@@ -343,10 +394,16 @@
 				</button>
 			{/if}
 
-			<hr class=" border-gray-50/30 dark:border-gray-800/30 my-1 p-0" />
+			<hr
+				class="my-1 p-0 {isSnapdealTheme($theme)
+					? 'snapdeal-divider'
+					: 'border-gray-50/30 dark:border-gray-800/30'}"
+			/>
 
 			<button
-				class="flex rounded-xl py-1.5 px-3 w-full hover:bg-gray-50 dark:hover:bg-gray-800 transition cursor-pointer select-none"
+				class="flex rounded-xl py-1.5 px-3 w-full transition cursor-pointer select-none {getMenuItemClasses(
+					$theme
+				)}"
 				type="button"
 				on:click={async () => {
 					const res = await userSignOut();
@@ -365,7 +422,11 @@
 
 			{#if showActiveUsers && ($config?.features?.enable_public_active_users_count || role === 'admin') && usage}
 				{#if usage?.user_count}
-					<hr class=" border-gray-50/30 dark:border-gray-800/30 my-1 p-0" />
+					<hr
+						class="my-1 p-0 {isSnapdealTheme($theme)
+							? 'snapdeal-divider'
+							: 'border-gray-50/30 dark:border-gray-800/30'}"
+					/>
 
 					<Tooltip
 						content={usage?.model_ids && usage?.model_ids.length > 0

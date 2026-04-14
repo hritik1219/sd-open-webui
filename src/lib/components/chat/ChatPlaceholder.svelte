@@ -1,24 +1,25 @@
 <script lang="ts">
-	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL } from '$lib/constants';
 	import { marked } from 'marked';
 
-	import { config, user, models as _models, temporaryChatEnabled } from '$lib/stores';
+	import { config, user, models as _models, temporaryChatEnabled, theme } from '$lib/stores';
 	import { onMount, getContext } from 'svelte';
 
-	import { blur, fade } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 
 	import Suggestions from './Suggestions.svelte';
 	import { sanitizeResponseContent } from '$lib/utils';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import EyeSlash from '$lib/components/icons/EyeSlash.svelte';
-
+	import SnapdealWordmark from '$lib/components/branding/SnapdealWordmark.svelte';
+	import { isSnapdealTheme } from '$lib/utils/theme';
 	const i18n = getContext('i18n');
 
 	export let modelIds = [];
 	export let models = [];
 	export let atSelectedModel;
 
-	export let onSelect = (e) => {};
+	export let onSelect = () => {};
 
 	let mounted = false;
 	let selectedModelIdx = 0;
@@ -36,36 +37,38 @@
 
 {#key mounted}
 	<div class="m-auto w-full max-w-6xl px-8 lg:px-20">
-		<div class="flex justify-start">
-			<div class="flex -space-x-4 mb-0.5" in:fade={{ duration: 200 }}>
-				{#each models as model, modelIdx}
-					<button
-						on:click={() => {
-							selectedModelIdx = modelIdx;
-						}}
-					>
-						<Tooltip
-							content={marked.parse(
-								sanitizeResponseContent(
-									models[selectedModelIdx]?.info?.meta?.description ?? ''
-								).replaceAll('\n', '<br>')
-							)}
-							placement="right"
+		{#if !(isSnapdealTheme($theme) && !models[selectedModelIdx]?.name)}
+			<div class="flex justify-start">
+				<div class="flex -space-x-4 mb-0.5" in:fade={{ duration: 200 }}>
+					{#each models as model, modelIdx}
+						<button
+							on:click={() => {
+								selectedModelIdx = modelIdx;
+							}}
 						>
-							<img
-								src={`${WEBUI_API_BASE_URL}/models/model/profile/image?id=${model?.id}&lang=${$i18n.language}`}
-								class=" size-[2.7rem] rounded-full border-[1px] border-gray-100 dark:border-none"
-								alt="logo"
-								draggable="false"
-								on:error={(e) => {
-									e.currentTarget.src = '/favicon.png';
-								}}
-							/>
-						</Tooltip>
-					</button>
-				{/each}
+							<Tooltip
+								content={marked.parse(
+									sanitizeResponseContent(
+										models[selectedModelIdx]?.info?.meta?.description ?? ''
+									).replaceAll('\n', '<br>')
+								)}
+								placement="right"
+							>
+								<img
+									src={`${WEBUI_API_BASE_URL}/models/model/profile/image?id=${model?.id}&lang=${$i18n.language}`}
+									class=" size-[2.7rem] rounded-full border-[1px] border-gray-100 dark:border-none"
+									alt="logo"
+									draggable="false"
+									on:error={(e) => {
+										e.currentTarget.src = '/favicon.png';
+									}}
+								/>
+							</Tooltip>
+						</button>
+					{/each}
+				</div>
 			</div>
-		</div>
+		{/if}
 
 		{#if $temporaryChatEnabled}
 			<Tooltip
@@ -82,6 +85,12 @@
 		<div
 			class=" mt-2 mb-4 text-3xl text-gray-800 dark:text-gray-100 text-left flex items-center gap-4 font-primary"
 		>
+			{#if isSnapdealTheme($theme) && !models[selectedModelIdx]?.name}
+				<div class="snapdeal-icon-badge shrink-0 p-3" in:fade={{ duration: 200 }}>
+					<SnapdealWordmark compact iconOnly iconClassName="h-[1.45rem] w-auto" />
+				</div>
+			{/if}
+
 			<div>
 				<div class=" capitalize line-clamp-1" in:fade={{ duration: 200 }}>
 					{#if models[selectedModelIdx]?.name}

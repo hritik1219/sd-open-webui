@@ -11,6 +11,12 @@
 	import { flyAndScale } from '$lib/utils/transitions';
 	import { marked } from 'marked';
 	import SensitiveInput from './SensitiveInput.svelte';
+	import { theme } from '$lib/stores';
+	import {
+		getDialogPanelClasses,
+		getDialogPrimaryButtonClasses,
+		getDialogSecondaryButtonClasses
+	} from '$lib/utils/theme';
 
 	export let title = '';
 	export let message = '';
@@ -109,7 +115,9 @@
 		}}
 	>
 		<div
-			class=" m-auto max-w-full w-[32rem] mx-2 bg-white/95 dark:bg-gray-950/95 backdrop-blur-sm rounded-4xl max-h-[100dvh] shadow-3xl border border-white dark:border-gray-900"
+			class=" m-auto max-w-full w-[32rem] mx-2 backdrop-blur-sm rounded-4xl max-h-[100dvh] shadow-3xl border {getDialogPanelClasses(
+				$theme
+			)}"
 			in:flyAndScale
 			on:mousedown={(e) => {
 				e.stopPropagation();
@@ -162,7 +170,9 @@
 
 				<div class="mt-6 flex justify-between gap-1.5">
 					<button
-						class="text-sm bg-gray-100 hover:bg-gray-200 text-gray-800 dark:bg-gray-850 dark:hover:bg-gray-800 dark:text-white font-medium w-full py-2 rounded-3xl transition"
+						class="text-sm font-medium w-full py-2 rounded-3xl transition {getDialogSecondaryButtonClasses(
+							$theme
+						)}"
 						on:click={() => {
 							show = false;
 							dispatch('cancel');
@@ -172,7 +182,9 @@
 						{cancelLabel}
 					</button>
 					<button
-						class="text-sm bg-gray-900 hover:bg-gray-850 text-gray-100 dark:bg-gray-100 dark:hover:bg-white dark:text-gray-800 font-medium w-full py-2 rounded-3xl transition"
+						class="text-sm font-medium w-full py-2 rounded-3xl transition {getDialogPrimaryButtonClasses(
+							$theme
+						)}"
 						on:click={() => {
 							confirmHandler();
 						}}

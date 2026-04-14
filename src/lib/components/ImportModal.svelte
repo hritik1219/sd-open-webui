@@ -7,6 +7,8 @@
 	import Modal from '$lib/components/common/Modal.svelte';
 	import XMark from '$lib/components/icons/XMark.svelte';
 	import { extractFrontmatter, nameToId } from '$lib/utils';
+	import { theme } from '$lib/stores';
+	import { getDialogPrimaryButtonClasses } from '$lib/utils/theme';
 
 	export let show = false;
 
@@ -104,9 +106,9 @@
 
 					<div class="flex justify-end pt-3 text-sm font-medium">
 						<button
-							class="px-3.5 py-1.5 text-sm font-medium bg-black hover:bg-gray-900 text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full flex items-center gap-2 whitespace-nowrap {loading
-								? ' cursor-not-allowed'
-								: ''}"
+							class="px-3.5 py-1.5 text-sm font-medium transition rounded-full flex items-center gap-2 whitespace-nowrap {getDialogPrimaryButtonClasses(
+								$theme
+							)} {loading ? ' cursor-not-allowed' : ''}"
 							type="submit"
 							disabled={loading}
 						>

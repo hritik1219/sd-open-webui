@@ -5,6 +5,8 @@
 
 	import Modal from '../../common/Modal.svelte';
 	import XMark from '$lib/components/icons/XMark.svelte';
+	import { theme } from '$lib/stores';
+	import { getDialogPrimaryButtonClasses } from '$lib/utils/theme';
 
 	const i18n = getContext('i18n');
 	const dispatch = createEventDispatcher();
@@ -61,7 +63,9 @@
 
 					<div class="flex justify-end pt-3 text-sm font-medium">
 						<button
-							class="px-3.5 py-1.5 text-sm font-medium bg-black hover:bg-gray-900 text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full"
+							class={$theme === 'snapdeal'
+								? `px-3.5 py-1.5 text-sm font-medium transition rounded-full ${getDialogPrimaryButtonClasses($theme)}`
+								: 'px-3.5 py-1.5 text-sm font-medium bg-black hover:bg-gray-900 text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full'}
 							type="submit"
 						>
 							{$i18n.t('Done')}

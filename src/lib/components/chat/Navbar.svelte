@@ -12,6 +12,7 @@
 		showArchivedChats,
 		showControls,
 		showSidebar,
+		theme,
 		temporaryChatEnabled,
 		user
 	} from '$lib/stores';
@@ -39,6 +40,8 @@
 	import ChatCheck from '../icons/ChatCheck.svelte';
 	import Knobs from '../icons/Knobs.svelte';
 	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import SnapdealWordmark from '$lib/components/branding/SnapdealWordmark.svelte';
+	import { getTopBarActionClasses, getTopBarShellClasses, isSnapdealTheme } from '$lib/utils/theme';
 
 	const i18n = getContext('i18n');
 
@@ -74,26 +77,36 @@
 
 <nav
 	class="sticky top-0 z-30 w-full {chat?.id
-		? 'pt-0.5 pb-1'
-		: 'pt-1 pb-1'} -mb-12 flex flex-col items-center drag-region"
+		? isSnapdealTheme($theme)
+			? 'pt-1 pb-0.5'
+			: 'pt-0.5 pb-1'
+		: isSnapdealTheme($theme)
+			? 'pt-1 pb-0.5'
+			: 'pt-1 pb-1'} -mb-12 flex flex-col items-center drag-region"
 >
 	<div class="flex items-center w-full pl-1.5 pr-1">
 		<div
 			id="navbar-bg-gradient-to-b"
-			class="{chat?.id
-				? 'visible'
-				: 'invisible'} bg-linear-to-b via-40% to-97% from-white/90 via-white/50 to-transparent dark:from-gray-900/90 dark:via-gray-900/50 dark:to-transparent pointer-events-none absolute inset-0 -bottom-10 z-[-1]"
+			class="{chat?.id ? 'visible' : 'invisible'} {isSnapdealTheme($theme)
+				? 'bg-linear-to-b via-28% to-95% from-[#ffe1e7] via-[#fff6f8] to-transparent'
+				: 'bg-linear-to-b via-40% to-97% from-white/90 via-white/50 to-transparent dark:from-gray-900/90 dark:via-gray-900/50 dark:to-transparent'} pointer-events-none absolute inset-0 -bottom-10 z-[-1]"
 		></div>
 
-		<div class=" flex max-w-full w-full mx-auto px-1.5 md:px-2 pt-0.5 bg-transparent">
+		<div
+			class="flex max-w-full w-full mx-auto bg-transparent {isSnapdealTheme($theme)
+				? `px-1.5 md:px-2 py-1 ${getTopBarShellClasses($theme)}`
+				: 'px-1.5 md:px-2 pt-0.5'}"
+		>
 			<div class="flex items-center w-full max-w-full">
 				{#if $mobile && !$showSidebar}
 					<div
-						class="-translate-x-0.5 mr-1 mt-1 self-start flex flex-none items-center text-gray-600 dark:text-gray-400"
+						class="-translate-x-0.5 mr-1 {isSnapdealTheme($theme)
+							? 'self-center text-white'
+							: 'mt-1 self-start text-gray-600 dark:text-gray-400'} flex flex-none items-center"
 					>
 						<Tooltip content={$showSidebar ? $i18n.t('Close Sidebar') : $i18n.t('Open Sidebar')}>
 							<button
-								class=" cursor-pointer flex rounded-lg hover:bg-gray-100 dark:hover:bg-gray-850 transition"
+								class="cursor-pointer flex rounded-xl transition {getTopBarActionClasses($theme)}"
 								on:click={() => {
 									showSidebar.set(!$showSidebar);
 								}}
@@ -107,8 +120,9 @@
 				{/if}
 
 				<div
-					class="flex-1 overflow-hidden max-w-full mt-0.5 py-0.5
-			{$showSidebar ? 'ml-1' : ''}
+					class="flex-1 overflow-hidden max-w-full {isSnapdealTheme($theme) ? 'py-0' : 'py-0.5'}
+			{$showSidebar && !isSnapdealTheme($theme) ? 'ml-1' : ''}
+			{isSnapdealTheme($theme) ? '' : 'mt-0.5'}
 			"
 				>
 					{#if showModelSelector}
@@ -116,14 +130,20 @@
 					{/if}
 				</div>
 
-				<div class="self-start flex flex-none items-center text-gray-600 dark:text-gray-400">
+				<div
+					class="{isSnapdealTheme($theme)
+						? 'self-center text-white'
+						: 'self-start text-gray-600 dark:text-gray-400'} flex flex-none items-center"
+				>
 					<!-- <div class="md:hidden flex self-center w-[1px] h-5 mx-2 bg-gray-300 dark:bg-stone-700" /> -->
 
 					{#if $user?.role === 'user' ? ($user?.permissions?.chat?.temporary ?? true) && !($user?.permissions?.chat?.temporary_enforced ?? false) : true}
 						{#if !chat?.id}
 							<Tooltip content={$i18n.t(`Temporary Chat`)}>
 								<button
-									class="flex cursor-pointer px-2 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-850 transition"
+									class="flex cursor-pointer {isSnapdealTheme($theme)
+										? 'px-1.5 py-1.5'
+										: 'px-2 py-2'} rounded-xl transition {getTopBarActionClasses($theme)}"
 									id="temporary-chat-button"
 									on:click={async () => {
 										if (($settings?.temporaryChatByDefault ?? false) && $temporaryChatEnabled) {
@@ -157,7 +177,9 @@
 						{:else if $temporaryChatEnabled}
 							<Tooltip content={$i18n.t(`Save Chat`)}>
 								<button
-									class="flex cursor-pointer px-2 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-850 transition"
+									class="flex cursor-pointer {isSnapdealTheme($theme)
+										? 'px-1.5 py-1.5'
+										: 'px-2 py-2'} rounded-xl transition {getTopBarActionClasses($theme)}"
 									id="save-temporary-chat-button"
 									on:click={async () => {
 										onSaveTempChat();
@@ -174,9 +196,13 @@
 					{#if $mobile && !$temporaryChatEnabled && chat && chat.id}
 						<Tooltip content={$i18n.t('New Chat')}>
 							<button
-								class=" flex {$showSidebar
-									? 'md:hidden'
-									: ''} cursor-pointer px-2 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-850 transition"
+								class=" flex {$showSidebar ? 'md:hidden' : ''} cursor-pointer {isSnapdealTheme(
+									$theme
+								)
+									? 'px-1.5 py-1.5'
+									: 'px-2 py-2'} rounded-xl transition {isSnapdealTheme($theme)
+									? 'text-white'
+									: 'text-gray-600 dark:text-gray-400'} {getTopBarActionClasses($theme)}"
 								on:click={() => {
 									initNewChat();
 								}}
@@ -202,7 +228,9 @@
 							{moveChatHandler}
 						>
 							<button
-								class="flex cursor-pointer px-2 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-850 transition"
+								class="flex cursor-pointer {isSnapdealTheme($theme)
+									? 'px-1.5 py-1.5'
+									: 'px-2 py-2'} rounded-xl transition {getTopBarActionClasses($theme)}"
 								id="chat-context-menu-button"
 							>
 								<div class=" m-auto self-center">
@@ -215,7 +243,9 @@
 					{#if $user?.role === 'admin' || ($user?.permissions.chat?.controls ?? true)}
 						<Tooltip content={$i18n.t('Controls')}>
 							<button
-								class=" flex cursor-pointer px-2 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-850 transition"
+								class="flex cursor-pointer {isSnapdealTheme($theme)
+									? 'px-1.5 py-1.5'
+									: 'px-2 py-2'} rounded-xl transition {getTopBarActionClasses($theme)}"
 								on:click={async () => {
 									await showControls.set(!$showControls);
 								}}
@@ -240,13 +270,31 @@
 							}}
 						>
 							<div
-								class="select-none flex rounded-xl p-1.5 w-full hover:bg-gray-50 dark:hover:bg-gray-850 transition"
+								class="select-none flex items-center transition {isSnapdealTheme($theme)
+									? 'snapdeal-profile-shell gap-2 pl-1.5 py-0.75 pr-0.75 hover:bg-[#fff0f3]'
+									: 'rounded-xl p-1.5 w-full hover:bg-gray-50 dark:hover:bg-gray-850'}"
 							>
+								{#if isSnapdealTheme($theme)}
+									<div class="hidden md:flex items-center snapdeal-brand-shell px-2.5 py-1.25">
+										<SnapdealWordmark
+											compact
+											iconClassName="h-[1.2rem] w-auto"
+											textClassName="h-[1.03rem] w-auto"
+										/>
+									</div>
+
+									<div class="flex md:hidden items-center">
+										<SnapdealWordmark compact iconOnly iconClassName="h-[1rem] w-auto" />
+									</div>
+								{/if}
+
 								<div class=" self-center">
 									<span class="sr-only">{$i18n.t('User menu')}</span>
 									<img
 										src={`${WEBUI_API_BASE_URL}/users/${$user?.id}/profile/image`}
-										class="size-6 object-cover rounded-full"
+										class="{isSnapdealTheme($theme)
+											? 'size-8 border-2 border-white shadow-sm'
+											: 'size-6'} object-cover rounded-full"
 										alt=""
 										draggable="false"
 									/>

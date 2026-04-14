@@ -20,6 +20,7 @@
 		showEmbeds,
 		artifactContents
 	} from '$lib/stores';
+	import { getMenuItemClasses, getMenuPanelClasses, isSnapdealTheme } from '$lib/utils/theme';
 
 	import { getChatById } from '$lib/apis/chats';
 
@@ -279,7 +280,9 @@
 
 	<div slot="content">
 		<div
-			class="select-none min-w-[200px] max-w-[200px] rounded-2xl px-1 py-1 border border-gray-100 dark:border-gray-800 z-50 bg-white dark:bg-gray-850 dark:text-white shadow-lg transition"
+			class="select-none min-w-[200px] max-w-[200px] rounded-2xl px-1 py-1 border z-50 shadow-lg transition {getMenuPanelClasses(
+				$theme
+			)}"
 		>
 			<!-- <DropdownMenu.Item draggable="false"
 				class="flex gap-2 items-center px-3 py-1.5 text-sm  cursor-pointer dark:hover:bg-gray-800 rounded-xl"
@@ -312,7 +315,9 @@
 			{#if ($artifactContents ?? []).length > 0}
 				<button
 					draggable="false"
-					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
+					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer rounded-xl select-none w-full {getMenuItemClasses(
+						$theme
+					)}"
 					id="chat-artifacts-button"
 					on:click={async () => {
 						await showControls.set(true);
@@ -324,13 +329,19 @@
 					<div class="flex items-center">{$i18n.t('Artifacts')}</div>
 				</button>
 
-				<hr class="border-gray-50/30 dark:border-gray-800/30 my-1" />
+				<hr
+					class="my-1 p-0 {isSnapdealTheme($theme)
+						? 'snapdeal-divider'
+						: 'border-gray-50/30 dark:border-gray-800/30'}"
+				/>
 			{/if}
 
 			{#if !$temporaryChatEnabled && ($user?.role === 'admin' || ($user.permissions?.chat?.share ?? true))}
 				<button
 					draggable="false"
-					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
+					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer rounded-xl select-none w-full {getMenuItemClasses(
+						$theme
+					)}"
 					id="chat-share-button"
 					on:click={() => {
 						shareHandler();
@@ -345,7 +356,9 @@
 				<button
 					slot="trigger"
 					draggable="false"
-					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
+					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer rounded-xl select-none w-full {getMenuItemClasses(
+						$theme
+					)}"
 				>
 					<Download strokeWidth="1.5" />
 
@@ -354,7 +367,9 @@
 				{#if $user?.role === 'admin' || ($user.permissions?.chat?.export ?? true)}
 					<button
 						draggable="false"
-						class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
+						class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer rounded-xl select-none w-full {getMenuItemClasses(
+							$theme
+						)}"
 						on:click={() => {
 							downloadJSONExport();
 						}}
@@ -364,7 +379,9 @@
 				{/if}
 				<button
 					draggable="false"
-					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
+					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer rounded-xl select-none w-full {getMenuItemClasses(
+						$theme
+					)}"
 					on:click={() => {
 						downloadTxt();
 					}}
@@ -374,7 +391,9 @@
 
 				<button
 					draggable="false"
-					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
+					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer rounded-xl select-none w-full {getMenuItemClasses(
+						$theme
+					)}"
 					on:click={() => {
 						downloadPdf();
 					}}
@@ -385,7 +404,9 @@
 
 			<button
 				draggable="false"
-				class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
+				class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer rounded-xl select-none w-full {getMenuItemClasses(
+					$theme
+				)}"
 				id="chat-copy-button"
 				on:click={async () => {
 					const res = await copyToClipboard(await getChatAsText()).catch((e) => {
@@ -402,14 +423,20 @@
 			</button>
 
 			{#if !$temporaryChatEnabled && chat?.id}
-				<hr class="border-gray-50/30 dark:border-gray-800/30 my-1" />
+				<hr
+					class="my-1 p-0 {isSnapdealTheme($theme)
+						? 'snapdeal-divider'
+						: 'border-gray-50/30 dark:border-gray-800/30'}"
+				/>
 
 				{#if $folders.length > 0}
 					<DropdownSub maxWidth={200}>
 						<button
 							slot="trigger"
 							draggable="false"
-							class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
+							class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer rounded-xl select-none w-full {getMenuItemClasses(
+								$theme
+							)}"
 						>
 							<Folder strokeWidth="1.5" />
 
@@ -419,7 +446,9 @@
 							{#if folder?.id}
 								<button
 									draggable="false"
-									class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl overflow-hidden w-full"
+									class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer rounded-xl overflow-hidden w-full {getMenuItemClasses(
+										$theme
+									)}"
 									on:click={() => {
 										moveChatHandler(chat.id, folder.id);
 									}}
@@ -437,7 +466,9 @@
 
 				<button
 					draggable="false"
-					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
+					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer rounded-xl select-none w-full {getMenuItemClasses(
+						$theme
+					)}"
 					on:click={() => {
 						archiveChatHandler();
 					}}
@@ -446,7 +477,11 @@
 					<div class="flex items-center">{$i18n.t('Archive')}</div>
 				</button>
 
-				<hr class="border-gray-50/30 dark:border-gray-800/30 my-1" />
+				<hr
+					class="my-1 p-0 {isSnapdealTheme($theme)
+						? 'snapdeal-divider'
+						: 'border-gray-50/30 dark:border-gray-800/30'}"
+				/>
 
 				<div class="flex p-1">
 					<Tags chatId={chat.id} />

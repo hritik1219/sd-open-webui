@@ -3,8 +3,12 @@
 	import { toast } from 'svelte-sonner';
 
 	import { goto } from '$app/navigation';
-	import { user } from '$lib/stores';
+	import { theme, user } from '$lib/stores';
 	import { page } from '$app/stores';
+	import {
+		getActiveTabClasses,
+		getInactiveTabClasses
+	} from '$lib/utils/theme';
 
 	import UserList from './Users/UserList.svelte';
 	import Groups from './Users/Groups.svelte';
@@ -66,8 +70,8 @@
 			draggable="false"
 			class="px-0.5 py-1 min-w-fit rounded-lg lg:flex-none flex text-right transition select-none {selectedTab ===
 			'overview'
-				? ''
-				: ' text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'}"
+				? getActiveTabClasses($theme)
+				: getInactiveTabClasses($theme)}"
 		>
 			<div class=" self-center mr-2">
 				<svg
@@ -90,8 +94,8 @@
 			draggable="false"
 			class="px-0.5 py-1 min-w-fit rounded-lg lg:flex-none flex text-right transition select-none {selectedTab ===
 			'groups'
-				? ''
-				: ' text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'}"
+				? getActiveTabClasses($theme)
+				: getInactiveTabClasses($theme)}"
 		>
 			<div class=" self-center mr-2">
 				<svg

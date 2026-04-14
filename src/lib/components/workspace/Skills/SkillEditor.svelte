@@ -12,6 +12,8 @@
 	import Spinner from '$lib/components/common/Spinner.svelte';
 	import { updateSkillAccessGrants } from '$lib/apis/skills';
 	import { goto } from '$app/navigation';
+	import { theme } from '$lib/stores';
+	import { getDialogPrimaryButtonClasses } from '$lib/utils/theme';
 
 	export let onSubmit: Function;
 	export let edit = false;
@@ -252,7 +254,9 @@
 				<div class="pb-3 flex justify-end">
 					{#if !disabled}
 						<button
-							class="px-3.5 py-1.5 text-sm font-medium bg-black hover:bg-gray-900 text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full flex items-center gap-2 whitespace-nowrap"
+							class={$theme === 'snapdeal'
+								? `px-3.5 py-1.5 text-sm font-medium transition rounded-full flex items-center gap-2 whitespace-nowrap ${getDialogPrimaryButtonClasses($theme)}`
+								: 'px-3.5 py-1.5 text-sm font-medium bg-black hover:bg-gray-900 text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full flex items-center gap-2 whitespace-nowrap'}
 							type="submit"
 							disabled={loading}
 						>

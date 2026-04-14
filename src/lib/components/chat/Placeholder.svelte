@@ -1,15 +1,12 @@
 <script lang="ts">
-	import { toast } from 'svelte-sonner';
 	import { marked } from 'marked';
 
-	import { onMount, getContext, tick, createEventDispatcher } from 'svelte';
-	import { blur, fade } from 'svelte/transition';
+	import { getContext, createEventDispatcher } from 'svelte';
+	import { fade } from 'svelte/transition';
 
 	const dispatch = createEventDispatcher();
 
 	import { getChatList } from '$lib/apis/chats';
-	import { updateFolderById } from '$lib/apis/folders';
-
 	import {
 		config,
 		user,
@@ -17,10 +14,13 @@
 		temporaryChatEnabled,
 		selectedFolder,
 		chats,
-		currentChatPage
+		currentChatPage,
+		theme
 	} from '$lib/stores';
-	import { sanitizeResponseContent, extractCurlyBraceWords } from '$lib/utils';
-	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
+	import { sanitizeResponseContent } from '$lib/utils';
+	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import SnapdealWordmark from '$lib/components/branding/SnapdealWordmark.svelte';
+	import { isSnapdealTheme } from '$lib/utils/theme';
 
 	import Suggestions from './Suggestions.svelte';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
@@ -56,8 +56,8 @@
 	export let webSearchEnabled = false;
 
 	export let onUpload: Function = (e) => {};
-	export let onSelect = (e) => {};
-	export let onChange = (e) => {};
+	export let onSelect = () => {};
+	export let onChange = () => {};
 
 	export let toolServers = [];
 
@@ -73,7 +73,11 @@
 	$: models = selectedModels.map((id) => $_models.find((m) => m.id === id));
 </script>
 
-<div class="m-auto w-full max-w-6xl px-2 @2xl:px-20 translate-y-6 py-24 text-center">
+<div
+	class="m-auto w-full max-w-6xl px-2 @2xl:px-20 text-center {isSnapdealTheme($theme)
+		? 'translate-y-2 py-20'
+		: 'translate-y-6 py-24'}"
+>
 	{#if $temporaryChatEnabled}
 		<Tooltip
 			content={$i18n.t("This chat won't appear in history and your messages will not be saved.")}
@@ -87,7 +91,9 @@
 	{/if}
 
 	<div
-		class="w-full text-3xl text-gray-800 dark:text-gray-100 text-center flex items-center gap-4 font-primary"
+		class="w-full text-3xl text-center flex items-center gap-4 font-primary {isSnapdealTheme($theme)
+			? 'text-[var(--snapdeal-text)]'
+			: 'text-gray-800 dark:text-gray-100'}"
 	>
 		<div class="w-full flex flex-col justify-center items-center">
 			{#if $selectedFolder}
@@ -107,40 +113,48 @@
 			{:else}
 				<div class="flex flex-row justify-center gap-3 @sm:gap-3.5 w-fit px-5 max-w-xl">
 					<div class="flex shrink-0 justify-center">
-						<div class="flex -space-x-4 mb-0.5" in:fade={{ duration: 100 }}>
-							{#each models as model, modelIdx}
-								<Tooltip
-									content={(models[modelIdx]?.info?.meta?.tags ?? [])
-										.map((tag) => tag.name.toUpperCase())
-										.join(', ')}
-									placement="top"
-								>
-									<button
-										aria-hidden={models.length <= 1}
-										aria-label={$i18n.t('Get information on {{name}} in the UI', {
-											name: models[modelIdx]?.name
-										})}
-										on:click={() => {
-											selectedModelIdx = modelIdx;
-										}}
+						{#if isSnapdealTheme($theme) && !models[selectedModelIdx]?.name}
+							<div class="snapdeal-icon-badge p-2.5" in:fade={{ duration: 100 }}>
+								<SnapdealWordmark compact iconOnly iconClassName="h-[1.45rem] w-auto" />
+							</div>
+						{:else}
+							<div class="flex -space-x-4 mb-0.5" in:fade={{ duration: 100 }}>
+								{#each models as model, modelIdx}
+									<Tooltip
+										content={(models[modelIdx]?.info?.meta?.tags ?? [])
+											.map((tag) => tag.name.toUpperCase())
+											.join(', ')}
+										placement="top"
 									>
-										<img
-											src={`${WEBUI_API_BASE_URL}/models/model/profile/image?id=${model?.id}&lang=${$i18n.language}`}
-											class=" size-9 @sm:size-10 rounded-full border-[1px] border-gray-100 dark:border-none"
-											aria-hidden="true"
-											draggable="false"
-											on:error={(e) => {
-												e.currentTarget.src = '/favicon.png';
+										<button
+											aria-hidden={models.length <= 1}
+											aria-label={$i18n.t('Get information on {{name}} in the UI', {
+												name: models[modelIdx]?.name
+											})}
+											on:click={() => {
+												selectedModelIdx = modelIdx;
 											}}
-										/>
-									</button>
-								</Tooltip>
-							{/each}
-						</div>
+										>
+											<img
+												src={`${WEBUI_API_BASE_URL}/models/model/profile/image?id=${model?.id}&lang=${$i18n.language}`}
+												class=" size-9 @sm:size-10 rounded-full border-[1px] border-gray-100 dark:border-none"
+												aria-hidden="true"
+												draggable="false"
+												on:error={(e) => {
+													e.currentTarget.src = '/favicon.png';
+												}}
+											/>
+										</button>
+									</Tooltip>
+								{/each}
+							</div>
+						{/if}
 					</div>
 
 					<div
-						class=" text-3xl @sm:text-3xl line-clamp-1 flex items-center"
+						class=" text-3xl @sm:text-3xl line-clamp-1 flex items-center {isSnapdealTheme($theme)
+							? 'tracking-[-0.02em]'
+							: ''}"
 						in:fade={{ duration: 100 }}
 					>
 						{#if models[selectedModelIdx]?.name}
@@ -203,7 +217,11 @@
 				</div>
 			{/if}
 
-			<div class="text-base font-normal @md:max-w-3xl w-full py-3 {atSelectedModel ? 'mt-2' : ''}">
+			<div
+				class="text-base font-normal @md:max-w-3xl w-full {isSnapdealTheme($theme)
+					? 'py-2.5'
+					: 'py-3'} {atSelectedModel ? 'mt-2' : ''}"
+			>
 				<MessageInput
 					bind:this={messageInput}
 					{history}
@@ -242,7 +260,10 @@
 			<FolderPlaceholder folder={$selectedFolder} />
 		</div>
 	{:else}
-		<div class="mx-auto max-w-2xl font-primary mt-2" in:fade={{ duration: 200, delay: 200 }}>
+		<div
+			class="mx-auto max-w-2xl font-primary {isSnapdealTheme($theme) ? 'mt-3' : 'mt-2'}"
+			in:fade={{ duration: 200, delay: 200 }}
+		>
 			<div class="mx-5">
 				<Suggestions
 					suggestionPrompts={atSelectedModel?.info?.meta?.suggestion_prompts ??

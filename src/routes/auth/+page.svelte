@@ -18,7 +18,9 @@
 	} from '$lib/apis/auths';
 
 	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
-	import { WEBUI_NAME, config, user, socket } from '$lib/stores';
+	import { WEBUI_NAME, config, user, socket, theme } from '$lib/stores';
+	import SnapdealWordmark from '$lib/components/branding/SnapdealWordmark.svelte';
+	import { getPrimaryButtonClasses, isSnapdealTheme } from '$lib/utils/theme';
 
 	import { generateInitialsImage, canvasPixelTest, getUserTimezone } from '$lib/utils';
 
@@ -238,13 +240,22 @@
 						<div class=" sm:max-w-md my-auto pb-10 w-full dark:text-gray-100">
 							{#if $config?.metadata?.auth_logo_position === 'center'}
 								<div class="flex justify-center mb-6">
-									<img
-										id="logo"
-										crossorigin="anonymous"
-										src="{WEBUI_BASE_URL}/static/favicon.png"
-										class="size-24 rounded-full"
-										alt="{$WEBUI_NAME} logo"
-									/>
+									{#if isSnapdealTheme($theme)}
+										<div class="snapdeal-brand-shell px-5 py-3">
+											<SnapdealWordmark
+												iconClassName="h-[2.6rem] w-auto"
+												textClassName="h-[2.2rem] w-auto"
+											/>
+										</div>
+									{:else}
+										<img
+											id="logo"
+											crossorigin="anonymous"
+											src="{WEBUI_BASE_URL}/static/favicon.png"
+											class="size-24 rounded-full"
+											alt="{$WEBUI_NAME} logo"
+										/>
+									{/if}
 								</div>
 							{/if}
 							<form
@@ -373,14 +384,22 @@
 									{#if $config?.features.enable_login_form || $config?.features.enable_ldap || form}
 										{#if mode === 'ldap'}
 											<button
-												class="bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
+												class="transition w-full rounded-full font-medium text-sm py-2.5 {isSnapdealTheme(
+													$theme
+												)
+													? getPrimaryButtonClasses($theme)
+													: 'bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white'}"
 												type="submit"
 											>
 												{$i18n.t('Authenticate')}
 											</button>
 										{:else}
 											<button
-												class="bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
+												class="transition w-full rounded-full font-medium text-sm py-2.5 {isSnapdealTheme(
+													$theme
+												)
+													? getPrimaryButtonClasses($theme)
+													: 'bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white'}"
 												type="submit"
 											>
 												{mode === 'signin'
@@ -590,13 +609,23 @@
 			<div class="fixed m-10 z-50">
 				<div class="flex space-x-2">
 					<div class=" self-center">
-						<img
-							id="logo"
-							crossorigin="anonymous"
-							src="{WEBUI_BASE_URL}/static/favicon.png"
-							class=" w-6 rounded-full"
-							alt=""
-						/>
+						{#if isSnapdealTheme($theme)}
+							<div class="snapdeal-brand-shell px-3 py-2">
+								<SnapdealWordmark
+									compact
+									iconClassName="h-[1.45rem] w-auto"
+									textClassName="h-[1.22rem] w-auto"
+								/>
+							</div>
+						{:else}
+							<img
+								id="logo"
+								crossorigin="anonymous"
+								src="{WEBUI_BASE_URL}/static/favicon.png"
+								class=" w-6 rounded-full"
+								alt=""
+							/>
+						{/if}
 					</div>
 				</div>
 			</div>

@@ -15,6 +15,8 @@
 	import Spinner from '$lib/components/common/Spinner.svelte';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import Plus from '$lib/components/icons/Plus.svelte';
+	import { theme } from '$lib/stores';
+	import { getPrimaryButtonClasses } from '$lib/utils/theme';
 
 	import OpenAIConnection from './Connections/OpenAIConnection.svelte';
 	import AddConnectionModal from '$lib/components/AddConnectionModal.svelte';
@@ -420,7 +422,9 @@
 
 	<div class="flex justify-end pt-3 text-sm font-medium">
 		<button
-			class="px-3.5 py-1.5 text-sm font-medium bg-black hover:bg-gray-900 text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full"
+			class={$theme === 'snapdeal'
+				? `px-3.5 py-1.5 text-sm font-medium transition rounded-full ${getPrimaryButtonClasses($theme)}`
+				: 'px-3.5 py-1.5 text-sm font-medium bg-black hover:bg-gray-900 text-white dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full'}
 			type="submit"
 		>
 			{$i18n.t('Save')}

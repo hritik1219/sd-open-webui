@@ -22,11 +22,13 @@
 		mobile,
 		temporaryChatEnabled,
 		settings,
-		config
+		config,
+		theme
 	} from '$lib/stores';
 	import { toast } from 'svelte-sonner';
 	import { capitalizeFirstLetter, sanitizeResponseContent, splitStream } from '$lib/utils';
 	import { getModels } from '$lib/apis';
+	import { getActiveTabClasses, getInactiveTabClasses, isSnapdealTheme } from '$lib/utils/theme';
 
 	import ChevronDown from '$lib/components/icons/ChevronDown.svelte';
 	import Check from '$lib/components/icons/Check.svelte';
@@ -414,8 +416,11 @@
 		id="model-selector-{id}-button"
 	>
 		<div
-			class="flex w-full text-left px-0.5 bg-transparent truncate {triggerClassName} justify-between {($settings?.highContrastMode ??
-			false)
+			class="flex w-full items-center gap-2 text-left bg-transparent truncate justify-between {triggerClassName} {isSnapdealTheme(
+				$theme
+			)
+				? 'snapdeal-search-trigger px-0 text-[0.95rem] font-medium leading-none'
+				: 'px-0.5'} {($settings?.highContrastMode ?? false)
 				? 'dark:placeholder-gray-100 placeholder-gray-800'
 				: 'placeholder-gray-400'}"
 			on:mouseenter={async () => {
@@ -427,12 +432,23 @@
 				);
 			}}
 		>
-			{#if selectedModel}
-				{selectedModel.label}
-			{:else}
-				{placeholder}
+			{#if isSnapdealTheme($theme)}
+				<Search className="size-3.5 shrink-0 text-[#666666]" strokeWidth="2.25" />
 			{/if}
-			<ChevronDown className=" self-center ml-2 size-3" strokeWidth="2.5" />
+
+			<div
+				class="flex-1 truncate {isSnapdealTheme($theme) && !selectedModel
+					? 'snapdeal-search-placeholder'
+					: ''}"
+			>
+				{#if selectedModel}
+					{selectedModel.label}
+				{:else}
+					{placeholder}
+				{/if}
+			</div>
+
+			<ChevronDown className="self-center ml-1.5 size-[0.8rem] shrink-0" strokeWidth="2.5" />
 		</div>
 	</DropdownMenu.Trigger>
 
@@ -453,12 +469,20 @@
 							{...props}
 							class="{props.class} z-40 {$mobile
 								? `w-full`
-								: `${className}`} max-w-[calc(100vw-1rem)] justify-start rounded-2xl bg-white dark:bg-gray-850 dark:text-white shadow-lg outline-hidden"
+								: `${className}`} max-w-[calc(100vw-1rem)] justify-start rounded-2xl shadow-lg outline-hidden {isSnapdealTheme(
+								$theme
+							)
+								? 'snapdeal-select-content'
+								: 'bg-white dark:bg-gray-850 dark:text-white'}"
 							transition:flyAndScale
 						>
 							<slot>
 								{#if searchEnabled}
-									<div class="flex items-center gap-2.5 px-4.5 pt-3.5 mb-1.5">
+									<div
+										class="flex items-center gap-2.5 mb-1.5 {isSnapdealTheme($theme)
+											? 'mx-2.5 mt-2.5 px-3 py-1.5 snapdeal-search-shell'
+											: 'px-4.5 pt-3.5'}"
+									>
 										<Search className="size-4" strokeWidth="2.5" />
 
 										<input
@@ -510,15 +534,19 @@
 											}}
 										>
 											<div
-												class="flex gap-1 w-fit text-center text-sm rounded-full bg-transparent px-1.5 whitespace-nowrap"
+												class="flex gap-1 w-fit text-center text-sm whitespace-nowrap {isSnapdealTheme(
+													$theme
+												)
+													? 'snapdeal-tab-rail px-1 py-0.75'
+													: 'rounded-full bg-transparent px-1.5'}"
 												bind:this={tagsContainerElement}
 											>
 												{#if items.find((item) => item.model?.connection_type === 'local') || items.find((item) => item.model?.connection_type === 'external') || items.find((item) => item.model?.direct) || tags.length > 0}
 													<button
 														class="min-w-fit outline-none px-1.5 py-0.5 {selectedTag === '' &&
 														selectedConnectionType === ''
-															? ''
-															: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'} transition capitalize"
+															? getActiveTabClasses($theme)
+															: getInactiveTabClasses($theme)} transition capitalize"
 														aria-pressed={selectedTag === '' && selectedConnectionType === ''}
 														on:click={() => {
 															selectedConnectionType = '';
@@ -533,8 +561,8 @@
 													<button
 														class="min-w-fit outline-none px-1.5 py-0.5 {selectedConnectionType ===
 														'local'
-															? ''
-															: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'} transition capitalize"
+															? getActiveTabClasses($theme)
+															: getInactiveTabClasses($theme)} transition capitalize"
 														aria-pressed={selectedConnectionType === 'local'}
 														on:click={() => {
 															selectedTag = '';
@@ -549,8 +577,8 @@
 													<button
 														class="min-w-fit outline-none px-1.5 py-0.5 {selectedConnectionType ===
 														'external'
-															? ''
-															: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'} transition capitalize"
+															? getActiveTabClasses($theme)
+															: getInactiveTabClasses($theme)} transition capitalize"
 														aria-pressed={selectedConnectionType === 'external'}
 														on:click={() => {
 															selectedTag = '';
@@ -565,8 +593,8 @@
 													<button
 														class="min-w-fit outline-none px-1.5 py-0.5 {selectedConnectionType ===
 														'direct'
-															? ''
-															: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'} transition capitalize"
+															? getActiveTabClasses($theme)
+															: getInactiveTabClasses($theme)} transition capitalize"
 														aria-pressed={selectedConnectionType === 'direct'}
 														on:click={() => {
 															selectedTag = '';
@@ -581,8 +609,8 @@
 													<Tooltip content={tag}>
 														<button
 															class="min-w-fit outline-none px-1.5 py-0.5 {selectedTag === tag
-																? ''
-																: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'} transition capitalize"
+																? getActiveTabClasses($theme)
+																: getInactiveTabClasses($theme)} transition capitalize"
 															aria-pressed={selectedTag === tag}
 															on:click={() => {
 																selectedConnectionType = '';

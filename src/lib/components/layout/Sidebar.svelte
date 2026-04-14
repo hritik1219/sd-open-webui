@@ -27,7 +27,8 @@
 		selectedFolder,
 		WEBUI_NAME,
 		sidebarWidth,
-		activeChatIds
+		activeChatIds,
+		theme
 	} from '$lib/stores';
 	import { onMount, getContext, tick, onDestroy } from 'svelte';
 
@@ -66,6 +67,12 @@
 	import Note from '../icons/Note.svelte';
 	import { slide } from 'svelte/transition';
 	import HotkeyHint from '../common/HotkeyHint.svelte';
+	import SnapdealWordmark from '$lib/components/branding/SnapdealWordmark.svelte';
+	import {
+		getHeaderIconButtonClasses,
+		getSidebarActionClasses,
+		isSnapdealTheme
+	} from '$lib/utils/theme';
 
 	const BREAKPOINT = 768;
 
@@ -691,7 +698,9 @@
 
 {#if !$mobile && !$showSidebar}
 	<div
-		class=" pt-[7px] pb-2 px-2 flex flex-col justify-between text-black dark:text-white hover:bg-gray-50/30 dark:hover:bg-gray-950/30 h-full z-10 transition-all border-e-[0.5px] border-gray-50 dark:border-gray-850/30"
+		class="{isSnapdealTheme($theme)
+			? 'w-[3.45rem] min-w-[3.45rem] pt-1.25 pb-1.25 px-1 snapdeal-sidebar-mini-rail'
+			: 'pt-[7px] pb-2 px-2 hover:bg-gray-50/30 dark:hover:bg-gray-950/30 border-e-[0.5px] border-gray-50 dark:border-gray-850/30'} flex flex-col justify-between text-black dark:text-white h-full z-10 transition-all"
 		id="sidebar"
 	>
 		<button
@@ -706,17 +715,23 @@
 					placement="right"
 				>
 					<button
-						class="flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-850 transition group {isWindows
+						class="flex rounded-xl transition group {getHeaderIconButtonClasses($theme)} {isWindows
 							? 'cursor-pointer'
 							: 'cursor-[e-resize]'}"
 						aria-label={$showSidebar ? $i18n.t('Close Sidebar') : $i18n.t('Open Sidebar')}
 					>
-						<div class=" self-center flex items-center justify-center size-9">
-							<img
-								src="{WEBUI_BASE_URL}/static/favicon.png"
-								class="sidebar-new-chat-icon size-6 rounded-full group-hover:hidden"
-								alt=""
-							/>
+						<div class=" self-center flex items-center justify-center size-7">
+							{#if isSnapdealTheme($theme)}
+								<div class="sidebar-new-chat-icon group-hover:hidden snapdeal-brand-shell p-1">
+									<SnapdealWordmark compact iconOnly iconClassName="h-[0.95rem] w-auto" />
+								</div>
+							{:else}
+								<img
+									src="{WEBUI_BASE_URL}/static/favicon.png"
+									class="sidebar-new-chat-icon size-6 rounded-full group-hover:hidden"
+									alt=""
+								/>
+							{/if}
 
 							<Sidebar className="size-5 hidden group-hover:flex" />
 						</div>
@@ -728,7 +743,9 @@
 				<div class="">
 					<Tooltip content={$i18n.t('New Chat')} placement="right">
 						<a
-							class=" cursor-pointer flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-850 transition group"
+							class="cursor-pointer flex rounded-xl transition group {getHeaderIconButtonClasses(
+								$theme
+							)}"
 							href="/"
 							draggable="false"
 							on:click={async (e) => {
@@ -740,7 +757,7 @@
 							}}
 							aria-label={$i18n.t('New Chat')}
 						>
-							<div class=" self-center flex items-center justify-center size-9">
+							<div class=" self-center flex items-center justify-center size-7">
 								<PencilSquare className="size-4.5" />
 							</div>
 						</a>
@@ -750,7 +767,9 @@
 				<div>
 					<Tooltip content={$i18n.t('Search')} placement="right">
 						<button
-							class=" cursor-pointer flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-850 transition group"
+							class="cursor-pointer flex rounded-xl transition group {getHeaderIconButtonClasses(
+								$theme
+							)}"
 							on:click={(e) => {
 								e.stopImmediatePropagation();
 								e.preventDefault();
@@ -760,7 +779,7 @@
 							draggable="false"
 							aria-label={$i18n.t('Search')}
 						>
-							<div class=" self-center flex items-center justify-center size-9">
+							<div class=" self-center flex items-center justify-center size-7">
 								<Search className="size-4.5" />
 							</div>
 						</button>
@@ -771,7 +790,9 @@
 					<div class="">
 						<Tooltip content={$i18n.t('Notes')} placement="right">
 							<a
-								class=" cursor-pointer flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-850 transition group"
+								class="cursor-pointer flex rounded-xl transition group {getHeaderIconButtonClasses(
+									$theme
+								)}"
 								href="/notes"
 								on:click={async (e) => {
 									e.stopImmediatePropagation();
@@ -783,7 +804,7 @@
 								draggable="false"
 								aria-label={$i18n.t('Notes')}
 							>
-								<div class=" self-center flex items-center justify-center size-9">
+								<div class=" self-center flex items-center justify-center size-7">
 									<Note className="size-4.5" />
 								</div>
 							</a>
@@ -795,7 +816,9 @@
 					<div class="">
 						<Tooltip content={$i18n.t('Workspace')} placement="right">
 							<a
-								class=" cursor-pointer flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-850 transition group"
+								class="cursor-pointer flex rounded-xl transition group {getHeaderIconButtonClasses(
+									$theme
+								)}"
 								href="/workspace"
 								on:click={async (e) => {
 									e.stopImmediatePropagation();
@@ -807,7 +830,7 @@
 								aria-label={$i18n.t('Workspace')}
 								draggable="false"
 							>
-								<div class=" self-center flex items-center justify-center size-9">
+								<div class=" self-center flex items-center justify-center size-7">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
 										fill="none"
@@ -845,12 +868,16 @@
 							}}
 						>
 							<div
-								class=" cursor-pointer flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-850 transition group"
+								class=" cursor-pointer flex items-center transition group {isSnapdealTheme($theme)
+									? 'snapdeal-sidebar-mini-profile justify-center p-1'
+									: 'rounded-xl hover:bg-gray-100 dark:hover:bg-gray-850'}"
 							>
 								<div class="self-center relative">
 									<img
 										src={`${WEBUI_API_BASE_URL}/users/${$user?.id}/profile/image`}
-										class=" size-7 object-cover rounded-full"
+										class="{isSnapdealTheme($theme)
+											? 'size-7 border-2 border-white shadow-sm'
+											: 'size-7'} object-cover rounded-full"
 										alt={$i18n.t('Open User Profile Menu')}
 										aria-label={$i18n.t('Open User Profile Menu')}
 									/>
@@ -884,7 +911,13 @@
 		bind:this={navElement}
 		id="sidebar"
 		class="h-screen max-h-[100dvh] min-h-screen select-none {$showSidebar
-			? `${$mobile ? 'bg-gray-50 dark:bg-gray-950' : 'bg-gray-50/70 dark:bg-gray-950/70'} z-50`
+			? `${
+					isSnapdealTheme($theme)
+						? 'snapdeal-sidebar-shell'
+						: $mobile
+							? 'bg-gray-50 dark:bg-gray-950'
+							: 'bg-gray-50/70 dark:bg-gray-950/70'
+				} z-50`
 			: ' bg-transparent z-0 '} {$isApp
 			? `ml-[4.5rem] md:ml-0 `
 			: ' transition-all duration-300 '} shrink-0 text-gray-900 dark:text-gray-200 text-sm fixed top-0 left-0 overflow-x-hidden
@@ -898,38 +931,60 @@
 				: 'invisible'}"
 		>
 			<div
-				class="sidebar px-[0.5625rem] pt-2 pb-1.5 flex justify-between space-x-1 text-gray-600 dark:text-gray-400 sticky top-0 z-10 -mb-3"
+				class="sidebar px-[0.5625rem] pt-2 pb-1.5 flex justify-between space-x-1 text-gray-600 dark:text-gray-400 sticky top-0 z-10 -mb-3 {isSnapdealTheme(
+					$theme
+				)
+					? 'snapdeal-sidebar-header'
+					: ''}"
 			>
 				<a
-					class="flex items-center rounded-xl size-8.5 h-full justify-center hover:bg-gray-100/50 dark:hover:bg-gray-850/50 transition no-drag-region"
+					class="flex items-center h-full justify-center transition no-drag-region {isSnapdealTheme(
+						$theme
+					)
+						? 'rounded-full px-2.5 py-1.25 snapdeal-brand-shell snapdeal-header-action'
+						: 'rounded-xl size-8.5 hover:bg-gray-100/50 dark:hover:bg-gray-850/50'}"
 					href="/"
 					draggable="false"
 					on:click={newChatHandler}
 				>
-					<img
-						crossorigin="anonymous"
-						src="{WEBUI_BASE_URL}/static/favicon.png"
-						class="sidebar-new-chat-icon size-6 rounded-full"
-						alt=""
-					/>
+					{#if isSnapdealTheme($theme)}
+						<SnapdealWordmark
+							compact
+							iconClassName="h-[1.3rem] w-auto"
+							textClassName="h-[1.1rem] w-auto"
+						/>
+					{:else}
+						<img
+							crossorigin="anonymous"
+							src="{WEBUI_BASE_URL}/static/favicon.png"
+							class="sidebar-new-chat-icon size-6 rounded-full"
+							alt=""
+						/>
+					{/if}
 				</a>
 
-				<a href="/" class="flex flex-1 px-1.5" on:click={newChatHandler}>
-					<div
-						id="sidebar-webui-name"
-						class=" self-center font-medium text-gray-850 dark:text-white font-primary"
-					>
-						{$WEBUI_NAME}
-					</div>
-				</a>
+				{#if !isSnapdealTheme($theme)}
+					<a href="/" class="flex flex-1 px-1.5" on:click={newChatHandler}>
+						<div
+							id="sidebar-webui-name"
+							class=" self-center font-medium text-gray-850 dark:text-white font-primary"
+						>
+							{$WEBUI_NAME}
+						</div>
+					</a>
+				{:else}
+					<div class="flex-1"></div>
+				{/if}
 				<Tooltip
 					content={$showSidebar ? $i18n.t('Close Sidebar') : $i18n.t('Open Sidebar')}
 					placement="bottom"
 				>
 					<button
-						class="flex rounded-xl size-8.5 justify-center items-center hover:bg-gray-100/50 dark:hover:bg-gray-850/50 transition {isWindows
-							? 'cursor-pointer'
-							: 'cursor-[w-resize]'}"
+						class="flex rounded-xl {isSnapdealTheme($theme)
+							? 'size-8'
+							: 'size-8.5'} justify-center items-center transition {getHeaderIconButtonClasses(
+							$theme
+						)} {isWindows ? 'cursor-pointer' : 'cursor-[w-resize]'}"
 						on:click={() => {
 							showSidebar.set(!$showSidebar);
 						}}
@@ -962,7 +1017,9 @@
 					<div class="px-[0.4375rem] flex justify-center text-gray-800 dark:text-gray-200">
 						<a
 							id="sidebar-new-chat-button"
-							class="group grow flex items-center space-x-3 rounded-2xl px-2.5 py-2 hover:bg-gray-100 dark:hover:bg-gray-900 transition outline-none"
+							class="group grow flex items-center space-x-3 rounded-2xl px-2.5 py-2 transition outline-none {getSidebarActionClasses(
+								$theme
+							)}"
 							href="/"
 							draggable="false"
 							on:click={newChatHandler}
@@ -983,7 +1040,9 @@
 					<div class="px-[0.4375rem] flex justify-center text-gray-800 dark:text-gray-200">
 						<button
 							id="sidebar-search-button"
-							class="group grow flex items-center space-x-3 rounded-2xl px-2.5 py-2 hover:bg-gray-100 dark:hover:bg-gray-900 transition outline-none"
+							class="group grow flex items-center space-x-3 rounded-2xl px-2.5 py-2 transition outline-none {getSidebarActionClasses(
+								$theme
+							)}"
 							on:click={() => {
 								showSearch.set(true);
 							}}
@@ -1005,7 +1064,9 @@
 						<div class="px-[0.4375rem] flex justify-center text-gray-800 dark:text-gray-200">
 							<a
 								id="sidebar-notes-button"
-								class="grow flex items-center space-x-3 rounded-2xl px-2.5 py-2 hover:bg-gray-100 dark:hover:bg-gray-900 transition"
+								class="grow flex items-center space-x-3 rounded-2xl px-2.5 py-2 transition {getSidebarActionClasses(
+									$theme
+								)}"
 								href="/notes"
 								on:click={itemClickHandler}
 								draggable="false"
@@ -1026,7 +1087,9 @@
 						<div class="px-[0.4375rem] flex justify-center text-gray-800 dark:text-gray-200">
 							<a
 								id="sidebar-workspace-button"
-								class="grow flex items-center space-x-3 rounded-2xl px-2.5 py-2 hover:bg-gray-100 dark:hover:bg-gray-900 transition"
+								class="grow flex items-center space-x-3 rounded-2xl px-2.5 py-2 transition {getSidebarActionClasses(
+									$theme
+								)}"
 								href="/workspace"
 								on:click={itemClickHandler}
 								draggable="false"
@@ -1414,12 +1477,26 @@
 							}}
 						>
 							<div
-								class=" flex items-center rounded-2xl py-2 px-1.5 w-full hover:bg-gray-100/50 dark:hover:bg-gray-900/50 transition"
+								class=" flex items-center py-2 px-1.5 w-full transition {isSnapdealTheme($theme)
+									? 'snapdeal-sidebar-profile-row justify-between gap-1.5 pl-1.25 pr-0.75 py-0.5 rounded-full'
+									: 'rounded-2xl hover:bg-gray-100/50 dark:hover:bg-gray-900/50'}"
 							>
-								<div class=" self-center mr-3 relative">
+								{#if isSnapdealTheme($theme)}
+									<div class="self-center shrink-0 snapdeal-sidebar-wordmark-shell px-2.25 py-1">
+										<SnapdealWordmark
+											compact
+											iconClassName="h-[1rem] w-auto"
+											textClassName="h-[0.92rem] w-auto"
+										/>
+									</div>
+								{/if}
+
+								<div class=" self-center relative">
 									<img
 										src={`${WEBUI_API_BASE_URL}/users/${$user?.id}/profile/image`}
-										class=" size-7 object-cover rounded-full"
+										class="{isSnapdealTheme($theme)
+											? 'size-7.5 border-[3px] border-white shadow-sm'
+											: 'size-7'} object-cover rounded-full"
 										alt={$i18n.t('Open User Profile Menu')}
 										aria-label={$i18n.t('Open User Profile Menu')}
 									/>
@@ -1436,7 +1513,9 @@
 										</div>
 									{/if}
 								</div>
-								<div class=" self-center font-medium">{$user?.name}</div>
+								{#if !isSnapdealTheme($theme)}
+									<div class=" self-center font-medium">{$user?.name}</div>
+								{/if}
 							</div>
 						</UserMenu>
 					{/if}

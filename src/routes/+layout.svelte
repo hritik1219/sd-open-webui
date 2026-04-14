@@ -71,6 +71,7 @@
 	import { getUserSettings } from '$lib/apis/users';
 	import dayjs from 'dayjs';
 	import { getChannels } from '$lib/apis/channels';
+	import { SNAPDEAL_THEME } from '$lib/utils/theme';
 
 	const unregisterServiceWorkers = async () => {
 		if ('serviceWorker' in navigator) {
@@ -861,7 +862,7 @@
 		// Call visibility change handler initially to set state on load
 		handleVisibilityChange();
 
-		theme.set(localStorage.theme);
+		theme.set(localStorage.theme ?? SNAPDEAL_THEME);
 
 		mobile.set(window.innerWidth < BREAKPOINT);
 

@@ -4,7 +4,14 @@
 	import { getLanguages, changeLanguage } from '$lib/i18n';
 	const dispatch = createEventDispatcher();
 
-	import { config, models, settings, theme, user } from '$lib/stores';
+	import { config, settings, theme, user } from '$lib/stores';
+	import SnapdealWordmark from '$lib/components/branding/SnapdealWordmark.svelte';
+	import {
+		SNAPDEAL_THEME,
+		THEME_CLASS_NAMES,
+		getThemeClasses,
+		getThemeMetaColor
+	} from '$lib/utils/theme';
 
 	const i18n = getContext('i18n');
 
@@ -14,8 +21,7 @@
 	export let getModels: Function;
 
 	// General
-	let themes = ['dark', 'light', 'oled-dark'];
-	let selectedTheme = 'system';
+	let selectedTheme = SNAPDEAL_THEME;
 
 	let languages: Awaited<ReturnType<typeof getLanguages>> = [];
 	let lang = $i18n.language;
@@ -108,7 +114,7 @@
 	};
 
 	onMount(async () => {
-		selectedTheme = localStorage.theme ?? 'system';
+		selectedTheme = localStorage.theme ?? SNAPDEAL_THEME;
 
 		languages = await getLanguages();
 
@@ -124,52 +130,32 @@
 	});
 
 	const applyTheme = (_theme: string) => {
-		let themeToApply = _theme === 'oled-dark' ? 'dark' : _theme === 'her' ? 'light' : _theme;
-
-		if (_theme === 'system') {
-			themeToApply = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-		}
+		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		const themeToApply = getThemeClasses(_theme, prefersDark);
 
 		if (themeToApply === 'dark' && !_theme.includes('oled')) {
 			document.documentElement.style.setProperty('--color-gray-800', '#333');
 			document.documentElement.style.setProperty('--color-gray-850', '#262626');
 			document.documentElement.style.setProperty('--color-gray-900', '#171717');
 			document.documentElement.style.setProperty('--color-gray-950', '#0d0d0d');
+		} else if (!_theme.includes('oled')) {
+			document.documentElement.style.removeProperty('--color-gray-800');
+			document.documentElement.style.removeProperty('--color-gray-850');
+			document.documentElement.style.removeProperty('--color-gray-900');
+			document.documentElement.style.removeProperty('--color-gray-950');
 		}
 
-		themes
-			.filter((e) => e !== themeToApply)
-			.forEach((e) => {
-				e.split(' ').forEach((e) => {
-					document.documentElement.classList.remove(e);
-				});
-			});
+		THEME_CLASS_NAMES.forEach((className) => {
+			document.documentElement.classList.remove(className);
+		});
 
-		themeToApply.split(' ').forEach((e) => {
-			document.documentElement.classList.add(e);
+		themeToApply.split(' ').forEach((className) => {
+			document.documentElement.classList.add(className);
 		});
 
 		const metaThemeColor = document.querySelector('meta[name="theme-color"]');
 		if (metaThemeColor) {
-			if (_theme.includes('system')) {
-				const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
-					? 'dark'
-					: 'light';
-				console.log('Setting system meta theme color: ' + systemTheme);
-				metaThemeColor.setAttribute('content', systemTheme === 'light' ? '#ffffff' : '#171717');
-			} else {
-				console.log('Setting meta theme color: ' + _theme);
-				metaThemeColor.setAttribute(
-					'content',
-					_theme === 'dark'
-						? '#171717'
-						: _theme === 'oled-dark'
-							? '#000000'
-							: _theme === 'her'
-								? '#983724'
-								: '#ffffff'
-				);
-			}
+			metaThemeColor.setAttribute('content', getThemeMetaColor(_theme, prefersDark));
 		}
 
 		if (typeof window !== 'undefined' && window.applyTheme) {
@@ -214,12 +200,31 @@
 						<option value="dark">🌑 {$i18n.t('Dark')}</option>
 						<option value="oled-dark">🌃 {$i18n.t('OLED Dark')}</option>
 						<option value="light">☀️ {$i18n.t('Light')}</option>
+						<option value={SNAPDEAL_THEME}>Snapdeal</option>
 						{#if $config?.features?.enable_easter_eggs}
 							<option value="her">🌷 Her</option>
 						{/if}
 					</select>
 				</div>
 			</div>
+
+			{#if selectedTheme === SNAPDEAL_THEME}
+				<div class="mt-2 rounded-2xl border border-[#ffd2db] bg-[#fff4f6] px-3 py-2">
+					<div class="flex items-center justify-between gap-3">
+						<div class="shrink-0">
+							<SnapdealWordmark
+								compact
+								iconClassName="h-[1.4rem] w-auto"
+								textClassName="h-[1.2rem] w-auto"
+							/>
+						</div>
+
+						<div class="text-right text-[11px] leading-4 text-[#666666]">
+							Snapdeal branding is active for the splash screen, sidebar, and profile surfaces.
+						</div>
+					</div>
+				</div>
+			{/if}
 
 			<div class=" flex w-full justify-between">
 				<div class=" self-center text-xs font-medium">{$i18n.t('Language')}</div>

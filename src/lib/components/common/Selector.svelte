@@ -3,6 +3,8 @@
 	import Check from '../icons/Check.svelte';
 	import Search from '../icons/Search.svelte';
 	import Select from './Select.svelte';
+	import { theme } from '$lib/stores';
+	import { getSelectContentClasses, getSelectItemClasses } from '$lib/utils/theme';
 
 	export let value = '';
 	export let placeholder = $i18n.t('Select a model');
@@ -31,7 +33,9 @@
 	{items}
 	{placeholder}
 	triggerClass="relative w-full"
-	contentClass="w-full rounded-lg bg-white dark:bg-gray-900 dark:text-white shadow-lg border border-gray-300/30 dark:border-gray-700/40 outline-hidden"
+	contentClass={`w-full rounded-lg shadow-lg border outline-hidden ${getSelectContentClasses(
+		$theme
+	)}`}
 	onClose={() => {
 		searchValue = '';
 	}}
@@ -65,7 +69,9 @@
 			<div class="px-3 my-2 max-h-80 overflow-y-auto">
 				{#each filteredItems as item}
 					<button
-						class="flex w-full font-medium line-clamp-1 select-none items-center rounded-button py-2 pl-3 pr-1.5 text-sm text-gray-700 dark:text-gray-100 outline-hidden transition-all duration-75 hover:bg-gray-100 dark:hover:bg-gray-850 rounded-lg cursor-pointer"
+						class="flex w-full font-medium line-clamp-1 select-none items-center rounded-button py-2 pl-3 pr-1.5 text-sm outline-hidden transition-all duration-75 rounded-lg cursor-pointer {getSelectItemClasses(
+							$theme
+						)}"
 						type="button"
 						on:click={() => selectItem(item)}
 					>

@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { flyAndScale } from '$lib/utils/transitions';
 	import { tick } from 'svelte';
+	import { theme } from '$lib/stores';
+	import { getSelectContentClasses, getSelectItemClasses } from '$lib/utils/theme';
 
 	/** Currently selected value */
 	export let value = '';
@@ -21,12 +23,10 @@
 	export let labelClass = '';
 
 	/** CSS classes for the dropdown content container */
-	export let contentClass =
-		'rounded-2xl min-w-[170px] p-1 border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-850 dark:text-white shadow-lg';
+	export let contentClass = '';
 
 	/** CSS classes for each item button */
-	export let itemClass =
-		'flex w-full gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl';
+	export let itemClass = '';
 
 	/** Alignment of the dropdown: 'start' | 'end' */
 	export let align = 'start';
@@ -40,6 +40,14 @@
 	let contentEl;
 
 	$: selectedLabel = items.find((i) => i.value === value)?.label ?? placeholder;
+	$: resolvedContentClass =
+		contentClass ||
+		`rounded-2xl min-w-[170px] p-1 border shadow-lg ${getSelectContentClasses($theme)}`;
+	$: resolvedItemClass =
+		itemClass ||
+		`flex w-full gap-2 items-center px-3 py-1.5 text-sm cursor-pointer rounded-xl ${getSelectItemClasses(
+			$theme
+		)}`;
 
 	/** Svelte action: moves the node to document.body (portal) */
 	function portal(node) {
@@ -123,10 +131,10 @@
 </button>
 
 {#if open}
-	<div use:portal bind:this={contentEl} class={contentClass} transition:flyAndScale>
+	<div use:portal bind:this={contentEl} class={resolvedContentClass} transition:flyAndScale>
 		<slot {open} {selectItem}>
 			{#each items as item}
-				<button class={itemClass} type="button" on:click={() => selectItem(item)}>
+				<button class={resolvedItemClass} type="button" on:click={() => selectItem(item)}>
 					<slot name="item" {item} selected={value === item.value}>
 						{item.label}
 					</slot>

@@ -1,9 +1,17 @@
 <script lang="ts">
 	import { onMount, getContext } from 'svelte';
-	import { WEBUI_NAME, showSidebar, functions, mobile } from '$lib/stores';
+	import { WEBUI_NAME, showSidebar, functions, mobile, theme } from '$lib/stores';
 	import { page } from '$app/stores';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import Sidebar from '$lib/components/icons/Sidebar.svelte';
+	import {
+		getTopBarActionClasses,
+		getTopBarActiveTabClasses,
+		getTopBarInactiveTabClasses,
+		getTopBarRailClasses,
+		getTopBarShellClasses,
+		isSnapdealTheme
+	} from '$lib/utils/theme';
 
 	const i18n = getContext('i18n');
 
@@ -17,12 +25,16 @@
 </svelte:head>
 
 <div
-	class=" flex flex-col w-full h-screen max-h-[100dvh] transition-width duration-200 ease-in-out {$showSidebar
+	class=" flex flex-col w-full h-screen max-h-[100dvh] transition-[max-width] duration-300 ease-out {$showSidebar
 		? 'md:max-w-[calc(100%-var(--sidebar-width))]'
 		: ''} max-w-full"
 >
-	<nav class="   px-2.5 pt-1.5 backdrop-blur-xl w-full drag-region">
-		<div class=" flex items-center">
+	<nav class="px-2 pt-1.5 backdrop-blur-xl w-full drag-region">
+		<div
+			class="flex items-center {getTopBarShellClasses($theme)} {isSnapdealTheme($theme)
+				? 'px-2 py-1'
+				: ''}"
+		>
 			{#if $mobile}
 				<div class="{$showSidebar ? 'md:hidden' : ''} flex flex-none items-center self-end mt-1.5">
 					<Tooltip
@@ -31,7 +43,7 @@
 					>
 						<button
 							id="sidebar-toggle-button"
-							class=" cursor-pointer flex rounded-lg hover:bg-gray-100 dark:hover:bg-gray-850 transition cursor-"
+							class="cursor-pointer flex rounded-xl transition {getTopBarActionClasses($theme)}"
 							on:click={() => {
 								showSidebar.set(!$showSidebar);
 							}}
@@ -46,19 +58,23 @@
 
 			<div class=" flex w-full">
 				<div
-					class="flex gap-1 scrollbar-none overflow-x-auto w-fit text-center text-sm font-medium rounded-full bg-transparent pt-1"
+					class="flex gap-1 scrollbar-none overflow-x-auto w-fit text-center text-sm font-medium {isSnapdealTheme(
+						$theme
+					)
+						? `pt-1 px-1.5 py-1 ${getTopBarRailClasses($theme)}`
+						: 'rounded-full bg-transparent pt-1'}"
 				>
 					<a
 						class="min-w-fit p-1.5 {$page.url.pathname.includes('/home/notes')
-							? ''
-							: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'} transition"
+							? getTopBarActiveTabClasses($theme)
+							: getTopBarInactiveTabClasses($theme)} transition"
 						href="/playground/notes">{$i18n.t('Notes')}</a
 					>
 
 					<a
 						class="min-w-fit p-1.5 {$page.url.pathname.includes('/playground/calendar')
-							? ''
-							: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'} transition"
+							? getTopBarActiveTabClasses($theme)
+							: getTopBarInactiveTabClasses($theme)} transition"
 						href="/playground/completions">{$i18n.t('Calendar')}</a
 					>
 				</div>

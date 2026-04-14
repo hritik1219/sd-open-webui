@@ -9,6 +9,8 @@
 	import Collapsible from './Collapsible.svelte';
 	import Tooltip from './Tooltip.svelte';
 	import Plus from '../icons/Plus.svelte';
+	import { theme } from '$lib/stores';
+	import { getFolderButtonClasses, getIconButtonClasses } from '$lib/utils/theme';
 
 	export let open = true;
 
@@ -150,7 +152,9 @@
 				<!-- svelte-ignore a11y-no-static-element-interactions -->
 				<div
 					id="sidebar-folder-button"
-					class=" w-full group rounded-xl relative flex items-center justify-between hover:bg-gray-100 dark:hover:bg-gray-900 transition {buttonClassName}"
+					class=" w-full group rounded-xl relative flex items-center justify-between transition {getFolderButtonClasses(
+						$theme
+					)} {buttonClassName}"
 				>
 					<button class="w-full py-1.5 pl-2 flex items-center gap-1.5 text-xs font-medium">
 						{#if chevron}
@@ -181,7 +185,7 @@
 						>
 							<Tooltip content={onAddLabel}>
 								<button
-									class="p-0.5 dark:hover:bg-gray-850 rounded-lg touch-auto"
+									class="p-0.5 rounded-lg touch-auto {getIconButtonClasses($theme)}"
 									on:click={(e) => {}}
 								>
 									<Plus className=" size-3" strokeWidth="2.5" />
