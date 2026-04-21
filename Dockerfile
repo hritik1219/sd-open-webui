@@ -28,12 +28,19 @@ FROM --platform=$BUILDPLATFORM node:22-alpine3.20 AS build
 ARG BUILD_HASH
 
 # Set Node.js options (heap limit Allocation failed - JavaScript heap out of memory)
-# ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 WORKDIR /app
 
-# to store git revision in build
-RUN apk add --no-cache git
+# Safe fallback to HTTP mirrors to install git and ca-certificates (apk validates signatures natively)
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.20/main" > /etc/apk/repositories && \
+    echo "http://dl-cdn.alpinelinux.org/alpine/v3.20/community" >> /etc/apk/repositories && \
+    apk add --no-cache ca-certificates git
+
+# Inject corporate CA to properly verify TLS without disabling security
+COPY internal-ca.crt /usr/local/share/ca-certificates/internal-ca.crt
+RUN update-ca-certificates
+ENV NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/internal-ca.crt
 
 COPY package.json package-lock.json ./
 RUN npm ci --force
@@ -123,14 +130,26 @@ RUN echo -n 00000000-0000-0000-0000-000000000000 > $HOME/.cache/chroma/telemetry
 # Make sure the user has access to the app and root directory
 RUN chown -R $UID:$GID /app $HOME
 
+# Inject corporate CA to Debian trust store before apt install
+COPY internal-ca.crt /usr/local/share/ca-certificates/internal-ca.crt
+
 # Install common system dependencies
+# (apt-get uses HTTP deb.debian.org so it naturally survives MITM for metadata)
 RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates && \
+    update-ca-certificates && \
     apt-get install -y --no-install-recommends \
     git build-essential pandoc gcc netcat-openbsd curl jq \
     libmariadb-dev \
     python3-dev \
     ffmpeg libsm6 libxext6 zstd \
     && rm -rf /var/lib/apt/lists/*
+
+# Tell pip, uv, and python requests to use the system trust store
+ENV REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+ENV PIP_CERT=/etc/ssl/certs/ca-certificates.crt
+ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+ENV SSL_CERT_DIR=/etc/ssl/certs
 
 # install python dependencies
 COPY --chown=$UID:$GID ./backend/requirements.txt ./requirements.txt
