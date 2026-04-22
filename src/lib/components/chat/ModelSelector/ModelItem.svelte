@@ -83,7 +83,7 @@
 						class="rounded-full size-5 flex items-center"
 						loading="lazy"
 						on:error={(e) => {
-							e.currentTarget.src = '/favicon.png';
+							e.currentTarget.src = '/static/favicon.svg';
 						}}
 					/>
 				</Tooltip>

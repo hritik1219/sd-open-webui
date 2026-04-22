@@ -1,1 +1,7 @@
-{}
+{
+  "name": "Prism",
+  "short_name": "Prism",
+  "theme_color": "#FF2341",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}

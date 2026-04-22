@@ -206,7 +206,7 @@
 									{$i18n.t('Help')}
 								</div>
 								<div class=" text-xs text-gray-500">
-									{$i18n.t('Discover how to use Open WebUI and seek support from the community.')}
+									{$i18n.t('Discover how to use Prism and seek support from the community.')}
 								</div>
 							</div>
 
@@ -219,29 +219,30 @@
 							</a>
 						</div>
 
-						<div class="mt-1">
-							<div class="flex space-x-1">
-								<a href="https://discord.gg/5rJgQTnV4s" target="_blank">
-									<img
-										alt="Discord"
-										src="https://img.shields.io/badge/Discord-Open_WebUI-blue?logo=discord&logoColor=white"
-									/>
-								</a>
+						<div class="mt-2 flex flex-wrap gap-2 text-xs">
+							<a
+								class="rounded-full border border-gray-200 px-3 py-1 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-900"
+								href="https://discord.gg/5rJgQTnV4s"
+								target="_blank"
+							>
+								Discord
+							</a>
 
-								<a href="https://twitter.com/OpenWebUI" target="_blank">
-									<img
-										alt="X (formerly Twitter) Follow"
-										src="https://img.shields.io/twitter/follow/OpenWebUI"
-									/>
-								</a>
+							<a
+								class="rounded-full border border-gray-200 px-3 py-1 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-900"
+								href="https://x.com"
+								target="_blank"
+							>
+								X
+							</a>
 
-								<a href="https://github.com/open-webui/open-webui" target="_blank">
-									<img
-										alt="Github Repo"
-										src="https://img.shields.io/github/stars/open-webui/open-webui?style=social&label=Star us on Github"
-									/>
-								</a>
-							</div>
+							<a
+								class="rounded-full border border-gray-200 px-3 py-1 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-900"
+								href="https://github.com/open-webui/open-webui"
+								target="_blank"
+							>
+								GitHub
+							</a>
 						</div>
 					</div>
 

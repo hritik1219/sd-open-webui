@@ -5,7 +5,7 @@
 	const dispatch = createEventDispatcher();
 
 	import { config, settings, theme, user } from '$lib/stores';
-	import SnapdealWordmark from '$lib/components/branding/SnapdealWordmark.svelte';
+	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
 	import {
 		SNAPDEAL_THEME,
 		THEME_CLASS_NAMES,
@@ -212,15 +212,11 @@
 				<div class="mt-2 rounded-2xl border border-[#ffd2db] bg-[#fff4f6] px-3 py-2">
 					<div class="flex items-center justify-between gap-3">
 						<div class="shrink-0">
-							<SnapdealWordmark
-								compact
-								iconClassName="h-[1.4rem] w-auto"
-								textClassName="h-[1.2rem] w-auto"
-							/>
+							<PrismBrand compact iconClassName="h-[1.4rem] w-auto" textClassName="text-[1.8rem]" />
 						</div>
 
 						<div class="text-right text-[11px] leading-4 text-[#666666]">
-							Snapdeal branding is active for the splash screen, sidebar, and profile surfaces.
+							Prism branding uses Snapdeal mark across splash, auth, sidebar, and profile surfaces.
 						</div>
 					</div>
 				</div>
@@ -259,7 +255,7 @@
 						href="https://github.com/open-webui/open-webui/blob/main/docs/CONTRIBUTING.md#-translations-and-internationalization"
 						target="_blank"
 					>
-						Help us translate Open WebUI!
+						Help us translate Prism!
 					</a>
 				</div>
 			{/if}

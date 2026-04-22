@@ -19,7 +19,7 @@
 	} from '$lib/stores';
 	import { sanitizeResponseContent } from '$lib/utils';
 	import { WEBUI_API_BASE_URL } from '$lib/constants';
-	import SnapdealWordmark from '$lib/components/branding/SnapdealWordmark.svelte';
+	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
 	import { isSnapdealTheme } from '$lib/utils/theme';
 
 	import Suggestions from './Suggestions.svelte';
@@ -113,9 +113,9 @@
 			{:else}
 				<div class="flex flex-row justify-center gap-3 @sm:gap-3.5 w-fit px-5 max-w-xl">
 					<div class="flex shrink-0 justify-center">
-						{#if isSnapdealTheme($theme) && !models[selectedModelIdx]?.name}
+						{#if !models[selectedModelIdx]?.name}
 							<div class="snapdeal-icon-badge p-2.5" in:fade={{ duration: 100 }}>
-								<SnapdealWordmark compact iconOnly iconClassName="h-[1.45rem] w-auto" />
+								<PrismBrand compact iconOnly iconClassName="h-[1.45rem] w-auto" />
 							</div>
 						{:else}
 							<div class="flex -space-x-4 mb-0.5" in:fade={{ duration: 100 }}>
@@ -141,7 +141,7 @@
 												aria-hidden="true"
 												draggable="false"
 												on:error={(e) => {
-													e.currentTarget.src = '/favicon.png';
+													e.currentTarget.src = '/static/favicon.svg';
 												}}
 											/>
 										</button>

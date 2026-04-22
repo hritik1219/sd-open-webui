@@ -5,6 +5,7 @@
 	import { WEBUI_NAME, config, showChangelog } from '$lib/stores';
 	import { compareVersion } from '$lib/utils';
 	import { onMount, getContext } from 'svelte';
+	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
 
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 
@@ -114,35 +115,17 @@
 
 		{#if $config?.license_metadata}
 			<div class="mb-2 text-xs">
-				{#if !$WEBUI_NAME.includes('Open WebUI')}
-					<span class=" text-gray-500 dark:text-gray-300 font-medium">{$WEBUI_NAME}</span> -
-				{/if}
+				<span class=" text-gray-500 dark:text-gray-300 font-medium">{$WEBUI_NAME}</span> -
 
 				<span class=" capitalize">{$config?.license_metadata?.type}</span> license purchased by
 				<span class=" capitalize">{$config?.license_metadata?.organization_name}</span>
 			</div>
 		{:else}
-			<div class="flex space-x-1">
-				<a href="https://discord.gg/5rJgQTnV4s" target="_blank">
-					<img
-						alt="Discord"
-						src="https://img.shields.io/badge/Discord-Open_WebUI-blue?logo=discord&logoColor=white"
-					/>
-				</a>
-
-				<a href="https://twitter.com/OpenWebUI" target="_blank">
-					<img
-						alt="X (formerly Twitter) Follow"
-						src="https://img.shields.io/twitter/follow/OpenWebUI"
-					/>
-				</a>
-
-				<a href="https://github.com/open-webui/open-webui" target="_blank">
-					<img
-						alt="Github Repo"
-						src="https://img.shields.io/github/stars/open-webui/open-webui?style=social&label=Star us on Github"
-					/>
-				</a>
+			<div
+				class="inline-flex items-center gap-2 rounded-full border border-[#ffd2db] bg-[#fff4f6] px-3 py-2"
+			>
+				<PrismBrand compact iconClassName="h-[1.15rem] w-auto" textClassName="text-[1.25rem]" />
+				<span class="text-xs text-[#666666]">Snapdeal mark active across Prism surfaces.</span>
 			</div>
 		{/if}
 
@@ -155,9 +138,9 @@
 		<div>
 			<pre
 				class="text-xs text-gray-400 dark:text-gray-500">Copyright (c) {new Date().getFullYear()} <a
-					href="https://openwebui.com"
+					href="/"
 					target="_blank"
-					class="underline">Open WebUI Inc.</a
+					class="underline">Prism</a
 				> <a href="https://github.com/open-webui/open-webui/blob/main/LICENSE" target="_blank"
 					>All rights reserved.</a
 				>

@@ -1,9 +1,6 @@
 <script lang="ts">
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
-	import { WEBUI_BASE_URL } from '$lib/constants';
-	import { theme } from '$lib/stores';
-	import SnapdealWordmark from '$lib/components/branding/SnapdealWordmark.svelte';
-	import { isSnapdealTheme } from '$lib/utils/theme';
+	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
 
 	let selected = '';
 </script>
@@ -31,18 +28,9 @@
 					}
 				}}
 			>
-				{#if isSnapdealTheme($theme)}
-					<div class="snapdeal-brand-shell p-2">
-						<SnapdealWordmark compact iconOnly iconClassName="h-7 w-auto" />
-					</div>
-				{:else}
-					<img
-						src="{WEBUI_BASE_URL}/static/splash.png"
-						class="size-11 dark:invert p-0.5"
-						alt="logo"
-						draggable="false"
-					/>
-				{/if}
+				<div class="snapdeal-brand-shell p-2">
+					<PrismBrand compact iconOnly iconClassName="h-7 w-auto" />
+				</div>
 			</button>
 		</Tooltip>
 	</div>
@@ -62,18 +50,9 @@
 				selected = '';
 			}}
 		>
-			{#if isSnapdealTheme($theme)}
-				<div class="snapdeal-brand-shell p-2">
-					<SnapdealWordmark compact iconOnly iconClassName="h-6 w-auto" />
-				</div>
-			{:else}
-				<img
-					src="{WEBUI_BASE_URL}/static/favicon.png"
-					class="size-10 {selected === '' ? 'rounded-2xl' : 'rounded-full'}"
-					alt="logo"
-					draggable="false"
-				/>
-			{/if}
+			<div class="snapdeal-brand-shell p-2">
+				<PrismBrand compact iconOnly iconClassName="h-6 w-auto" />
+			</div>
 		</button>
 	</div>
 

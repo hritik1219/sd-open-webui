@@ -3,7 +3,6 @@
 	import { toast } from 'svelte-sonner';
 
 	import {
-		WEBUI_NAME,
 		banners,
 		chatId,
 		config,
@@ -40,7 +39,7 @@
 	import ChatCheck from '../icons/ChatCheck.svelte';
 	import Knobs from '../icons/Knobs.svelte';
 	import { WEBUI_API_BASE_URL } from '$lib/constants';
-	import SnapdealWordmark from '$lib/components/branding/SnapdealWordmark.svelte';
+	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
 	import { getTopBarActionClasses, getTopBarShellClasses, isSnapdealTheme } from '$lib/utils/theme';
 
 	const i18n = getContext('i18n');
@@ -270,31 +269,25 @@
 							}}
 						>
 							<div
-								class="select-none flex items-center transition {isSnapdealTheme($theme)
-									? 'snapdeal-profile-shell gap-2 pl-1.5 py-0.75 pr-0.75 hover:bg-[#fff0f3]'
-									: 'rounded-xl p-1.5 w-full hover:bg-gray-50 dark:hover:bg-gray-850'}"
+								class="select-none flex items-center transition snapdeal-profile-shell gap-2 pl-1.5 py-0.75 pr-0.75 hover:bg-[#fff0f3]"
 							>
-								{#if isSnapdealTheme($theme)}
-									<div class="hidden md:flex items-center snapdeal-brand-shell px-2.5 py-1.25">
-										<SnapdealWordmark
-											compact
-											iconClassName="h-[1.2rem] w-auto"
-											textClassName="h-[1.03rem] w-auto"
-										/>
-									</div>
+								<div class="hidden md:flex items-center snapdeal-brand-shell px-2.5 py-1.25">
+									<PrismBrand
+										compact
+										iconClassName="h-[1.2rem] w-auto"
+										textClassName="text-[1.3rem]"
+									/>
+								</div>
 
-									<div class="flex md:hidden items-center">
-										<SnapdealWordmark compact iconOnly iconClassName="h-[1rem] w-auto" />
-									</div>
-								{/if}
+								<div class="flex md:hidden items-center">
+									<PrismBrand compact iconOnly iconClassName="h-[1rem] w-auto" />
+								</div>
 
 								<div class=" self-center">
 									<span class="sr-only">{$i18n.t('User menu')}</span>
 									<img
 										src={`${WEBUI_API_BASE_URL}/users/${$user?.id}/profile/image`}
-										class="{isSnapdealTheme($theme)
-											? 'size-8 border-2 border-white shadow-sm'
-											: 'size-6'} object-cover rounded-full"
+										class="size-8 border-2 border-white shadow-sm object-cover rounded-full"
 										alt=""
 										draggable="false"
 									/>

@@ -915,7 +915,7 @@
 								{$i18n.t('Warning')}:
 							</span>
 							{$i18n.t(
-								'MCP support is experimental and its specification changes often, which can lead to incompatibilities. OpenAPI specification support is directly maintained by the Open WebUI team, making it the more reliable option for compatibility.'
+								'MCP support is experimental and its specification changes often, which can lead to incompatibilities. OpenAPI specification support is directly maintained by the Prism team, making it the more reliable option for compatibility.'
 							)}
 
 							<a
@@ -941,13 +941,13 @@
 							{/if}
 						</div>
 
-					<button
-						class="px-3.5 py-1.5 text-sm font-medium transition rounded-full flex items-center gap-2 whitespace-nowrap {getDialogPrimaryButtonClasses(
-							$theme
-						)} {loading ? ' cursor-not-allowed' : ''}"
-						type="submit"
-						disabled={loading}
-					>
+						<button
+							class="px-3.5 py-1.5 text-sm font-medium transition rounded-full flex items-center gap-2 whitespace-nowrap {getDialogPrimaryButtonClasses(
+								$theme
+							)} {loading ? ' cursor-not-allowed' : ''}"
+							type="submit"
+							disabled={loading}
+						>
 							{$i18n.t('Save')}
 
 							{#if loading}

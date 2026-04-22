@@ -18,7 +18,7 @@
 	} from '$lib/stores';
 
 	import { WEBUI_API_BASE_URL } from '$lib/constants';
-	import SnapdealWordmark from '$lib/components/branding/SnapdealWordmark.svelte';
+	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
 	import {
 		getMenuItemClasses,
 		getMenuPanelClasses,
@@ -104,18 +104,14 @@
 		>
 			{#if profile}
 				<div class=" flex gap-3.5 w-full p-2.5 items-center">
-					{#if isSnapdealTheme($theme)}
-						<div class="snapdeal-brand-shell px-2.5 py-1.5 shrink-0">
-							<SnapdealWordmark compact iconOnly iconClassName="h-[1.1rem] w-auto" />
-						</div>
-					{/if}
+					<div class="snapdeal-brand-shell px-2.5 py-1.5 shrink-0">
+						<PrismBrand compact iconOnly iconClassName="h-[1.1rem] w-auto" />
+					</div>
 
 					<div class=" items-center flex shrink-0">
 						<img
 							src={`${WEBUI_API_BASE_URL}/users/${$user?.id}/profile/image`}
-							class="{isSnapdealTheme($theme)
-								? 'size-10 border-2 border-white shadow-sm'
-								: 'size-10'} object-cover rounded-full"
+							class="size-10 border-2 border-white shadow-sm object-cover rounded-full"
 							alt="profile"
 						/>
 					</div>

@@ -143,7 +143,7 @@
 	};
 
 	const shareModelHandler = async (model) => {
-		toast.success($i18n.t('Redirecting you to Open WebUI Community'));
+		toast.success($i18n.t('Redirecting you to Community'));
 
 		const url = 'https://openwebui.com';
 
@@ -602,7 +602,7 @@
 												alt="modelfile profile"
 												class=" rounded-2xl size-12 object-cover"
 												on:error={(e) => {
-													e.target.src = '/favicon.png';
+													e.target.src = '/static/favicon.svg';
 												}}
 											/>
 										</div>
@@ -804,7 +804,7 @@
 	{#if $config?.features.enable_community_sharing}
 		<div class=" my-16">
 			<div class=" text-xl font-medium mb-1 line-clamp-1">
-				{$i18n.t('Made by Open WebUI Community')}
+				{$i18n.t('Made by Community')}
 			</div>
 
 			<a

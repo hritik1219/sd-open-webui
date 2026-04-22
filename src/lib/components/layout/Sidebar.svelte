@@ -25,7 +25,6 @@
 		isApp,
 		models,
 		selectedFolder,
-		WEBUI_NAME,
 		sidebarWidth,
 		activeChatIds,
 		theme
@@ -67,7 +66,7 @@
 	import Note from '../icons/Note.svelte';
 	import { slide } from 'svelte/transition';
 	import HotkeyHint from '../common/HotkeyHint.svelte';
-	import SnapdealWordmark from '$lib/components/branding/SnapdealWordmark.svelte';
+	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
 	import {
 		getHeaderIconButtonClasses,
 		getSidebarActionClasses,
@@ -721,17 +720,9 @@
 						aria-label={$showSidebar ? $i18n.t('Close Sidebar') : $i18n.t('Open Sidebar')}
 					>
 						<div class=" self-center flex items-center justify-center size-7">
-							{#if isSnapdealTheme($theme)}
-								<div class="sidebar-new-chat-icon group-hover:hidden snapdeal-brand-shell p-1">
-									<SnapdealWordmark compact iconOnly iconClassName="h-[0.95rem] w-auto" />
-								</div>
-							{:else}
-								<img
-									src="{WEBUI_BASE_URL}/static/favicon.png"
-									class="sidebar-new-chat-icon size-6 rounded-full group-hover:hidden"
-									alt=""
-								/>
-							{/if}
+							<div class="sidebar-new-chat-icon group-hover:hidden snapdeal-brand-shell p-1">
+								<PrismBrand compact iconOnly iconClassName="h-[0.95rem] w-auto" />
+							</div>
 
 							<Sidebar className="size-5 hidden group-hover:flex" />
 						</div>
@@ -938,43 +929,15 @@
 					: ''}"
 			>
 				<a
-					class="flex items-center h-full justify-center transition no-drag-region {isSnapdealTheme(
-						$theme
-					)
-						? 'rounded-full px-2.5 py-1.25 snapdeal-brand-shell snapdeal-header-action'
-						: 'rounded-xl size-8.5 hover:bg-gray-100/50 dark:hover:bg-gray-850/50'}"
+					class="flex items-center h-full justify-center transition no-drag-region px-2.5 py-1.25 snapdeal-brand-link"
 					href="/"
 					draggable="false"
 					on:click={newChatHandler}
 				>
-					{#if isSnapdealTheme($theme)}
-						<SnapdealWordmark
-							compact
-							iconClassName="h-[1.3rem] w-auto"
-							textClassName="h-[1.1rem] w-auto"
-						/>
-					{:else}
-						<img
-							crossorigin="anonymous"
-							src="{WEBUI_BASE_URL}/static/favicon.png"
-							class="sidebar-new-chat-icon size-6 rounded-full"
-							alt=""
-						/>
-					{/if}
+					<PrismBrand compact iconClassName="h-[1.2rem] w-auto" textClassName="text-[1.3rem]" />
 				</a>
 
-				{#if !isSnapdealTheme($theme)}
-					<a href="/" class="flex flex-1 px-1.5" on:click={newChatHandler}>
-						<div
-							id="sidebar-webui-name"
-							class=" self-center font-medium text-gray-850 dark:text-white font-primary"
-						>
-							{$WEBUI_NAME}
-						</div>
-					</a>
-				{:else}
-					<div class="flex-1"></div>
-				{/if}
+				<div class="flex-1"></div>
 				<Tooltip
 					content={$showSidebar ? $i18n.t('Close Sidebar') : $i18n.t('Open Sidebar')}
 					placement="bottom"
@@ -1481,15 +1444,13 @@
 									? 'snapdeal-sidebar-profile-row justify-between gap-1.5 pl-1.25 pr-0.75 py-0.5 rounded-full'
 									: 'rounded-2xl hover:bg-gray-100/50 dark:hover:bg-gray-900/50'}"
 							>
-								{#if isSnapdealTheme($theme)}
-									<div class="self-center shrink-0 snapdeal-sidebar-wordmark-shell px-2.25 py-1">
-										<SnapdealWordmark
-											compact
-											iconClassName="h-[1rem] w-auto"
-											textClassName="h-[0.92rem] w-auto"
-										/>
-									</div>
-								{/if}
+								<div class="self-center shrink-0 snapdeal-sidebar-wordmark-shell px-2.25 py-1">
+									<PrismBrand
+										compact
+										iconClassName="h-[1.2rem] w-auto"
+										textClassName="text-[1.3rem]"
+									/>
+								</div>
 
 								<div class=" self-center relative">
 									<img
@@ -1513,9 +1474,6 @@
 										</div>
 									{/if}
 								</div>
-								{#if !isSnapdealTheme($theme)}
-									<div class=" self-center font-medium">{$user?.name}</div>
-								{/if}
 							</div>
 						</UserMenu>
 					{/if}

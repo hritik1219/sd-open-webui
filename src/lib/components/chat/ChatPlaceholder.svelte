@@ -11,7 +11,7 @@
 	import { sanitizeResponseContent } from '$lib/utils';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import EyeSlash from '$lib/components/icons/EyeSlash.svelte';
-	import SnapdealWordmark from '$lib/components/branding/SnapdealWordmark.svelte';
+	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
 	import { isSnapdealTheme } from '$lib/utils/theme';
 	const i18n = getContext('i18n');
 
@@ -37,7 +37,7 @@
 
 {#key mounted}
 	<div class="m-auto w-full max-w-6xl px-8 lg:px-20">
-		{#if !(isSnapdealTheme($theme) && !models[selectedModelIdx]?.name)}
+		{#if models[selectedModelIdx]?.name}
 			<div class="flex justify-start">
 				<div class="flex -space-x-4 mb-0.5" in:fade={{ duration: 200 }}>
 					{#each models as model, modelIdx}
@@ -60,7 +60,7 @@
 									alt="logo"
 									draggable="false"
 									on:error={(e) => {
-										e.currentTarget.src = '/favicon.png';
+										e.currentTarget.src = '/static/favicon.svg';
 									}}
 								/>
 							</Tooltip>
@@ -85,9 +85,9 @@
 		<div
 			class=" mt-2 mb-4 text-3xl text-gray-800 dark:text-gray-100 text-left flex items-center gap-4 font-primary"
 		>
-			{#if isSnapdealTheme($theme) && !models[selectedModelIdx]?.name}
+			{#if !models[selectedModelIdx]?.name}
 				<div class="snapdeal-icon-badge shrink-0 p-3" in:fade={{ duration: 200 }}>
-					<SnapdealWordmark compact iconOnly iconClassName="h-[1.45rem] w-auto" />
+					<PrismBrand compact iconOnly iconClassName="h-[1.45rem] w-auto" />
 				</div>
 			{/if}
 

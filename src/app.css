@@ -82,10 +82,28 @@ html.snapdeal ::selection {
 }
 
 .snapdeal-brand-shell {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	background: #fff;
 	border: 1px solid rgba(200, 200, 200, 0.82);
 	box-shadow: 0 6px 18px rgba(28, 26, 26, 0.045);
 	border-radius: 1.15rem;
+}
+
+.snapdeal-brand-link {
+	background: #fff;
+	border: 1px solid rgba(200, 200, 200, 0.82);
+	box-shadow: 0 6px 18px rgba(28, 26, 26, 0.045);
+	color: var(--snapdeal-text);
+	border-radius: 1.15rem;
+}
+
+.snapdeal-brand-link:hover {
+	background: #fff7f8;
+	border-color: rgba(255, 35, 65, 0.12);
+	box-shadow: 0 8px 20px rgba(28, 26, 26, 0.06);
+	color: var(--snapdeal-text);
 }
 
 .snapdeal-topbar-shell {
@@ -215,8 +233,8 @@ html.snapdeal .snapdeal-muted-tab:hover {
 	align-items: center;
 	justify-content: center;
 	background: #fff;
-	border: 1px solid rgba(255, 35, 65, 0.16);
-	box-shadow: 0 6px 18px rgba(28, 26, 26, 0.05);
+	border: 1px solid rgba(200, 200, 200, 0.82);
+	box-shadow: 0 6px 18px rgba(28, 26, 26, 0.045);
 	border-radius: 999px;
 }
 
@@ -259,10 +277,10 @@ html.snapdeal .snapdeal-muted-tab:hover {
 }
 
 .snapdeal-sidebar-wordmark-shell {
-	background: linear-gradient(180deg, #ffffff 0%, #fffdfd 100%);
-	border: 1px solid rgba(200, 200, 200, 0.68);
-	box-shadow: 0 4px 10px rgba(28, 26, 26, 0.035);
-	border-radius: 999px;
+	background: #fff;
+	border: 1px solid rgba(200, 200, 200, 0.82);
+	box-shadow: 0 6px 18px rgba(28, 26, 26, 0.045);
+	border-radius: 1.15rem;
 }
 
 .snapdeal-menu-panel {
