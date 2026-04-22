@@ -1,11 +1,12 @@
 <script lang="ts">
-	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
 	import { marked } from 'marked';
+	import DOMPurify from 'dompurify';
 
 	import { config, user, models as _models, temporaryChatEnabled, theme } from '$lib/stores';
 	import { onMount, getContext } from 'svelte';
 
-	import { fade } from 'svelte/transition';
+	import { blur, fade } from 'svelte/transition';
 
 	import Suggestions from './Suggestions.svelte';
 	import { sanitizeResponseContent } from '$lib/utils';
@@ -19,7 +20,7 @@
 	export let models = [];
 	export let atSelectedModel;
 
-	export let onSelect = () => {};
+	export let onSelect = (e) => {};
 
 	let mounted = false;
 	let selectedModelIdx = 0;
@@ -37,38 +38,38 @@
 
 {#key mounted}
 	<div class="m-auto w-full max-w-6xl px-8 lg:px-20">
-		{#if models[selectedModelIdx]?.name}
-			<div class="flex justify-start">
-				<div class="flex -space-x-4 mb-0.5" in:fade={{ duration: 200 }}>
-					{#each models as model, modelIdx}
-						<button
-							on:click={() => {
-								selectedModelIdx = modelIdx;
-							}}
-						>
-							<Tooltip
-								content={marked.parse(
+		<div class="flex justify-start">
+			<div class="flex -space-x-4 mb-0.5" in:fade={{ duration: 200 }}>
+				{#each models as model, modelIdx}
+					<button
+						on:click={() => {
+							selectedModelIdx = modelIdx;
+						}}
+					>
+						<Tooltip
+							content={DOMPurify.sanitize(
+								marked.parse(
 									sanitizeResponseContent(
 										models[selectedModelIdx]?.info?.meta?.description ?? ''
 									).replaceAll('\n', '<br>')
-								)}
-								placement="right"
-							>
-								<img
-									src={`${WEBUI_API_BASE_URL}/models/model/profile/image?id=${model?.id}&lang=${$i18n.language}`}
-									class=" size-[2.7rem] rounded-full border-[1px] border-gray-100 dark:border-none"
-									alt="logo"
-									draggable="false"
-									on:error={(e) => {
-										e.currentTarget.src = '/static/favicon.svg';
-									}}
-								/>
-							</Tooltip>
-						</button>
-					{/each}
-				</div>
+								)
+							)}
+							placement="right"
+						>
+							<img
+								src={`${WEBUI_API_BASE_URL}/models/model/profile/image?id=${model?.id}&lang=${$i18n.language}`}
+								class=" size-[2.7rem] rounded-full border-[1px] border-gray-100 dark:border-none"
+								alt="logo"
+								draggable="false"
+								on:error={(e) => {
+									e.currentTarget.src = '/static/favicon.svg';
+								}}
+							/>
+						</Tooltip>
+					</button>
+				{/each}
 			</div>
-		{/if}
+		</div>
 
 		{#if $temporaryChatEnabled}
 			<Tooltip
@@ -109,10 +110,12 @@
 						<div
 							class="mt-0.5 text-base font-normal text-gray-500 dark:text-gray-400 line-clamp-3 markdown"
 						>
-							{@html marked.parse(
-								sanitizeResponseContent(
-									models[selectedModelIdx]?.info?.meta?.description
-								).replaceAll('\n', '<br>')
+							{@html DOMPurify.sanitize(
+								marked.parse(
+									sanitizeResponseContent(
+										models[selectedModelIdx]?.info?.meta?.description
+									).replaceAll('\n', '<br>')
+								)
 							)}
 						</div>
 						{#if models[selectedModelIdx]?.info?.meta?.user}
