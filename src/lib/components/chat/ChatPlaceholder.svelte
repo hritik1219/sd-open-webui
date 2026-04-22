@@ -12,7 +12,7 @@
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import EyeSlash from '$lib/components/icons/EyeSlash.svelte';
 	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
-	import { isSnapdealTheme } from '$lib/utils/theme';
+	import { isPrismTheme } from '$lib/utils/theme';
 	const i18n = getContext('i18n');
 
 	export let modelIds = [];
@@ -83,7 +83,11 @@
 		{/if}
 
 		<div
-			class=" mt-2 mb-4 text-3xl text-gray-800 dark:text-gray-100 text-left flex items-center gap-4 font-primary"
+			class=" mt-2 mb-4 text-3xl text-left flex items-center gap-4 font-primary {isPrismTheme(
+				$theme
+			)
+				? 'text-white'
+				: 'text-gray-800 dark:text-gray-100'}"
 		>
 			{#if !models[selectedModelIdx]?.name}
 				<div class="snapdeal-icon-badge shrink-0 p-3" in:fade={{ duration: 200 }}>
@@ -128,7 +132,11 @@
 							</div>
 						{/if}
 					{:else}
-						<div class=" text-gray-400 dark:text-gray-500 line-clamp-1 font-p">
+						<div
+							class="{isPrismTheme($theme)
+								? 'text-gray-400'
+								: 'text-gray-400 dark:text-gray-500'} line-clamp-1 font-p"
+						>
 							{$i18n.t('How can I help you today?')}
 						</div>
 					{/if}

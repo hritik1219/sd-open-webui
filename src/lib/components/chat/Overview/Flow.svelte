@@ -20,6 +20,8 @@
 	export let nodeTypes;
 	export let edges;
 	export let setLayoutDirection;
+
+	import { isDarkTheme } from '$lib/utils/theme';
 </script>
 
 <SvelteFlow
@@ -28,13 +30,12 @@
 	{edges}
 	fitView
 	minZoom={0.001}
-	colorMode={$theme.includes('dark')
+	colorMode={isDarkTheme(
+		$theme,
+		$theme === 'system' ? window.matchMedia('(prefers-color-scheme: dark)').matches : false
+	)
 		? 'dark'
-		: $theme === 'system'
-			? window.matchMedia('(prefers-color-scheme: dark)').matches
-				? 'dark'
-				: 'light'
-			: 'light'}
+		: 'light'}
 	nodesConnectable={false}
 	nodesDraggable={false}
 	on:nodeclick={(e) => dispatch('nodeclick', e.detail)}

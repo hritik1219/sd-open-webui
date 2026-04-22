@@ -40,7 +40,12 @@
 	import Knobs from '../icons/Knobs.svelte';
 	import { WEBUI_API_BASE_URL } from '$lib/constants';
 	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
-	import { getTopBarActionClasses, getTopBarShellClasses, isSnapdealTheme } from '$lib/utils/theme';
+	import {
+		getTopBarActionClasses,
+		getTopBarShellClasses,
+		isPrismTheme,
+		isSnapdealTheme
+	} from '$lib/utils/theme';
 
 	const i18n = getContext('i18n');
 
@@ -76,10 +81,10 @@
 
 <nav
 	class="sticky top-0 z-30 w-full {chat?.id
-		? isSnapdealTheme($theme)
+		? isSnapdealTheme($theme) || isPrismTheme($theme)
 			? 'pt-1 pb-0.5'
 			: 'pt-0.5 pb-1'
-		: isSnapdealTheme($theme)
+		: isSnapdealTheme($theme) || isPrismTheme($theme)
 			? 'pt-1 pb-0.5'
 			: 'pt-1 pb-1'} -mb-12 flex flex-col items-center drag-region"
 >
@@ -88,18 +93,22 @@
 			id="navbar-bg-gradient-to-b"
 			class="{chat?.id ? 'visible' : 'invisible'} {isSnapdealTheme($theme)
 				? 'bg-linear-to-b via-28% to-95% from-[#ffe1e7] via-[#fff6f8] to-transparent'
-				: 'bg-linear-to-b via-40% to-97% from-white/90 via-white/50 to-transparent dark:from-gray-900/90 dark:via-gray-900/50 dark:to-transparent'} pointer-events-none absolute inset-0 -bottom-10 z-[-1]"
+				: isPrismTheme($theme)
+					? 'bg-linear-to-b via-30% to-95% from-[#12151d]/92 via-[#0d1016]/60 to-transparent'
+					: 'bg-linear-to-b via-40% to-97% from-white/90 via-white/50 to-transparent dark:from-gray-900/90 dark:via-gray-900/50 dark:to-transparent'} pointer-events-none absolute inset-0 -bottom-10 z-[-1]"
 		></div>
 
 		<div
 			class="flex max-w-full w-full mx-auto bg-transparent {isSnapdealTheme($theme)
 				? `px-1.5 md:px-2 py-1 ${getTopBarShellClasses($theme)}`
-				: 'px-1.5 md:px-2 pt-0.5'}"
+				: isPrismTheme($theme)
+					? `px-1.5 md:px-2 py-1 ${getTopBarShellClasses($theme)}`
+					: 'px-1.5 md:px-2 pt-0.5'}"
 		>
 			<div class="flex items-center w-full max-w-full">
 				{#if $mobile && !$showSidebar}
 					<div
-						class="-translate-x-0.5 mr-1 {isSnapdealTheme($theme)
+						class="-translate-x-0.5 mr-1 {isSnapdealTheme($theme) || isPrismTheme($theme)
 							? 'self-center text-white'
 							: 'mt-1 self-start text-gray-600 dark:text-gray-400'} flex flex-none items-center"
 					>
@@ -119,9 +128,11 @@
 				{/if}
 
 				<div
-					class="flex-1 overflow-hidden max-w-full {isSnapdealTheme($theme) ? 'py-0' : 'py-0.5'}
-			{$showSidebar && !isSnapdealTheme($theme) ? 'ml-1' : ''}
-			{isSnapdealTheme($theme) ? '' : 'mt-0.5'}
+					class="flex-1 overflow-hidden max-w-full {isSnapdealTheme($theme) || isPrismTheme($theme)
+						? 'py-0'
+						: 'py-0.5'}
+			{$showSidebar && !(isSnapdealTheme($theme) || isPrismTheme($theme)) ? 'ml-1' : ''}
+			{isSnapdealTheme($theme) || isPrismTheme($theme) ? '' : 'mt-0.5'}
 			"
 				>
 					{#if showModelSelector}
@@ -130,7 +141,7 @@
 				</div>
 
 				<div
-					class="{isSnapdealTheme($theme)
+					class="{isSnapdealTheme($theme) || isPrismTheme($theme)
 						? 'self-center text-white'
 						: 'self-start text-gray-600 dark:text-gray-400'} flex flex-none items-center"
 				>
@@ -142,7 +153,9 @@
 								<button
 									class="flex cursor-pointer {isSnapdealTheme($theme)
 										? 'px-1.5 py-1.5'
-										: 'px-2 py-2'} rounded-xl transition {getTopBarActionClasses($theme)}"
+										: isPrismTheme($theme)
+											? 'px-1.5 py-1.5'
+											: 'px-2 py-2'} rounded-xl transition {getTopBarActionClasses($theme)}"
 									id="temporary-chat-button"
 									on:click={async () => {
 										if (($settings?.temporaryChatByDefault ?? false) && $temporaryChatEnabled) {
@@ -178,7 +191,9 @@
 								<button
 									class="flex cursor-pointer {isSnapdealTheme($theme)
 										? 'px-1.5 py-1.5'
-										: 'px-2 py-2'} rounded-xl transition {getTopBarActionClasses($theme)}"
+										: isPrismTheme($theme)
+											? 'px-1.5 py-1.5'
+											: 'px-2 py-2'} rounded-xl transition {getTopBarActionClasses($theme)}"
 									id="save-temporary-chat-button"
 									on:click={async () => {
 										onSaveTempChat();
@@ -199,9 +214,13 @@
 									$theme
 								)
 									? 'px-1.5 py-1.5'
-									: 'px-2 py-2'} rounded-xl transition {isSnapdealTheme($theme)
+									: isPrismTheme($theme)
+										? 'px-1.5 py-1.5'
+										: 'px-2 py-2'} rounded-xl transition {isSnapdealTheme($theme)
 									? 'text-white'
-									: 'text-gray-600 dark:text-gray-400'} {getTopBarActionClasses($theme)}"
+									: isPrismTheme($theme)
+										? 'text-white'
+										: 'text-gray-600 dark:text-gray-400'} {getTopBarActionClasses($theme)}"
 								on:click={() => {
 									initNewChat();
 								}}
@@ -229,7 +248,9 @@
 							<button
 								class="flex cursor-pointer {isSnapdealTheme($theme)
 									? 'px-1.5 py-1.5'
-									: 'px-2 py-2'} rounded-xl transition {getTopBarActionClasses($theme)}"
+									: isPrismTheme($theme)
+										? 'px-1.5 py-1.5'
+										: 'px-2 py-2'} rounded-xl transition {getTopBarActionClasses($theme)}"
 								id="chat-context-menu-button"
 							>
 								<div class=" m-auto self-center">
@@ -244,7 +265,9 @@
 							<button
 								class="flex cursor-pointer {isSnapdealTheme($theme)
 									? 'px-1.5 py-1.5'
-									: 'px-2 py-2'} rounded-xl transition {getTopBarActionClasses($theme)}"
+									: isPrismTheme($theme)
+										? 'px-1.5 py-1.5'
+										: 'px-2 py-2'} rounded-xl transition {getTopBarActionClasses($theme)}"
 								on:click={async () => {
 									await showControls.set(!$showControls);
 								}}
@@ -269,7 +292,11 @@
 							}}
 						>
 							<div
-								class="select-none flex items-center transition snapdeal-profile-shell gap-2 pl-1.5 py-0.75 pr-0.75 hover:bg-[#fff0f3]"
+								class="select-none flex items-center transition snapdeal-profile-shell gap-2 pl-1.5 py-0.75 pr-0.75 {isPrismTheme(
+									$theme
+								)
+									? 'hover:bg-white/10'
+									: 'hover:bg-[#fff0f3]'}"
 							>
 								<div class="hidden md:flex items-center snapdeal-brand-shell px-2.5 py-1.25">
 									<PrismBrand

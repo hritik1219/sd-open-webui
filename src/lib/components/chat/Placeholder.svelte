@@ -20,7 +20,7 @@
 	import { sanitizeResponseContent } from '$lib/utils';
 	import { WEBUI_API_BASE_URL } from '$lib/constants';
 	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
-	import { isSnapdealTheme } from '$lib/utils/theme';
+	import { isPrismTheme, isSnapdealTheme } from '$lib/utils/theme';
 
 	import Suggestions from './Suggestions.svelte';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
@@ -76,7 +76,9 @@
 <div
 	class="m-auto w-full max-w-6xl px-2 @2xl:px-20 text-center {isSnapdealTheme($theme)
 		? 'translate-y-2 py-20'
-		: 'translate-y-6 py-24'}"
+		: isPrismTheme($theme)
+			? 'translate-y-4 py-24'
+			: 'translate-y-6 py-24'}"
 >
 	{#if $temporaryChatEnabled}
 		<Tooltip
@@ -93,7 +95,9 @@
 	<div
 		class="w-full text-3xl text-center flex items-center gap-4 font-primary {isSnapdealTheme($theme)
 			? 'text-[var(--snapdeal-text)]'
-			: 'text-gray-800 dark:text-gray-100'}"
+			: isPrismTheme($theme)
+				? 'text-white'
+				: 'text-gray-800 dark:text-gray-100'}"
 	>
 		<div class="w-full flex flex-col justify-center items-center">
 			{#if $selectedFolder}
@@ -154,7 +158,9 @@
 					<div
 						class=" text-3xl @sm:text-3xl line-clamp-1 flex items-center {isSnapdealTheme($theme)
 							? 'tracking-[-0.02em]'
-							: ''}"
+							: isPrismTheme($theme)
+								? 'tracking-[-0.03em]'
+								: ''}"
 						in:fade={{ duration: 100 }}
 					>
 						{#if models[selectedModelIdx]?.name}
@@ -220,7 +226,9 @@
 			<div
 				class="text-base font-normal @md:max-w-3xl w-full {isSnapdealTheme($theme)
 					? 'py-2.5'
-					: 'py-3'} {atSelectedModel ? 'mt-2' : ''}"
+					: isPrismTheme($theme)
+						? 'py-3.5'
+						: 'py-3'} {atSelectedModel ? 'mt-2' : ''}"
 			>
 				<MessageInput
 					bind:this={messageInput}
@@ -261,7 +269,11 @@
 		</div>
 	{:else}
 		<div
-			class="mx-auto max-w-2xl font-primary {isSnapdealTheme($theme) ? 'mt-3' : 'mt-2'}"
+			class="mx-auto max-w-2xl font-primary {isSnapdealTheme($theme)
+				? 'mt-3'
+				: isPrismTheme($theme)
+					? 'mt-4'
+					: 'mt-2'}"
 			in:fade={{ duration: 200, delay: 200 }}
 		>
 			<div class="mx-5">

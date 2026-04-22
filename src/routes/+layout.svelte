@@ -71,7 +71,7 @@
 	import { getUserSettings } from '$lib/apis/users';
 	import dayjs from 'dayjs';
 	import { getChannels } from '$lib/apis/channels';
-	import { SNAPDEAL_THEME } from '$lib/utils/theme';
+	import { SNAPDEAL_THEME, isDarkTheme } from '$lib/utils/theme';
 
 	const unregisterServiceWorkers = async () => {
 		if ('serviceWorker' in navigator) {
@@ -1070,13 +1070,12 @@
 {/if}
 
 <Toaster
-	theme={$theme.includes('dark')
+	theme={isDarkTheme(
+		$theme,
+		$theme === 'system' ? window.matchMedia('(prefers-color-scheme: dark)').matches : false
+	)
 		? 'dark'
-		: $theme === 'system'
-			? window.matchMedia('(prefers-color-scheme: dark)').matches
-				? 'dark'
-				: 'light'
-			: 'light'}
+		: 'light'}
 	richColors
 	position="top-right"
 	closeButton

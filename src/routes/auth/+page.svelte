@@ -20,7 +20,13 @@
 	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
 	import { WEBUI_NAME, config, user, socket, theme } from '$lib/stores';
 	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
-	import { getPrimaryButtonClasses, isSnapdealTheme } from '$lib/utils/theme';
+	import PrismBackground from '$lib/components/effects/PrismBackground.svelte';
+	import {
+		getDialogSecondaryButtonClasses,
+		getPrimaryButtonClasses,
+		isCustomTheme,
+		isPrismTheme
+	} from '$lib/utils/theme';
 
 	import { generateInitialsImage, canvasPixelTest, getUserTimezone } from '$lib/utils';
 
@@ -170,6 +176,13 @@
 			onboarding = $config?.onboarding ?? false;
 		}
 	});
+
+	$: authPrimaryButtonClasses = isCustomTheme($theme)
+		? getPrimaryButtonClasses($theme)
+		: 'bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white';
+	$: authSecondaryButtonClasses = isCustomTheme($theme)
+		? getDialogSecondaryButtonClasses($theme)
+		: 'bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white';
 </script>
 
 <svelte:head>
@@ -187,7 +200,28 @@
 />
 
 <div class="w-full h-screen max-h-[100dvh] text-white relative" id="auth-page">
-	<div class="w-full h-full absolute top-0 left-0 bg-white dark:bg-black"></div>
+	<div
+		class="w-full h-full absolute top-0 left-0 {isPrismTheme($theme)
+			? 'bg-[#06070b]'
+			: 'bg-white dark:bg-black'}"
+	></div>
+
+	{#if isPrismTheme($theme)}
+		<div class="absolute inset-0 z-0 overflow-hidden">
+			<PrismBackground
+				animationType="3drotate"
+				scale={4.4}
+				glow={1.2}
+				noise={0.14}
+				bloom={1.1}
+				hueShift={0.24}
+				timeScale={0.22}
+				suspendWhenOffscreen={true}
+				className="pointer-events-none opacity-85"
+			/>
+			<div class="absolute inset-0 prism-auth-canvas pointer-events-none"></div>
+		</div>
+	{/if}
 
 	<div class="w-full absolute top-0 left-0 right-0 h-8 drag-region" />
 
@@ -213,7 +247,11 @@
 					</div>
 				{:else}
 					<div class="my-auto flex flex-col justify-center items-center">
-						<div class=" sm:max-w-md my-auto pb-10 w-full dark:text-gray-100">
+						<div
+							class={isPrismTheme($theme)
+								? 'sm:max-w-lg my-auto pb-10 w-full dark:text-gray-100 prism-auth-panel rounded-[2rem] px-6 py-7'
+								: 'sm:max-w-md my-auto pb-10 w-full dark:text-gray-100'}
+						>
 							{#if $config?.metadata?.auth_logo_position === 'center'}
 								<div class="flex justify-center mb-6">
 									<div class="snapdeal-brand-shell px-5 py-3">
@@ -347,22 +385,14 @@
 									{#if $config?.features.enable_login_form || $config?.features.enable_ldap || form}
 										{#if mode === 'ldap'}
 											<button
-												class="transition w-full rounded-full font-medium text-sm py-2.5 {isSnapdealTheme(
-													$theme
-												)
-													? getPrimaryButtonClasses($theme)
-													: 'bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white'}"
+												class="transition w-full rounded-full font-medium text-sm py-2.5 {authPrimaryButtonClasses}"
 												type="submit"
 											>
 												{$i18n.t('Authenticate')}
 											</button>
 										{:else}
 											<button
-												class="transition w-full rounded-full font-medium text-sm py-2.5 {isSnapdealTheme(
-													$theme
-												)
-													? getPrimaryButtonClasses($theme)
-													: 'bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white'}"
+												class="transition w-full rounded-full font-medium text-sm py-2.5 {authPrimaryButtonClasses}"
 												type="submit"
 											>
 												{mode === 'signin'
@@ -413,7 +443,7 @@
 								<div class="flex flex-col space-y-2">
 									{#if $config?.oauth?.providers?.google}
 										<button
-											class="flex justify-center items-center bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
+											class="flex justify-center items-center transition w-full rounded-full font-medium text-sm py-2.5 {authSecondaryButtonClasses}"
 											on:click={() => {
 												window.location.href = `${WEBUI_BASE_URL}/oauth/google/login`;
 											}}
@@ -443,7 +473,7 @@
 									{/if}
 									{#if $config?.oauth?.providers?.microsoft}
 										<button
-											class="flex justify-center items-center bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
+											class="flex justify-center items-center transition w-full rounded-full font-medium text-sm py-2.5 {authSecondaryButtonClasses}"
 											on:click={() => {
 												window.location.href = `${WEBUI_BASE_URL}/oauth/microsoft/login`;
 											}}
@@ -474,7 +504,7 @@
 									{/if}
 									{#if $config?.oauth?.providers?.github}
 										<button
-											class="flex justify-center items-center bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
+											class="flex justify-center items-center transition w-full rounded-full font-medium text-sm py-2.5 {authSecondaryButtonClasses}"
 											on:click={() => {
 												window.location.href = `${WEBUI_BASE_URL}/oauth/github/login`;
 											}}
@@ -495,7 +525,7 @@
 									{/if}
 									{#if $config?.oauth?.providers?.oidc}
 										<button
-											class="flex justify-center items-center bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
+											class="flex justify-center items-center transition w-full rounded-full font-medium text-sm py-2.5 {authSecondaryButtonClasses}"
 											on:click={() => {
 												window.location.href = `${WEBUI_BASE_URL}/oauth/oidc/login`;
 											}}
@@ -525,7 +555,7 @@
 									{/if}
 									{#if $config?.oauth?.providers?.feishu}
 										<button
-											class="flex justify-center items-center bg-gray-700/5 hover:bg-gray-700/10 dark:bg-gray-100/5 dark:hover:bg-gray-100/10 dark:text-gray-300 dark:hover:text-white transition w-full rounded-full font-medium text-sm py-2.5"
+											class="flex justify-center items-center transition w-full rounded-full font-medium text-sm py-2.5 {authSecondaryButtonClasses}"
 											on:click={() => {
 												window.location.href = `${WEBUI_BASE_URL}/oauth/feishu/login`;
 											}}

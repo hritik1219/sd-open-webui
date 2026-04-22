@@ -7,6 +7,7 @@
 	import { config, settings, theme, user } from '$lib/stores';
 	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
 	import {
+		PRISM_THEME,
 		SNAPDEAL_THEME,
 		THEME_CLASS_NAMES,
 		getThemeClasses,
@@ -201,6 +202,7 @@
 						<option value="oled-dark">🌃 {$i18n.t('OLED Dark')}</option>
 						<option value="light">☀️ {$i18n.t('Light')}</option>
 						<option value={SNAPDEAL_THEME}>Snapdeal</option>
+						<option value={PRISM_THEME}>Prism</option>
 						{#if $config?.features?.enable_easter_eggs}
 							<option value="her">🌷 Her</option>
 						{/if}
@@ -217,6 +219,27 @@
 
 						<div class="text-right text-[11px] leading-4 text-[#666666]">
 							Prism branding uses Snapdeal mark across splash, auth, sidebar, and profile surfaces.
+						</div>
+					</div>
+				</div>
+			{:else if selectedTheme === PRISM_THEME}
+				<div
+					class="mt-2 rounded-[1.4rem] border border-white/10 bg-[#0b0e14] px-3 py-2 text-white shadow-[0_24px_50px_rgba(0,0,0,0.22)]"
+				>
+					<div class="flex items-center justify-between gap-3">
+						<div class="shrink-0">
+							<div class="snapdeal-brand-shell px-3 py-2">
+								<PrismBrand
+									compact
+									iconClassName="h-[1.35rem] w-auto"
+									textClassName="text-[1.55rem]"
+								/>
+							</div>
+						</div>
+
+						<div class="text-right text-[11px] leading-4 text-[#a0a8bb]">
+							Prism theme adds dark glass UI and interactive WebGL background on auth and chat
+							surfaces.
 						</div>
 					</div>
 				</div>

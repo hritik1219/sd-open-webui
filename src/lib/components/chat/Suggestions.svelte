@@ -4,7 +4,7 @@
 	import { onMount, getContext } from 'svelte';
 	import { settings, WEBUI_NAME, theme } from '$lib/stores';
 	import { WEBUI_VERSION } from '$lib/constants';
-	import { isSnapdealTheme } from '$lib/utils/theme';
+	import { isPrismTheme, isSnapdealTheme } from '$lib/utils/theme';
 
 	const i18n = getContext('i18n');
 
@@ -68,7 +68,9 @@
 <div
 	class="mb-1 flex gap-1 text-xs font-medium items-center {isSnapdealTheme($theme)
 		? 'snapdeal-suggestion-kicker'
-		: 'text-gray-600 dark:text-gray-400'}"
+		: isPrismTheme($theme)
+			? 'prism-suggestion-kicker'
+			: 'text-gray-600 dark:text-gray-400'}"
 >
 	{#if filteredPrompts.length > 0}
 		<Bolt />
@@ -97,7 +99,9 @@
 						$theme
 					)
 						? 'snapdeal-suggestion-card'
-						: 'bg-transparent hover:bg-black/5 dark:hover:bg-white/5'}"
+						: isPrismTheme($theme)
+							? 'prism-suggestion-card'
+							: 'bg-transparent hover:bg-black/5 dark:hover:bg-white/5'}"
 					style="animation-delay: {idx * 60}ms"
 					on:click={() => onSelect({ type: 'prompt', data: prompt.content })}
 				>
@@ -106,14 +110,18 @@
 							<div
 								class="font-medium transition line-clamp-1 {isSnapdealTheme($theme)
 									? 'text-[var(--snapdeal-text)] group-hover:text-[var(--snapdeal-cta)]'
-									: 'dark:text-gray-300 dark:group-hover:text-gray-200'}"
+									: isPrismTheme($theme)
+										? 'text-white'
+										: 'dark:text-gray-300 dark:group-hover:text-gray-200'}"
 							>
 								{prompt.title[0]}
 							</div>
 							<div
 								class="text-xs font-normal line-clamp-1 {isSnapdealTheme($theme)
 									? 'snapdeal-suggestion-kicker'
-									: 'text-gray-600 dark:text-gray-400'}"
+									: isPrismTheme($theme)
+										? 'prism-suggestion-kicker'
+										: 'text-gray-600 dark:text-gray-400'}"
 							>
 								{prompt.title[1]}
 							</div>
@@ -121,14 +129,18 @@
 							<div
 								class="font-medium transition line-clamp-1 {isSnapdealTheme($theme)
 									? 'text-[var(--snapdeal-text)] group-hover:text-[var(--snapdeal-cta)]'
-									: 'dark:text-gray-300 dark:group-hover:text-gray-200'}"
+									: isPrismTheme($theme)
+										? 'text-white'
+										: 'dark:text-gray-300 dark:group-hover:text-gray-200'}"
 							>
 								{prompt.content}
 							</div>
 							<div
 								class="text-xs font-normal line-clamp-1 {isSnapdealTheme($theme)
 									? 'snapdeal-suggestion-kicker'
-									: 'text-gray-600 dark:text-gray-400'}"
+									: isPrismTheme($theme)
+										? 'prism-suggestion-kicker'
+										: 'text-gray-600 dark:text-gray-400'}"
 							>
 								{$i18n.t('Prompt')}
 							</div>

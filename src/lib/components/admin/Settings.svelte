@@ -10,6 +10,7 @@
 		getActiveTabClasses,
 		getInactiveTabClasses,
 		getSearchShellClasses,
+		isPrismTheme,
 		isSnapdealTheme
 	} from '$lib/utils/theme';
 	import Database from './Settings/Database.svelte';
@@ -299,7 +300,7 @@
 		<div
 			class="hidden md:flex w-full rounded-full px-2.5 gap-2 backdrop-blur-2xl my-1 -mx-1 mt-1.5 {isSnapdealTheme(
 				$theme
-			)
+			) || isPrismTheme($theme)
 				? getSearchShellClasses($theme)
 				: 'bg-gray-100/80 dark:bg-gray-850/80'}"
 			id="settings-search"

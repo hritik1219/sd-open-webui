@@ -76,6 +76,10 @@
 					document.documentElement.classList.add('light');
 					document.documentElement.classList.add('snapdeal');
 					metaThemeColorTag.setAttribute('content', '#FF2341');
+				} else if (localStorage.theme === 'prism') {
+					document.documentElement.classList.add('dark');
+					document.documentElement.classList.add('prism');
+					metaThemeColorTag.setAttribute('content', '#090B10');
 				} else {
 					document.documentElement.classList.add('dark');
 					metaThemeColorTag.setAttribute('content', '#171717');
@@ -201,6 +205,17 @@
 
 		html.snapdeal #splash-screen {
 			background: linear-gradient(180deg, #ffffff 0%, #fff4f6 100%);
+		}
+
+		html.prism #splash-screen {
+			background:
+				radial-gradient(circle at 18% 12%, rgba(124, 92, 255, 0.22) 0%, transparent 28%),
+				radial-gradient(circle at 78% 0%, rgba(255, 35, 65, 0.16) 0%, transparent 26%),
+				linear-gradient(180deg, #06070b 0%, #0a0c12 28%, #090b10 100%);
+		}
+
+		html.prism #logo-prism {
+			box-shadow: 0 16px 32px rgba(0, 0, 0, 0.22);
 		}
 
 		#logo-prism {

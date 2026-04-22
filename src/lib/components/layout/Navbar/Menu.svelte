@@ -20,7 +20,7 @@
 		showEmbeds,
 		artifactContents
 	} from '$lib/stores';
-	import { getMenuItemClasses, getMenuPanelClasses, isSnapdealTheme } from '$lib/utils/theme';
+	import { getMenuItemClasses, getMenuPanelClasses, isCustomTheme } from '$lib/utils/theme';
 
 	import { getChatById } from '$lib/apis/chats';
 
@@ -330,7 +330,7 @@
 				</button>
 
 				<hr
-					class="my-1 p-0 {isSnapdealTheme($theme)
+					class="my-1 p-0 {isCustomTheme($theme)
 						? 'snapdeal-divider'
 						: 'border-gray-50/30 dark:border-gray-800/30'}"
 				/>
@@ -424,7 +424,7 @@
 
 			{#if !$temporaryChatEnabled && chat?.id}
 				<hr
-					class="my-1 p-0 {isSnapdealTheme($theme)
+					class="my-1 p-0 {isCustomTheme($theme)
 						? 'snapdeal-divider'
 						: 'border-gray-50/30 dark:border-gray-800/30'}"
 				/>
@@ -478,7 +478,7 @@
 				</button>
 
 				<hr
-					class="my-1 p-0 {isSnapdealTheme($theme)
+					class="my-1 p-0 {isCustomTheme($theme)
 						? 'snapdeal-divider'
 						: 'border-gray-50/30 dark:border-gray-800/30'}"
 				/>

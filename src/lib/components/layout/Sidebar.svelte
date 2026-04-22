@@ -70,6 +70,7 @@
 	import {
 		getHeaderIconButtonClasses,
 		getSidebarActionClasses,
+		isPrismTheme,
 		isSnapdealTheme
 	} from '$lib/utils/theme';
 
@@ -699,7 +700,9 @@
 	<div
 		class="{isSnapdealTheme($theme)
 			? 'w-[3.45rem] min-w-[3.45rem] pt-1.25 pb-1.25 px-1 snapdeal-sidebar-mini-rail'
-			: 'pt-[7px] pb-2 px-2 hover:bg-gray-50/30 dark:hover:bg-gray-950/30 border-e-[0.5px] border-gray-50 dark:border-gray-850/30'} flex flex-col justify-between text-black dark:text-white h-full z-10 transition-all"
+			: isPrismTheme($theme)
+				? 'w-[3.45rem] min-w-[3.45rem] pt-1.25 pb-1.25 px-1 prism-sidebar-mini-rail'
+				: 'pt-[7px] pb-2 px-2 hover:bg-gray-50/30 dark:hover:bg-gray-950/30 border-e-[0.5px] border-gray-50 dark:border-gray-850/30'} flex flex-col justify-between text-black dark:text-white h-full z-10 transition-all"
 		id="sidebar"
 	>
 		<button
@@ -861,14 +864,18 @@
 							<div
 								class=" cursor-pointer flex items-center transition group {isSnapdealTheme($theme)
 									? 'snapdeal-sidebar-mini-profile justify-center p-1'
-									: 'rounded-xl hover:bg-gray-100 dark:hover:bg-gray-850'}"
+									: isPrismTheme($theme)
+										? 'snapdeal-sidebar-mini-profile justify-center p-1'
+										: 'rounded-xl hover:bg-gray-100 dark:hover:bg-gray-850'}"
 							>
 								<div class="self-center relative">
 									<img
 										src={`${WEBUI_API_BASE_URL}/users/${$user?.id}/profile/image`}
 										class="{isSnapdealTheme($theme)
 											? 'size-7 border-2 border-white shadow-sm'
-											: 'size-7'} object-cover rounded-full"
+											: isPrismTheme($theme)
+												? 'size-7 border-2 border-white/85 shadow-[0_10px_18px_rgba(0,0,0,0.18)]'
+												: 'size-7'} object-cover rounded-full"
 										alt={$i18n.t('Open User Profile Menu')}
 										aria-label={$i18n.t('Open User Profile Menu')}
 									/>
@@ -905,9 +912,11 @@
 			? `${
 					isSnapdealTheme($theme)
 						? 'snapdeal-sidebar-shell'
-						: $mobile
-							? 'bg-gray-50 dark:bg-gray-950'
-							: 'bg-gray-50/70 dark:bg-gray-950/70'
+						: isPrismTheme($theme)
+							? 'prism-sidebar-shell'
+							: $mobile
+								? 'bg-gray-50 dark:bg-gray-950'
+								: 'bg-gray-50/70 dark:bg-gray-950/70'
 				} z-50`
 			: ' bg-transparent z-0 '} {$isApp
 			? `ml-[4.5rem] md:ml-0 `
@@ -926,7 +935,9 @@
 					$theme
 				)
 					? 'snapdeal-sidebar-header'
-					: ''}"
+					: isPrismTheme($theme)
+						? 'prism-sidebar-header'
+						: ''}"
 			>
 				<a
 					class="flex items-center h-full justify-center transition no-drag-region px-2.5 py-1.25 snapdeal-brand-link"
@@ -945,7 +956,9 @@
 					<button
 						class="flex rounded-xl {isSnapdealTheme($theme)
 							? 'size-8'
-							: 'size-8.5'} justify-center items-center transition {getHeaderIconButtonClasses(
+							: isPrismTheme($theme)
+								? 'size-8'
+								: 'size-8.5'} justify-center items-center transition {getHeaderIconButtonClasses(
 							$theme
 						)} {isWindows ? 'cursor-pointer' : 'cursor-[w-resize]'}"
 						on:click={() => {
@@ -1442,7 +1455,9 @@
 							<div
 								class=" flex items-center py-2 px-1.5 w-full transition {isSnapdealTheme($theme)
 									? 'snapdeal-sidebar-profile-row justify-between gap-1.5 pl-1.25 pr-0.75 py-0.5 rounded-full'
-									: 'rounded-2xl hover:bg-gray-100/50 dark:hover:bg-gray-900/50'}"
+									: isPrismTheme($theme)
+										? 'snapdeal-sidebar-profile-row justify-between gap-1.5 pl-1.25 pr-0.75 py-0.5 rounded-full'
+										: 'rounded-2xl hover:bg-gray-100/50 dark:hover:bg-gray-900/50'}"
 							>
 								<div class="self-center shrink-0 snapdeal-sidebar-wordmark-shell px-2.25 py-1">
 									<PrismBrand
@@ -1457,7 +1472,9 @@
 										src={`${WEBUI_API_BASE_URL}/users/${$user?.id}/profile/image`}
 										class="{isSnapdealTheme($theme)
 											? 'size-7.5 border-[3px] border-white shadow-sm'
-											: 'size-7'} object-cover rounded-full"
+											: isPrismTheme($theme)
+												? 'size-7.5 border-[3px] border-white/90 shadow-[0_12px_20px_rgba(0,0,0,0.2)]'
+												: 'size-7'} object-cover rounded-full"
 										alt={$i18n.t('Open User Profile Menu')}
 										aria-label={$i18n.t('Open User Profile Menu')}
 									/>

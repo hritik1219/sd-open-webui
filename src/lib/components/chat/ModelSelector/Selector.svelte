@@ -28,7 +28,13 @@
 	import { toast } from 'svelte-sonner';
 	import { capitalizeFirstLetter, sanitizeResponseContent, splitStream } from '$lib/utils';
 	import { getModels } from '$lib/apis';
-	import { getActiveTabClasses, getInactiveTabClasses, isSnapdealTheme } from '$lib/utils/theme';
+	import {
+		getActiveTabClasses,
+		getInactiveTabClasses,
+		getTabRailClasses,
+		isPrismTheme,
+		isSnapdealTheme
+	} from '$lib/utils/theme';
 
 	import ChevronDown from '$lib/components/icons/ChevronDown.svelte';
 	import Check from '$lib/components/icons/Check.svelte';
@@ -420,7 +426,9 @@
 				$theme
 			)
 				? 'snapdeal-search-trigger px-0 text-[0.95rem] font-medium leading-none'
-				: 'px-0.5'} {($settings?.highContrastMode ?? false)
+				: isPrismTheme($theme)
+					? 'prism-search-trigger px-0 text-[0.95rem] font-medium leading-none'
+					: 'px-0.5'} {($settings?.highContrastMode ?? false)
 				? 'dark:placeholder-gray-100 placeholder-gray-800'
 				: 'placeholder-gray-400'}"
 			on:mouseenter={async () => {
@@ -432,14 +440,19 @@
 				);
 			}}
 		>
-			{#if isSnapdealTheme($theme)}
-				<Search className="size-3.5 shrink-0 text-[#666666]" strokeWidth="2.25" />
+			{#if isSnapdealTheme($theme) || isPrismTheme($theme)}
+				<Search
+					className={`size-3.5 shrink-0 ${isPrismTheme($theme) ? 'text-white/60' : 'text-[#666666]'}`}
+					strokeWidth="2.25"
+				/>
 			{/if}
 
 			<div
 				class="flex-1 truncate {isSnapdealTheme($theme) && !selectedModel
 					? 'snapdeal-search-placeholder'
-					: ''}"
+					: isPrismTheme($theme) && !selectedModel
+						? 'prism-search-placeholder'
+						: ''}"
 			>
 				{#if selectedModel}
 					{selectedModel.label}
@@ -473,7 +486,9 @@
 								$theme
 							)
 								? 'snapdeal-select-content'
-								: 'bg-white dark:bg-gray-850 dark:text-white'}"
+								: isPrismTheme($theme)
+									? 'prism-select-content'
+									: 'bg-white dark:bg-gray-850 dark:text-white'}"
 							transition:flyAndScale
 						>
 							<slot>
@@ -481,7 +496,9 @@
 									<div
 										class="flex items-center gap-2.5 mb-1.5 {isSnapdealTheme($theme)
 											? 'mx-2.5 mt-2.5 px-3 py-1.5 snapdeal-search-shell'
-											: 'px-4.5 pt-3.5'}"
+											: isPrismTheme($theme)
+												? 'mx-2.5 mt-2.5 px-3 py-1.5 prism-search-shell'
+												: 'px-4.5 pt-3.5'}"
 									>
 										<Search className="size-4" strokeWidth="2.5" />
 
@@ -538,7 +555,9 @@
 													$theme
 												)
 													? 'snapdeal-tab-rail px-1 py-0.75'
-													: 'rounded-full bg-transparent px-1.5'}"
+													: isPrismTheme($theme)
+														? `${getTabRailClasses($theme)} px-1 py-0.75`
+														: 'rounded-full bg-transparent px-1.5'}"
 												bind:this={tagsContainerElement}
 											>
 												{#if items.find((item) => item.model?.connection_type === 'local') || items.find((item) => item.model?.connection_type === 'external') || items.find((item) => item.model?.direct) || tags.length > 0}

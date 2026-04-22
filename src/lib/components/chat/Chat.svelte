@@ -107,8 +107,9 @@
 	import Tooltip from '../common/Tooltip.svelte';
 	import Sidebar from '../icons/Sidebar.svelte';
 	import Image from '../common/Image.svelte';
+	import PrismBackground from '$lib/components/effects/PrismBackground.svelte';
 	import { getBanners } from '$lib/apis/configs';
-	import { isSnapdealTheme } from '$lib/utils/theme';
+	import { isPrismTheme, isSnapdealTheme } from '$lib/utils/theme';
 
 	export let chatIdProp = '';
 
@@ -2720,7 +2721,25 @@
 >
 	{#if !loading}
 		<div in:fade={{ duration: 50 }} class="w-full h-full flex flex-col">
-			{#if isSnapdealTheme($theme) && !($selectedFolder && $selectedFolder?.meta?.background_image_url) && !($settings?.backgroundImageUrl ?? $config?.license_metadata?.background_image_url ?? null)}
+			{#if isPrismTheme($theme) && !($selectedFolder && $selectedFolder?.meta?.background_image_url) && !($settings?.backgroundImageUrl ?? $config?.license_metadata?.background_image_url ?? null)}
+				<div class="absolute inset-0 z-0 overflow-hidden">
+					<PrismBackground
+						animationType="hover"
+						scale={4.2}
+						glow={1.15}
+						noise={0.22}
+						bloom={1.1}
+						hoverStrength={1.35}
+						inertia={0.04}
+						colorFrequency={1.1}
+						hueShift={0.32}
+						timeScale={0.34}
+						suspendWhenOffscreen={true}
+						className="pointer-events-none opacity-95"
+					/>
+					<div class="absolute inset-0 prism-chat-canvas pointer-events-none" />
+				</div>
+			{:else if isSnapdealTheme($theme) && !($selectedFolder && $selectedFolder?.meta?.background_image_url) && !($settings?.backgroundImageUrl ?? $config?.license_metadata?.background_image_url ?? null)}
 				<div class="absolute inset-0 snapdeal-chat-canvas z-0" />
 			{/if}
 

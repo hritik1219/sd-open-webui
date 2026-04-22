@@ -23,7 +23,7 @@
 		getMenuItemClasses,
 		getMenuPanelClasses,
 		getSoftButtonClasses,
-		isSnapdealTheme
+		isCustomTheme
 	} from '$lib/utils/theme';
 
 	import Dropdown from '$lib/components/common/Dropdown.svelte';
@@ -217,7 +217,7 @@
 				{/if}
 
 				<hr
-					class="my-1.5 p-0 {isSnapdealTheme($theme)
+					class="my-1.5 p-0 {isCustomTheme($theme)
 						? 'snapdeal-divider'
 						: 'border-gray-50/30 dark:border-gray-800/30'}"
 				/>
@@ -321,7 +321,7 @@
 
 			{#if help}
 				<hr
-					class="my-1 p-0 {isSnapdealTheme($theme)
+					class="my-1 p-0 {isCustomTheme($theme)
 						? 'snapdeal-divider'
 						: 'border-gray-50/30 dark:border-gray-800/30'}"
 				/>
@@ -391,7 +391,7 @@
 			{/if}
 
 			<hr
-				class="my-1 p-0 {isSnapdealTheme($theme)
+				class="my-1 p-0 {isCustomTheme($theme)
 					? 'snapdeal-divider'
 					: 'border-gray-50/30 dark:border-gray-800/30'}"
 			/>
@@ -419,7 +419,7 @@
 			{#if showActiveUsers && ($config?.features?.enable_public_active_users_count || role === 'admin') && usage}
 				{#if usage?.user_count}
 					<hr
-						class="my-1 p-0 {isSnapdealTheme($theme)
+						class="my-1 p-0 {isCustomTheme($theme)
 							? 'snapdeal-divider'
 							: 'border-gray-50/30 dark:border-gray-800/30'}"
 					/>
