@@ -2725,17 +2725,19 @@
 				<div class="absolute inset-0 z-0 overflow-hidden">
 					<PrismBackground
 						animationType="hover"
-						scale={4.2}
+						scale={2.9}
 						glow={1.15}
-						noise={0.22}
-						bloom={1.1}
-						hoverStrength={1.35}
+						noise={0.12}
+						bloom={1.22}
+						hoverStrength={1.5}
 						inertia={0.04}
 						colorFrequency={1.1}
+						edgeShine={2.45}
+						vertexFlash={3.1}
 						hueShift={0.32}
 						timeScale={0.34}
 						suspendWhenOffscreen={true}
-						className="pointer-events-none opacity-95"
+						className="pointer-events-none opacity-100"
 					/>
 					<div class="absolute inset-0 prism-chat-canvas pointer-events-none" />
 				</div>

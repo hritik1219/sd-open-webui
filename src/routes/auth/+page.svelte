@@ -210,10 +210,12 @@
 		<div class="absolute inset-0 z-0 overflow-hidden">
 			<PrismBackground
 				animationType="3drotate"
-				scale={4.4}
+				scale={3.15}
 				glow={1.2}
-				noise={0.14}
-				bloom={1.1}
+				noise={0.08}
+				bloom={1.16}
+				edgeShine={1.9}
+				vertexFlash={2.3}
 				hueShift={0.24}
 				timeScale={0.22}
 				suspendWhenOffscreen={true}

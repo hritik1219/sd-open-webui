@@ -16,6 +16,8 @@
 	export let hoverStrength = 2;
 	export let inertia = 0.05;
 	export let bloom = 1;
+	export let edgeShine = 1.35;
+	export let vertexFlash = 1.5;
 	export let suspendWhenOffscreen = false;
 	export let timeScale = 0.5;
 	export let className = '';
@@ -56,9 +58,11 @@
 		const HUE = hueShift || 0;
 		const CFREQ = Math.max(0.0, colorFrequency || 1);
 		const BLOOM = Math.max(0.0, bloom || 1);
+		const EDGE_SHINE = Math.max(0.0, edgeShine || 1);
 		const TS = Math.max(0, timeScale || 1);
 		const HOVSTR = Math.max(0, hoverStrength || 1);
 		const INERT = Math.max(0, Math.min(1, inertia || 0.12));
+		const VERTEX_FLASH = Math.max(0.0, vertexFlash || 1);
 
 		const dpr = Math.min(2, window.devicePixelRatio || 1);
 		const renderer = new Renderer({
@@ -111,6 +115,9 @@
 			uniform float uMinAxis;
 			uniform float uPxScale;
 			uniform float uTimeScale;
+			uniform float uEdgeShine;
+			uniform float uVertexFlash;
+			uniform float uMotionBoost;
 
 			vec4 tanh4(vec4 x){
 				vec4 e2x = exp(2.0*x);
@@ -153,6 +160,27 @@
 				return W + U * c + V * s;
 			}
 
+			float sdSegment(vec2 p, vec2 a, vec2 b){
+				vec2 pa = p - a;
+				vec2 ba = b - a;
+				float h = clamp(dot(pa, ba) / max(dot(ba, ba), 0.00001), 0.0, 1.0);
+				return length(pa - ba * h);
+			}
+
+			float lineGlow(vec2 p, vec2 a, vec2 b, float width, float softness){
+				float d = sdSegment(p, a, b);
+				float core = pow(clamp(1.0 - d / max(width, 0.0001), 0.0, 1.0), 3.0);
+				float halo = exp(-softness * d * d);
+				return core * 2.4 + halo * 1.15;
+			}
+
+			float pointGlow(vec2 p, vec2 c, float radius, float softness){
+				float d = length(p - c);
+				float core = pow(clamp(1.0 - d / max(radius, 0.0001), 0.0, 1.0), 4.0);
+				float halo = exp(-softness * d * d);
+				return core * 2.8 + halo * 1.2;
+			}
+
 			void main(){
 				vec2 f = (gl_FragCoord.xy - 0.5 * iResolution.xy - uOffsetPx) * uPxScale;
 				float z = 5.0;
@@ -178,13 +206,59 @@
 					p = uRot * p;
 					vec3 q = p;
 					q.y += centerShift;
-					d = 0.1 + 0.2 * abs(sdPyramidUpInv(q));
+					float sdf = sdPyramidUpInv(q);
+					d = 0.1 + 0.2 * abs(sdf);
 					z -= d;
 					o += (sin((p.y + z) * cf + vec4(0.0, 1.0, 2.0, 3.0)) + 1.0) / d;
 				}
 
 				o = tanh4(o * o * (uGlow * uBloom) / 1e5);
 				vec3 col = o.rgb;
+
+				vec3 apex = vec3(0.0, uHeight - centerShift, 0.0);
+				vec3 b0 = vec3( uBaseHalf, -centerShift,  uBaseHalf);
+				vec3 b1 = vec3(-uBaseHalf, -centerShift,  uBaseHalf);
+				vec3 b2 = vec3(-uBaseHalf, -centerShift, -uBaseHalf);
+				vec3 b3 = vec3( uBaseHalf, -centerShift, -uBaseHalf);
+
+				apex.xz = apex.xz * wob;
+				b0.xz = b0.xz * wob;
+				b1.xz = b1.xz * wob;
+				b2.xz = b2.xz * wob;
+				b3.xz = b3.xz * wob;
+
+				apex = uRot * apex;
+				b0 = uRot * b0;
+				b1 = uRot * b1;
+				b2 = uRot * b2;
+				b3 = uRot * b3;
+
+				vec2 screenPos = f;
+				float edgeWire =
+					lineGlow(screenPos, apex.xy, b0.xy, 0.034, 118.0) +
+					lineGlow(screenPos, apex.xy, b1.xy, 0.034, 118.0) +
+					lineGlow(screenPos, apex.xy, b2.xy, 0.034, 118.0) +
+					lineGlow(screenPos, apex.xy, b3.xy, 0.034, 118.0) +
+					lineGlow(screenPos, b0.xy, b1.xy, 0.028, 96.0) +
+					lineGlow(screenPos, b1.xy, b2.xy, 0.028, 96.0) +
+					lineGlow(screenPos, b2.xy, b3.xy, 0.028, 96.0) +
+					lineGlow(screenPos, b3.xy, b0.xy, 0.028, 96.0);
+
+				float motionPulse = smoothstep(0.02, 1.4, uMotionBoost);
+				float vertexPulse = 0.55 + motionPulse * (1.4 + 4.2 * pow(abs(sin(iTime * 20.0)), 12.0));
+				float vertexWire =
+					pointGlow(screenPos, apex.xy, 0.072, 146.0) * 1.45 +
+					pointGlow(screenPos, b0.xy, 0.052, 132.0) * 0.95 +
+					pointGlow(screenPos, b1.xy, 0.052, 132.0) * 0.95 +
+					pointGlow(screenPos, b2.xy, 0.052, 132.0) * 0.95 +
+					pointGlow(screenPos, b3.xy, 0.052, 132.0) * 0.95;
+
+				float edgeGlowAmount = edgeWire * (0.42 + 1.5 * uEdgeShine) * (1.0 + motionPulse * 0.45);
+				float vertexGlowAmount = vertexWire * uVertexFlash * (0.36 + motionPulse * 3.4) * vertexPulse;
+				vec3 edgeColor = mix(vec3(1.0, 0.28, 0.52), vec3(1.0), 0.88);
+				vec3 vertexColor = vec3(1.0, 0.98, 1.0);
+				col += edgeColor * edgeGlowAmount;
+				col += vertexColor * vertexGlowAmount;
 				float n = rand(gl_FragCoord.xy + vec2(iTime));
 				col += (n - 0.5) * uNoise;
 				col = clamp(col, 0.0, 1.0);
@@ -195,7 +269,8 @@
 					col = clamp(hueRotation(uHueShift) * col, 0.0, 1.0);
 				}
 
-				gl_FragColor = vec4(col, o.a);
+				float overlayAlpha = clamp(edgeGlowAmount * 0.12 + vertexGlowAmount * 0.18, 0.0, 1.0);
+				gl_FragColor = vec4(col, max(o.a, overlayAlpha));
 			}
 		`;
 
@@ -228,7 +303,10 @@
 				uPxScale: {
 					value: 1 / ((gl.drawingBufferHeight || 1) * 0.1 * SCALE)
 				},
-				uTimeScale: { value: TS }
+				uTimeScale: { value: TS },
+				uEdgeShine: { value: EDGE_SHINE },
+				uVertexFlash: { value: VERTEX_FLASH },
+				uMotionBoost: { value: 0 }
 			}
 		});
 
@@ -313,8 +391,13 @@
 		let roll = 0;
 		let targetYaw = 0;
 		let targetPitch = 0;
+		let motionBoost = 0;
 
 		const lerp = (from: number, to: number, amount: number) => from + (to - from) * amount;
+		const setMotionBoost = (nextBoost: number) => {
+			motionBoost = Math.max(nextBoost, motionBoost * 0.94);
+			program.uniforms.uMotionBoost.value = Math.min(2.4, motionBoost);
+		};
 		const pointer = { x: 0, y: 0, inside: true };
 
 		const onMove = (event: PointerEvent) => {
@@ -371,6 +454,12 @@
 				yaw = lerp(previousYaw, targetYaw, INERT);
 				pitch = lerp(previousPitch, targetPitch, INERT);
 				roll = lerp(previousRoll, 0, 0.1);
+				setMotionBoost(
+					(Math.abs(yaw - previousYaw) +
+						Math.abs(pitch - previousPitch) +
+						Math.abs(roll - previousRoll)) *
+						14.0
+				);
 
 				program.uniforms.uRot.value = setMat3FromEuler(yaw, pitch, roll, rotBuf);
 
@@ -386,9 +475,19 @@
 				}
 			} else if (animationType === '3drotate') {
 				const scaledTime = time * TS;
+				const previousYaw = yaw;
+				const previousPitch = pitch;
+				const previousRoll = roll;
 				yaw = scaledTime * wobbleY;
 				pitch = Math.sin(scaledTime * wobbleX + phaseX) * 0.6;
 				roll = Math.sin(scaledTime * wobbleZ + phaseZ) * 0.5;
+				setMotionBoost(
+					0.18 +
+						(Math.abs(yaw - previousYaw) +
+							Math.abs(pitch - previousPitch) +
+							Math.abs(roll - previousRoll)) *
+							6.2
+				);
 				program.uniforms.uRot.value = setMat3FromEuler(yaw, pitch, roll, rotBuf);
 
 				if (TS < 1e-6) {
@@ -404,6 +503,7 @@
 				rotBuf[6] = 0;
 				rotBuf[7] = 0;
 				rotBuf[8] = 1;
+				setMotionBoost(0.22 + 0.34 * (0.5 + 0.5 * Math.sin(time * 5.6)));
 				program.uniforms.uRot.value = rotBuf;
 
 				if (TS < 1e-6) {
@@ -490,6 +590,8 @@
 		hoverStrength,
 		inertia,
 		bloom,
+		edgeShine,
+		vertexFlash,
 		suspendWhenOffscreen,
 		timeScale
 	});
