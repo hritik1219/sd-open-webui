@@ -823,18 +823,17 @@
 						aria-label={$showSidebar ? $i18n.t('Close Sidebar') : $i18n.t('Open Sidebar')}
 					>
 						<div class=" self-center flex items-center justify-center size-7">
-
-							<img
-
-							<div class="sidebar-new-chat-icon group-hover:hidden snapdeal-brand-shell p-1">
-
-								src="{WEBUI_BASE_URL}/static/favicon.png"
-
-								<PrismBrand compact iconOnly iconClassName="h-[0.95rem] w-auto" />
-
-								class="sidebar-new-chat-icon size-6 rounded-full group-hover:hidden"
-
-							</div>
+							{#if isSnapdealTheme($theme) || isPrismTheme($theme)}
+								<div class="sidebar-new-chat-icon group-hover:hidden snapdeal-brand-shell p-1">
+									<PrismBrand compact iconOnly iconClassName="h-[0.95rem] w-auto" />
+								</div>
+							{:else}
+								<img
+									src="{WEBUI_BASE_URL}/static/favicon.svg"
+									class="sidebar-new-chat-icon size-6 rounded-full group-hover:hidden"
+									alt=""
+								/>
+							{/if}
 
 							<Sidebar className="size-5 hidden group-hover:flex" />
 						</div>
@@ -1090,23 +1089,28 @@
 					draggable="false"
 					on:click={newChatHandler}
 				>
-					<PrismBrand compact iconClassName="h-[1.2rem] w-auto" textClassName="text-[1.3rem]" />
-					<img
-						crossorigin="anonymous"
-						src="{WEBUI_BASE_URL}/static/favicon.svg"
-						class="sidebar-new-chat-icon size-6 rounded-full"
-						alt=""
-					/>
+					{#if isSnapdealTheme($theme) || isPrismTheme($theme)}
+						<PrismBrand compact iconClassName="h-[1.2rem] w-auto" textClassName="text-[1.3rem]" />
+					{:else}
+						<img
+							crossorigin="anonymous"
+							src="{WEBUI_BASE_URL}/static/favicon.svg"
+							class="sidebar-new-chat-icon size-6 rounded-full"
+							alt=""
+						/>
+					{/if}
 				</a>
 
-				<a href="/" class="flex flex-1 px-0.5" on:click={newChatHandler}>
-					<div
-						id="sidebar-webui-name"
-						class=" self-center font-medium text-gray-850 dark:text-white font-primary"
-					>
-						{$WEBUI_NAME}
-					</div>
-				</a>
+				{#if !(isSnapdealTheme($theme) || isPrismTheme($theme))}
+					<a href="/" class="flex flex-1 px-0.5" on:click={newChatHandler}>
+						<div
+							id="sidebar-webui-name"
+							class=" self-center font-medium text-gray-850 dark:text-white font-primary"
+						>
+							{$WEBUI_NAME}
+						</div>
+					</a>
+				{/if}
 				<Tooltip
 					content={$showSidebar ? $i18n.t('Close Sidebar') : $i18n.t('Open Sidebar')}
 					placement="bottom"
@@ -1694,41 +1698,45 @@
 							}}
 						>
 							<div
-								class=" flex items-center py-2 px-1.5 w-full transition {isSnapdealTheme($theme)? 'snapdeal-sidebar-profile-row justify-between gap-1.5 pl-1.25 pr-0.75 py-0.5 rounded-full': isPrismTheme($theme)? 'snapdeal-sidebar-profile-row justify-between gap-1.5 pl-1.25 pr-0.75 py-0.5 rounded-full': 'rounded-2xl hover:bg-gray-100/50 dark:hover:bg-gray-900/50'}"
+								class=" flex items-center py-2 px-1.5 w-full transition {isSnapdealTheme($theme)? 'snapdeal-sidebar-profile-row gap-2 pl-1.25 pr-3 py-0.5 rounded-full': isPrismTheme($theme)? 'snapdeal-sidebar-profile-row gap-2 pl-1.25 pr-3 py-0.5 rounded-full': 'rounded-2xl hover:bg-gray-100/50 dark:hover:bg-gray-900/50'}"
 							>
-								<div class="self-center shrink-0 snapdeal-sidebar-wordmark-shell px-2.25 py-1">
-									<PrismBrand
-										compact
-										iconClassName="h-[1.2rem] w-auto"
-										textClassName="text-[1.3rem]"
-									/>
+								{#if isSnapdealTheme($theme) || isPrismTheme($theme)}
+									<div class="self-center shrink-0 snapdeal-sidebar-wordmark-shell px-2.25 py-1">
+										<PrismBrand
+											compact
+											iconClassName="h-[1.2rem] w-auto"
+											textClassName="text-[1.3rem]"
+										/>
+									</div>
+								{/if}
+								
+								<div class="flex items-center gap-3">
+									<div class=" self-center relative">
+										<img
+											src={`${WEBUI_API_BASE_URL}/users/${$user?.id}/profile/image`}
+											class="{isSnapdealTheme($theme)
+												? 'size-7.5 border-[3px] border-white shadow-sm'
+												: isPrismTheme($theme)
+													? 'size-7.5 border-[3px] border-white/90 shadow-[0_12px_20px_rgba(0,0,0,0.2)]'
+													: 'size-7'} object-cover rounded-full"
+											alt={$i18n.t('Open User Profile Menu')}
+											aria-label={$i18n.t('Open User Profile Menu')}
+										/>
 
+										{#if $config?.features?.enable_user_status}
+											<div class="absolute -bottom-0.5 -right-0.5">
+												<span class="relative flex size-2.5">
+													<span
+														class="relative inline-flex size-2.5 rounded-full {true
+															? 'bg-green-500'
+															: 'bg-gray-300 dark:bg-gray-700'} border-2 border-white dark:border-gray-900"
+													></span>
+												</span>
+											</div>
+										{/if}
+									</div>
+									<div class=" self-center font-medium">{$user?.name}</div>
 								</div>
-								<div class=" self-center mr-3 relative">
-									<img
-										src={`${WEBUI_API_BASE_URL}/users/${$user?.id}/profile/image`}
-										class="{isSnapdealTheme($theme)
-											? 'size-7.5 border-[3px] border-white shadow-sm'
-											: isPrismTheme($theme)
-												? 'size-7.5 border-[3px] border-white/90 shadow-[0_12px_20px_rgba(0,0,0,0.2)]'
-												: 'size-7'} object-cover rounded-full"
-										alt={$i18n.t('Open User Profile Menu')}
-										aria-label={$i18n.t('Open User Profile Menu')}
-									/>
-
-									{#if $config?.features?.enable_user_status}
-										<div class="absolute -bottom-0.5 -right-0.5">
-											<span class="relative flex size-2.5">
-												<span
-													class="relative inline-flex size-2.5 rounded-full {true
-														? 'bg-green-500'
-														: 'bg-gray-300 dark:bg-gray-700'} border-2 border-white dark:border-gray-900"
-												></span>
-											</span>
-										</div>
-									{/if}
-								</div>
-								<div class=" self-center font-medium">{$user?.name}</div>
 							</div>
 						</UserMenu>
 					{/if}
