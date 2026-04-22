@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { WEBUI_API_BASE_URL } from '$lib/constants';
 	import { marked } from 'marked';
+	import DOMPurify from 'dompurify';
 
 	import { config, user, models as _models, temporaryChatEnabled, theme } from '$lib/stores';
 	import { onMount, getContext } from 'svelte';
@@ -38,13 +39,23 @@
 {#key mounted}
 	<div class="m-auto w-full max-w-6xl px-8 lg:px-20">
 		{#if models[selectedModelIdx]?.name}
-			<div class="flex justify-start">
-				<div class="flex -space-x-4 mb-0.5" in:fade={{ duration: 200 }}>
-					{#each models as model, modelIdx}
-						<button
-							on:click={() => {
-								selectedModelIdx = modelIdx;
-							}}
+		<div class="flex justify-start">
+			<div class="flex -space-x-4 mb-0.5" in:fade={{ duration: 200 }}>
+				{#each models as model, modelIdx}
+					<button
+						on:click={() => {
+							selectedModelIdx = modelIdx;
+						}}
+					>
+						<Tooltip
+							content={DOMPurify.sanitize(
+								marked.parse(
+									sanitizeResponseContent(
+										models[selectedModelIdx]?.info?.meta?.description ?? ''
+									).replaceAll('\n', '<br>')
+								)
+							)}
+							placement="right"
 						>
 							<Tooltip
 								content={marked.parse(
@@ -109,10 +120,12 @@
 						<div
 							class="mt-0.5 text-base font-normal text-gray-500 dark:text-gray-400 line-clamp-3 markdown"
 						>
-							{@html marked.parse(
-								sanitizeResponseContent(
-									models[selectedModelIdx]?.info?.meta?.description
-								).replaceAll('\n', '<br>')
+							{@html DOMPurify.sanitize(
+								marked.parse(
+									sanitizeResponseContent(
+										models[selectedModelIdx]?.info?.meta?.description
+									).replaceAll('\n', '<br>')
+								)
 							)}
 						</div>
 						{#if models[selectedModelIdx]?.info?.meta?.user}

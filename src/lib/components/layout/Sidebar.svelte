@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
 	import { v4 as uuidv4 } from 'uuid';
+	import Sortable from 'sortablejs';
 
 	import { goto } from '$app/navigation';
 	import {
@@ -16,6 +17,7 @@
 		mobile,
 		showArchivedChats,
 		pinnedChats,
+		pinnedNotes,
 		scrollPaginationEnabled,
 		currentChatPage,
 		temporaryChatEnabled,
@@ -25,9 +27,9 @@
 		isApp,
 		models,
 		selectedFolder,
+		WEBUI_NAME,
 		sidebarWidth,
-		activeChatIds,
-		theme
+		activeChatIds
 	} from '$lib/stores';
 	import { onMount, getContext, tick, onDestroy } from 'svelte';
 
@@ -40,10 +42,15 @@
 		toggleChatPinnedStatusById,
 		getChatById,
 		updateChatFolderIdById,
-		importChats
+		importChats,
+		deleteAllChats,
+		getChatListBySearchText
 	} from '$lib/apis/chats';
 	import { createNewFolder, getFolders, updateFolderParentIdById } from '$lib/apis/folders';
+	import { createNewNote, getPinnedNoteList, toggleNotePinnedStatusById } from '$lib/apis/notes';
+	import { updateUserSettings } from '$lib/apis/users';
 	import { checkActiveChats } from '$lib/apis/tasks';
+	import { createNoteHandler } from '$lib/components/notes/utils';
 	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
 
 	import ArchivedChatsModal from './ArchivedChatsModal.svelte';
@@ -64,17 +71,12 @@
 	import Sidebar from '../icons/Sidebar.svelte';
 	import PinnedModelList from './Sidebar/PinnedModelList.svelte';
 	import Note from '../icons/Note.svelte';
+	import Code from '../icons/Code.svelte';
 	import { slide } from 'svelte/transition';
 	import HotkeyHint from '../common/HotkeyHint.svelte';
-	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
-	import {
-		getHeaderIconButtonClasses,
-		getSidebarActionClasses,
-		isPrismTheme,
-		isSnapdealTheme
-	} from '$lib/utils/theme';
 
 	const BREAKPOINT = 768;
+	const DEFAULT_PINNED_ITEMS = ['notes', 'workspace'];
 
 	let scrollTop = 0;
 
@@ -93,6 +95,7 @@
 	let pinnedModels = [];
 
 	let showPinnedModels = false;
+	let showPinnedNotes = false;
 	let showChannels = false;
 	let showFolders = false;
 
@@ -100,6 +103,70 @@
 	let folderRegistry = {};
 
 	let newFolderId = null;
+
+	$: pinnedItems = $settings?.pinnedMenuItems ?? DEFAULT_PINNED_ITEMS;
+
+	const isMenuItemVisible = (id) => {
+		switch (id) {
+			case 'notes':
+				return (
+					($config?.features?.enable_notes ?? false) &&
+					($user?.role === 'admin' || ($user?.permissions?.features?.notes ?? true))
+				);
+			case 'workspace':
+				return (
+					$user?.role === 'admin' ||
+					$user?.permissions?.workspace?.models ||
+					$user?.permissions?.workspace?.knowledge ||
+					$user?.permissions?.workspace?.prompts ||
+					$user?.permissions?.workspace?.tools
+				);
+			case 'automations':
+				return (
+					$config?.features?.enable_automations &&
+					($user?.role === 'admin' || $user?.permissions?.features?.automations)
+				);
+			case 'calendar':
+				return (
+					$config?.features?.enable_calendar &&
+					($user?.role === 'admin' || $user?.permissions?.features?.calendar)
+				);
+			case 'playground':
+				return $user?.role === 'admin';
+			default:
+				return false;
+		}
+	};
+
+	const getMenuItemMeta = (id) => {
+		const items = {
+			notes: { label: 'Notes', href: '/notes', iconType: 'note' },
+			workspace: { label: 'Workspace', href: '/workspace', iconType: 'workspace' },
+			automations: { label: 'Automations', href: '/automations', iconType: 'automations' },
+			calendar: { label: 'Calendar', href: '/calendar', iconType: 'calendar' },
+			playground: { label: 'Playground', href: '/playground', iconType: 'playground' }
+		};
+		return items[id];
+	};
+
+	const initPinnedMenuSortable = () => {
+		const el = document.getElementById('pinned-menu-items-list');
+		if (el && !$mobile) {
+			new Sortable(el, {
+				animation: 150,
+				onUpdate: async (event) => {
+					const itemId = event.item.dataset.id;
+					const newIndex = event.newIndex;
+					const current = [...pinnedItems];
+					const oldIndex = current.indexOf(itemId);
+					current.splice(oldIndex, 1);
+					current.splice(newIndex, 0, itemId);
+					settings.set({ ...$settings, pinnedMenuItems: current });
+					await updateUserSettings(localStorage.token, { ui: $settings });
+				}
+			});
+		}
+	};
 
 	$: if ($selectedFolder) {
 		initFolders();
@@ -233,6 +300,16 @@
 				console.log('Init pinned chats');
 				const _pinnedChats = await getPinnedChatList(localStorage.token);
 				pinnedChats.set(_pinnedChats);
+			})(),
+			await (async () => {
+				if (
+					$config?.features?.enable_notes &&
+					($user?.role === 'admin' || ($user?.permissions?.features?.notes ?? true))
+				) {
+					console.log('Init pinned notes');
+					const _pinnedNotes = await getPinnedNoteList(localStorage.token).catch(() => []);
+					pinnedNotes.set(_pinnedNotes);
+				}
 			})(),
 			await (async () => {
 				console.log('Init chat list');
@@ -426,7 +503,7 @@
 		document.documentElement.style.setProperty('--sidebar-width', `${newSidebarWidth}px`);
 	};
 
-	onMount(() => {
+	onMount(async () => {
 		try {
 			const width = Number(localStorage.getItem('sidebarWidth'));
 			if (!Number.isNaN(width) && width >= MIN_WIDTH && width <= MAX_WIDTH) {
@@ -521,6 +598,9 @@
 		const socketInstance = $socket;
 		socketInstance?.on('events', chatActiveEventHandler);
 
+		await tick();
+		initPinnedMenuSortable();
+
 		return () => {
 			unsubscribers.forEach((unsubscriber) => unsubscriber());
 
@@ -543,7 +623,7 @@
 		};
 	});
 
-	// Handler for chat:active events (defined outside onMount for proper cleanup)
+	// Handler for chat events (defined outside onMount for proper cleanup)
 	const chatActiveEventHandler = (event: {
 		chat_id: string;
 		message_id: string;
@@ -560,6 +640,8 @@
 				}
 				return newSet;
 			});
+		} else if (event.data?.type === 'chat:list') {
+			initChatList();
 		}
 	};
 
@@ -698,11 +780,7 @@
 
 {#if !$mobile && !$showSidebar}
 	<div
-		class="{isSnapdealTheme($theme)
-			? 'w-[3.45rem] min-w-[3.45rem] pt-1.25 pb-1.25 px-1 snapdeal-sidebar-mini-rail'
-			: isPrismTheme($theme)
-				? 'w-[3.45rem] min-w-[3.45rem] pt-1.25 pb-1.25 px-1 prism-sidebar-mini-rail'
-				: 'pt-[7px] pb-2 px-2 hover:bg-gray-50/30 dark:hover:bg-gray-950/30 border-e-[0.5px] border-gray-50 dark:border-gray-850/30'} flex flex-col justify-between text-black dark:text-white h-full z-10 transition-all"
+		class=" pt-[7px] pb-2 px-2 flex flex-col justify-between text-black dark:text-white hover:bg-gray-50/30 dark:hover:bg-gray-950/30 h-full z-10 transition-all border-e-[0.5px] border-gray-50 dark:border-gray-850/30"
 		id="sidebar"
 	>
 		<button
@@ -717,15 +795,17 @@
 					placement="right"
 				>
 					<button
-						class="flex rounded-xl transition group {getHeaderIconButtonClasses($theme)} {isWindows
+						class="flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-850 transition group {isWindows
 							? 'cursor-pointer'
 							: 'cursor-[e-resize]'}"
 						aria-label={$showSidebar ? $i18n.t('Close Sidebar') : $i18n.t('Open Sidebar')}
 					>
-						<div class=" self-center flex items-center justify-center size-7">
-							<div class="sidebar-new-chat-icon group-hover:hidden snapdeal-brand-shell p-1">
-								<PrismBrand compact iconOnly iconClassName="h-[0.95rem] w-auto" />
-							</div>
+						<div class=" self-center flex items-center justify-center size-9">
+							<img
+								src="{WEBUI_BASE_URL}/static/favicon.svg"
+								class="sidebar-new-chat-icon size-6 rounded-full group-hover:hidden"
+								alt=""
+							/>
 
 							<Sidebar className="size-5 hidden group-hover:flex" />
 						</div>
@@ -737,9 +817,7 @@
 				<div class="">
 					<Tooltip content={$i18n.t('New Chat')} placement="right">
 						<a
-							class="cursor-pointer flex rounded-xl transition group {getHeaderIconButtonClasses(
-								$theme
-							)}"
+							class=" cursor-pointer flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-850 transition group"
 							href="/"
 							draggable="false"
 							on:click={async (e) => {
@@ -751,7 +829,7 @@
 							}}
 							aria-label={$i18n.t('New Chat')}
 						>
-							<div class=" self-center flex items-center justify-center size-7">
+							<div class=" self-center flex items-center justify-center size-9">
 								<PencilSquare className="size-4.5" />
 							</div>
 						</a>
@@ -761,9 +839,7 @@
 				<div>
 					<Tooltip content={$i18n.t('Search')} placement="right">
 						<button
-							class="cursor-pointer flex rounded-xl transition group {getHeaderIconButtonClasses(
-								$theme
-							)}"
+							class=" cursor-pointer flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-850 transition group"
 							on:click={(e) => {
 								e.stopImmediatePropagation();
 								e.preventDefault();
@@ -773,77 +849,87 @@
 							draggable="false"
 							aria-label={$i18n.t('Search')}
 						>
-							<div class=" self-center flex items-center justify-center size-7">
+							<div class=" self-center flex items-center justify-center size-9">
 								<Search className="size-4.5" />
 							</div>
 						</button>
 					</Tooltip>
 				</div>
 
-				{#if ($config?.features?.enable_notes ?? false) && ($user?.role === 'admin' || ($user?.permissions?.features?.notes ?? true))}
-					<div class="">
-						<Tooltip content={$i18n.t('Notes')} placement="right">
-							<a
-								class="cursor-pointer flex rounded-xl transition group {getHeaderIconButtonClasses(
-									$theme
-								)}"
-								href="/notes"
-								on:click={async (e) => {
-									e.stopImmediatePropagation();
-									e.preventDefault();
-
-									goto('/notes');
-									itemClickHandler();
-								}}
-								draggable="false"
-								aria-label={$i18n.t('Notes')}
-							>
-								<div class=" self-center flex items-center justify-center size-7">
-									<Note className="size-4.5" />
-								</div>
-							</a>
-						</Tooltip>
-					</div>
-				{/if}
-
-				{#if $user?.role === 'admin' || $user?.permissions?.workspace?.models || $user?.permissions?.workspace?.knowledge || $user?.permissions?.workspace?.prompts || $user?.permissions?.workspace?.tools}
-					<div class="">
-						<Tooltip content={$i18n.t('Workspace')} placement="right">
-							<a
-								class="cursor-pointer flex rounded-xl transition group {getHeaderIconButtonClasses(
-									$theme
-								)}"
-								href="/workspace"
-								on:click={async (e) => {
-									e.stopImmediatePropagation();
-									e.preventDefault();
-
-									goto('/workspace');
-									itemClickHandler();
-								}}
-								aria-label={$i18n.t('Workspace')}
-								draggable="false"
-							>
-								<div class=" self-center flex items-center justify-center size-7">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke-width="1.5"
-										stroke="currentColor"
-										class="size-4.5"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z"
-										/>
-									</svg>
-								</div>
-							</a>
-						</Tooltip>
-					</div>
-				{/if}
+				{#each pinnedItems as itemId (itemId)}
+					{@const meta = getMenuItemMeta(itemId)}
+					{#if meta && isMenuItemVisible(itemId)}
+						<div class="">
+							<Tooltip content={$i18n.t(meta.label)} placement="right">
+								<a
+									class=" cursor-pointer flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-850 transition group"
+									href={meta.href}
+									on:click={async (e) => {
+										e.stopImmediatePropagation();
+										e.preventDefault();
+										goto(meta.href);
+										itemClickHandler();
+									}}
+									draggable="false"
+									aria-label={$i18n.t(meta.label)}
+								>
+									<div class=" self-center flex items-center justify-center size-9">
+										{#if itemId === 'notes'}
+											<Note className="size-4.5" />
+										{:else if itemId === 'workspace'}
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke-width="1.5"
+												stroke="currentColor"
+												class="size-4.5"
+											>
+												<path
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z"
+												/>
+											</svg>
+										{:else if itemId === 'automations'}
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke-width="1.5"
+												stroke="currentColor"
+												class="size-4.5"
+											>
+												<path
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+												/>
+											</svg>
+										{:else if itemId === 'calendar'}
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke-width="1.5"
+												stroke="currentColor"
+												class="size-4.5"
+											>
+												<path
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
+												/>
+											</svg>
+										{:else if itemId === 'playground'}
+											<Code className="size-4.5" />
+										{/if}
+									</div>
+								</a>
+							</Tooltip>
+						</div>
+					{/if}
+				{/each}
 			</div>
 		</button>
 
@@ -862,20 +948,12 @@
 							}}
 						>
 							<div
-								class=" cursor-pointer flex items-center transition group {isSnapdealTheme($theme)
-									? 'snapdeal-sidebar-mini-profile justify-center p-1'
-									: isPrismTheme($theme)
-										? 'snapdeal-sidebar-mini-profile justify-center p-1'
-										: 'rounded-xl hover:bg-gray-100 dark:hover:bg-gray-850'}"
+								class=" cursor-pointer flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-850 transition group"
 							>
 								<div class="self-center relative">
 									<img
 										src={`${WEBUI_API_BASE_URL}/users/${$user?.id}/profile/image`}
-										class="{isSnapdealTheme($theme)
-											? 'size-7 border-2 border-white shadow-sm'
-											: isPrismTheme($theme)
-												? 'size-7 border-2 border-white/85 shadow-[0_10px_18px_rgba(0,0,0,0.18)]'
-												: 'size-7'} object-cover rounded-full"
+										class=" size-7 object-cover rounded-full"
 										alt={$i18n.t('Open User Profile Menu')}
 										aria-label={$i18n.t('Open User Profile Menu')}
 									/>
@@ -909,15 +987,7 @@
 		bind:this={navElement}
 		id="sidebar"
 		class="h-screen max-h-[100dvh] min-h-screen select-none {$showSidebar
-			? `${
-					isSnapdealTheme($theme)
-						? 'snapdeal-sidebar-shell'
-						: isPrismTheme($theme)
-							? 'prism-sidebar-shell'
-							: $mobile
-								? 'bg-gray-50 dark:bg-gray-950'
-								: 'bg-gray-50/70 dark:bg-gray-950/70'
-				} z-50`
+			? `${$mobile ? 'bg-gray-50 dark:bg-gray-950' : 'bg-gray-50/70 dark:bg-gray-950/70'} z-50`
 			: ' bg-transparent z-0 '} {$isApp
 			? `ml-[4.5rem] md:ml-0 `
 			: ' transition-all duration-300 '} shrink-0 text-gray-900 dark:text-gray-200 text-sm fixed top-0 left-0 overflow-x-hidden
@@ -931,36 +1001,38 @@
 				: 'invisible'}"
 		>
 			<div
-				class="sidebar px-[0.5625rem] pt-2 pb-1.5 flex justify-between space-x-1 text-gray-600 dark:text-gray-400 sticky top-0 z-10 -mb-3 {isSnapdealTheme(
-					$theme
-				)
-					? 'snapdeal-sidebar-header'
-					: isPrismTheme($theme)
-						? 'prism-sidebar-header'
-						: ''}"
+				class="sidebar px-[0.5625rem] pt-2 pb-1.5 flex justify-between space-x-1 text-gray-600 dark:text-gray-400 sticky top-0 z-10 -mb-3"
 			>
 				<a
-					class="flex items-center h-full justify-center transition no-drag-region px-2.5 py-1.25 snapdeal-brand-link"
+					class="flex items-center rounded-xl size-8.5 h-full justify-center hover:bg-gray-100/50 dark:hover:bg-gray-850/50 transition no-drag-region"
 					href="/"
 					draggable="false"
 					on:click={newChatHandler}
 				>
-					<PrismBrand compact iconClassName="h-[1.2rem] w-auto" textClassName="text-[1.3rem]" />
+					<img
+						crossorigin="anonymous"
+						src="{WEBUI_BASE_URL}/static/favicon.svg"
+						class="sidebar-new-chat-icon size-6 rounded-full"
+						alt=""
+					/>
 				</a>
 
-				<div class="flex-1"></div>
+				<a href="/" class="flex flex-1 px-0.5" on:click={newChatHandler}>
+					<div
+						id="sidebar-webui-name"
+						class=" self-center font-medium text-gray-850 dark:text-white font-primary"
+					>
+						{$WEBUI_NAME}
+					</div>
+				</a>
 				<Tooltip
 					content={$showSidebar ? $i18n.t('Close Sidebar') : $i18n.t('Open Sidebar')}
 					placement="bottom"
 				>
 					<button
-						class="flex rounded-xl {isSnapdealTheme($theme)
-							? 'size-8'
-							: isPrismTheme($theme)
-								? 'size-8'
-								: 'size-8.5'} justify-center items-center transition {getHeaderIconButtonClasses(
-							$theme
-						)} {isWindows ? 'cursor-pointer' : 'cursor-[w-resize]'}"
+						class="flex rounded-xl size-8.5 justify-center items-center hover:bg-gray-100/50 dark:hover:bg-gray-850/50 transition {isWindows
+							? 'cursor-pointer'
+							: 'cursor-[w-resize]'}"
 						on:click={() => {
 							showSidebar.set(!$showSidebar);
 						}}
@@ -993,9 +1065,7 @@
 					<div class="px-[0.4375rem] flex justify-center text-gray-800 dark:text-gray-200">
 						<a
 							id="sidebar-new-chat-button"
-							class="group grow flex items-center space-x-3 rounded-2xl px-2.5 py-2 transition outline-none {getSidebarActionClasses(
-								$theme
-							)}"
+							class="group grow flex items-center space-x-3 rounded-2xl px-2.5 py-2 hover:bg-gray-100 dark:hover:bg-gray-900 transition outline-none"
 							href="/"
 							draggable="false"
 							on:click={newChatHandler}
@@ -1016,9 +1086,7 @@
 					<div class="px-[0.4375rem] flex justify-center text-gray-800 dark:text-gray-200">
 						<button
 							id="sidebar-search-button"
-							class="group grow flex items-center space-x-3 rounded-2xl px-2.5 py-2 transition outline-none {getSidebarActionClasses(
-								$theme
-							)}"
+							class="group grow flex items-center space-x-3 rounded-2xl px-2.5 py-2 hover:bg-gray-100 dark:hover:bg-gray-900 transition outline-none"
 							on:click={() => {
 								showSearch.set(true);
 							}}
@@ -1036,64 +1104,83 @@
 						</button>
 					</div>
 
-					{#if ($config?.features?.enable_notes ?? false) && ($user?.role === 'admin' || ($user?.permissions?.features?.notes ?? true))}
-						<div class="px-[0.4375rem] flex justify-center text-gray-800 dark:text-gray-200">
-							<a
-								id="sidebar-notes-button"
-								class="grow flex items-center space-x-3 rounded-2xl px-2.5 py-2 transition {getSidebarActionClasses(
-									$theme
-								)}"
-								href="/notes"
-								on:click={itemClickHandler}
-								draggable="false"
-								aria-label={$i18n.t('Notes')}
-							>
-								<div class="self-center">
-									<Note className="size-4.5" strokeWidth="2" />
-								</div>
-
-								<div class="flex self-center translate-y-[0.5px]">
-									<div class=" self-center text-sm font-primary">{$i18n.t('Notes')}</div>
-								</div>
-							</a>
-						</div>
-					{/if}
-
-					{#if $user?.role === 'admin' || $user?.permissions?.workspace?.models || $user?.permissions?.workspace?.knowledge || $user?.permissions?.workspace?.prompts || $user?.permissions?.workspace?.tools}
-						<div class="px-[0.4375rem] flex justify-center text-gray-800 dark:text-gray-200">
-							<a
-								id="sidebar-workspace-button"
-								class="grow flex items-center space-x-3 rounded-2xl px-2.5 py-2 transition {getSidebarActionClasses(
-									$theme
-								)}"
-								href="/workspace"
-								on:click={itemClickHandler}
-								draggable="false"
-								aria-label={$i18n.t('Workspace')}
-							>
-								<div class="self-center">
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke-width="2"
-										stroke="currentColor"
-										class="size-4.5"
+					<div id="pinned-menu-items-list">
+						{#each pinnedItems as itemId (itemId)}
+							{@const meta = getMenuItemMeta(itemId)}
+							{#if meta && isMenuItemVisible(itemId)}
+								<div
+									class="px-[0.4375rem] flex justify-center text-gray-800 dark:text-gray-200"
+									data-id={itemId}
+								>
+									<a
+										id="sidebar-{itemId}-button"
+										class="grow flex items-center space-x-3 rounded-2xl px-2.5 py-2 hover:bg-gray-100 dark:hover:bg-gray-900 transition"
+										href={meta.href}
+										on:click={itemClickHandler}
+										draggable="false"
+										aria-label={$i18n.t(meta.label)}
 									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z"
-										/>
-									</svg>
-								</div>
+										<div class="self-center">
+											{#if itemId === 'notes'}
+												<Note className="size-4.5" strokeWidth="2" />
+											{:else if itemId === 'workspace'}
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke-width="2"
+													stroke="currentColor"
+													class="size-4.5"
+												>
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z"
+													/>
+												</svg>
+											{:else if itemId === 'automations'}
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke-width="2"
+													stroke="currentColor"
+													class="size-4.5"
+												>
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+													/>
+												</svg>
+											{:else if itemId === 'calendar'}
+												<svg
+													xmlns="http://www.w3.org/2000/svg"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke-width="2"
+													stroke="currentColor"
+													class="size-4.5"
+												>
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5"
+													/>
+												</svg>
+											{:else if itemId === 'playground'}
+												<Code className="size-4.5" strokeWidth="2" />
+											{/if}
+										</div>
 
-								<div class="flex self-center translate-y-[0.5px]">
-									<div class=" self-center text-sm font-primary">{$i18n.t('Workspace')}</div>
+										<div class="flex self-center translate-y-[0.5px]">
+											<div class=" self-center text-sm font-primary">{$i18n.t(meta.label)}</div>
+										</div>
+									</a>
 								</div>
-							</a>
-						</div>
-					{/if}
+							{/if}
+						{/each}
+					</div>
 				</div>
 
 				{#if ($models ?? []).length > 0 && (($settings?.pinnedModels ?? []).length > 0 || $config?.default_pinned_models)}
@@ -1106,6 +1193,70 @@
 						dragAndDrop={false}
 					>
 						<PinnedModelList bind:selectedChatId {shiftKey} />
+					</Folder>
+				{/if}
+
+				{#if ($config?.features?.enable_notes ?? false) && ($user?.role === 'admin' || ($user?.permissions?.features?.notes ?? true)) && $pinnedNotes.length > 0}
+					<Folder
+						id="sidebar-pinned-notes"
+						bind:open={showPinnedNotes}
+						className="px-2 mt-0.5"
+						name={$i18n.t('Notes')}
+						chevron={false}
+						dragAndDrop={false}
+						onAdd={async () => {
+							const note = await createNoteHandler('New Note');
+							if (note) {
+								goto(`/notes/${note.id}`);
+							}
+						}}
+						onAddLabel={$i18n.t('New Note')}
+					>
+						<div class="mt-0.5 pb-1.5">
+							{#each $pinnedNotes as note (note.id)}
+								<a
+									class="w-full flex items-center gap-2.5 rounded-xl px-2.5 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-900 transition group text-sm"
+									href={`/notes/${note.id}`}
+									on:click={() => {
+										itemClickHandler();
+									}}
+									draggable="false"
+								>
+									<div class="self-center">
+										<Note className="size-4" strokeWidth="2" />
+									</div>
+									<div class="flex-1 text-ellipsis line-clamp-1">
+										{note.title}
+									</div>
+									<button
+										class="invisible group-hover:visible self-center p-0.5 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-lg transition"
+										on:click|preventDefault|stopPropagation={async () => {
+											await toggleNotePinnedStatusById(localStorage.token, note.id);
+											const _pinnedNotes = await getPinnedNoteList(localStorage.token).catch(
+												() => []
+											);
+											pinnedNotes.set(_pinnedNotes);
+										}}
+										aria-label={$i18n.t('Unpin')}
+									>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke-width="2"
+											stroke="currentColor"
+											class="size-3.5"
+										>
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												d="M6 18 18 6M6 6l12 12"
+											/>
+										</svg>
+									</button>
+								</a>
+							{/each}
+						</div>
 					</Folder>
 				{/if}
 
@@ -1327,6 +1478,8 @@
 												id={chat.id}
 												title={chat.title}
 												createdAt={chat.created_at}
+												updatedAt={chat.updated_at}
+												lastReadAt={chat.last_read_at}
 												{shiftKey}
 												selected={selectedChatId === chat.id}
 												on:select={() => {
@@ -1388,6 +1541,8 @@
 										id={chat.id}
 										title={chat.title}
 										createdAt={chat.created_at}
+										updatedAt={chat.updated_at}
+										lastReadAt={chat.last_read_at}
 										{shiftKey}
 										selected={selectedChatId === chat.id}
 										on:select={() => {
@@ -1453,28 +1608,12 @@
 							}}
 						>
 							<div
-								class=" flex items-center py-2 px-1.5 w-full transition {isSnapdealTheme($theme)
-									? 'snapdeal-sidebar-profile-row justify-between gap-1.5 pl-1.25 pr-0.75 py-0.5 rounded-full'
-									: isPrismTheme($theme)
-										? 'snapdeal-sidebar-profile-row justify-between gap-1.5 pl-1.25 pr-0.75 py-0.5 rounded-full'
-										: 'rounded-2xl hover:bg-gray-100/50 dark:hover:bg-gray-900/50'}"
+								class=" flex items-center rounded-2xl py-2 px-1.5 w-full hover:bg-gray-100/50 dark:hover:bg-gray-900/50 transition"
 							>
-								<div class="self-center shrink-0 snapdeal-sidebar-wordmark-shell px-2.25 py-1">
-									<PrismBrand
-										compact
-										iconClassName="h-[1.2rem] w-auto"
-										textClassName="text-[1.3rem]"
-									/>
-								</div>
-
-								<div class=" self-center relative">
+								<div class=" self-center mr-3 relative">
 									<img
 										src={`${WEBUI_API_BASE_URL}/users/${$user?.id}/profile/image`}
-										class="{isSnapdealTheme($theme)
-											? 'size-7.5 border-[3px] border-white shadow-sm'
-											: isPrismTheme($theme)
-												? 'size-7.5 border-[3px] border-white/90 shadow-[0_12px_20px_rgba(0,0,0,0.2)]'
-												: 'size-7'} object-cover rounded-full"
+										class=" size-7 object-cover rounded-full"
 										alt={$i18n.t('Open User Profile Menu')}
 										aria-label={$i18n.t('Open User Profile Menu')}
 									/>
@@ -1491,6 +1630,7 @@
 										</div>
 									{/if}
 								</div>
+								<div class=" self-center font-medium">{$user?.name}</div>
 							</div>
 						</UserMenu>
 					{/if}

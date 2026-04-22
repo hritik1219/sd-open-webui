@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { marked } from 'marked';
+	import DOMPurify from 'dompurify';
 
 	import { getContext, createEventDispatcher } from 'svelte';
 	import { fade } from 'svelte/transition';
@@ -115,7 +116,7 @@
 					}}
 				/>
 			{:else}
-				<div class="flex flex-row justify-center gap-3 @sm:gap-3.5 w-fit px-5 max-w-xl">
+				<div class="flex flex-row justify-center gap-2.5 @sm:gap-3 w-fit px-5 max-w-xl">
 					<div class="flex shrink-0 justify-center">
 						{#if !models[selectedModelIdx]?.name}
 							<div class="snapdeal-icon-badge p-2.5" in:fade={{ duration: 100 }}>
@@ -184,20 +185,24 @@
 						{#if models[selectedModelIdx]?.info?.meta?.description ?? null}
 							<Tooltip
 								className=" w-fit"
-								content={marked.parse(
-									sanitizeResponseContent(
-										models[selectedModelIdx]?.info?.meta?.description ?? ''
-									).replaceAll('\n', '<br>')
+								content={DOMPurify.sanitize(
+									marked.parse(
+										sanitizeResponseContent(
+											models[selectedModelIdx]?.info?.meta?.description ?? ''
+										).replaceAll('\n', '<br>')
+									)
 								)}
 								placement="top"
 							>
 								<div
 									class="mt-0.5 px-2 text-sm font-normal text-gray-500 dark:text-gray-400 line-clamp-2 max-w-xl markdown"
 								>
-									{@html marked.parse(
-										sanitizeResponseContent(
-											models[selectedModelIdx]?.info?.meta?.description ?? ''
-										).replaceAll('\n', '<br>')
+									{@html DOMPurify.sanitize(
+										marked.parse(
+											sanitizeResponseContent(
+												models[selectedModelIdx]?.info?.meta?.description ?? ''
+											).replaceAll('\n', '<br>')
+										)
 									)}
 								</div>
 							</Tooltip>
