@@ -20,7 +20,6 @@
 	} from '$lib/stores';
 	import { sanitizeResponseContent } from '$lib/utils';
 	import { WEBUI_API_BASE_URL } from '$lib/constants';
-	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
 	import { isPrismTheme, isSnapdealTheme } from '$lib/utils/theme';
 
 	import Suggestions from './Suggestions.svelte';
@@ -119,9 +118,12 @@
 				<div class="flex flex-row justify-center gap-2.5 @sm:gap-3 w-fit px-5 max-w-xl">
 					<div class="flex shrink-0 justify-center">
 						{#if !models[selectedModelIdx]?.name}
-							<div class="snapdeal-icon-badge p-2.5" in:fade={{ duration: 100 }}>
-								<PrismBrand compact iconOnly iconClassName="h-[1.45rem] w-auto" />
-							</div>
+							<img
+								src="/static/favicon.svg"
+								class="size-10 rounded-full"
+								alt=""
+								draggable="false"
+							/>
 						{:else}
 							<div class="flex -space-x-4 mb-0.5" in:fade={{ duration: 100 }}>
 								{#each models as model, modelIdx}
@@ -211,13 +213,11 @@
 								<div class="mt-0.5 text-sm font-normal text-gray-400 dark:text-gray-500">
 									By
 									{#if models[selectedModelIdx]?.info?.meta?.user.community}
-										<a
-											href="https://openwebui.com/m/{models[selectedModelIdx]?.info?.meta?.user
-												.username}"
-											>{models[selectedModelIdx]?.info?.meta?.user.name
+										<span>
+											{models[selectedModelIdx]?.info?.meta?.user.name
 												? models[selectedModelIdx]?.info?.meta?.user.name
-												: `@${models[selectedModelIdx]?.info?.meta?.user.username}`}</a
-										>
+												: `@${models[selectedModelIdx]?.info?.meta?.user.username}`}
+										</span>
 									{:else}
 										{models[selectedModelIdx]?.info?.meta?.user.name}
 									{/if}

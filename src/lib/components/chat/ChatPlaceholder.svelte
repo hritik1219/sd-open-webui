@@ -12,7 +12,6 @@
 	import { sanitizeResponseContent } from '$lib/utils';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import EyeSlash from '$lib/components/icons/EyeSlash.svelte';
-	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
 	import { isPrismTheme } from '$lib/utils/theme';
 	const i18n = getContext('i18n');
 
@@ -91,9 +90,13 @@
 				: 'text-gray-800 dark:text-gray-100'}"
 		>
 			{#if !models[selectedModelIdx]?.name}
-				<div class="snapdeal-icon-badge shrink-0 p-3" in:fade={{ duration: 200 }}>
-					<PrismBrand compact iconOnly iconClassName="h-[1.45rem] w-auto" />
-				</div>
+				<img
+					src="/static/favicon.svg"
+					class="size-11 rounded-full shrink-0"
+					alt=""
+					draggable="false"
+					in:fade={{ duration: 200 }}
+				/>
 			{/if}
 
 			<div>
@@ -122,13 +125,11 @@
 							<div class="mt-0.5 text-sm font-normal text-gray-400 dark:text-gray-500">
 								By
 								{#if models[selectedModelIdx]?.info?.meta?.user.community}
-									<a
-										href="https://openwebui.com/m/{models[selectedModelIdx]?.info?.meta?.user
-											.username}"
-										>{models[selectedModelIdx]?.info?.meta?.user.name
+									<span>
+										{models[selectedModelIdx]?.info?.meta?.user.name
 											? models[selectedModelIdx]?.info?.meta?.user.name
-											: `@${models[selectedModelIdx]?.info?.meta?.user.username}`}</a
-									>
+											: `@${models[selectedModelIdx]?.info?.meta?.user.username}`}
+									</span>
 								{:else}
 									{models[selectedModelIdx]?.info?.meta?.user.name}
 								{/if}

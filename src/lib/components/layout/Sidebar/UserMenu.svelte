@@ -19,7 +19,6 @@
 	} from '$lib/stores';
 
 	import { WEBUI_API_BASE_URL } from '$lib/constants';
-	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
 	import {
 		getMenuItemClasses,
 		getMenuPanelClasses,
@@ -137,10 +136,6 @@
 		>
 			{#if profile}
 				<div class=" flex gap-3.5 w-full p-2.5 items-center">
-					<div class="snapdeal-brand-shell px-2.5 py-1.5 shrink-0">
-						<PrismBrand compact iconOnly iconClassName="h-[1.1rem] w-auto" />
-					</div>
-
 					<div class=" items-center flex shrink-0">
 						<img
 							src={`${WEBUI_API_BASE_URL}/users/${$user?.id}/profile/image`}
@@ -592,44 +587,7 @@
 
 				<!-- {$i18n.t('Help')} -->
 
-				{#if $user?.role === 'admin'}
-					<a
-						href="https://docs.openwebui.com"
-						target="_blank"
-						draggable="false"
-						class="flex rounded-xl py-1.5 px-3 w-full transition cursor-pointer select-none {getMenuItemClasses(
-							$theme
-						)}"
-						id="chat-share-button"
-						on:click={() => {
-							show = false;
-						}}
-					>
-						<div class=" self-center mr-3">
-							<QuestionMarkCircle className="size-5" />
-						</div>
-						<div class=" self-center truncate">{$i18n.t('Documentation')}</div>
-					</a>
-
-					<!-- Releases -->
-					<a
-						href="https://github.com/open-webui/open-webui/releases"
-						target="_blank"
-						draggable="false"
-						class="flex rounded-xl py-1.5 px-3 w-full transition cursor-pointer select-none {getMenuItemClasses(
-							$theme
-						)}"
-						id="chat-share-button"
-						on:click={() => {
-							show = false;
-						}}
-					>
-						<div class=" self-center mr-3">
-							<Map className="size-5" />
-						</div>
-						<div class=" self-center truncate">{$i18n.t('Releases')}</div>
-					</a>
-				{/if}
+				<!-- removed external docs/releases links -->
 
 				<button
 					class="flex rounded-xl py-1.5 px-3 w-full transition cursor-pointer select-none {getMenuItemClasses(

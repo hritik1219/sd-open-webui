@@ -159,43 +159,10 @@
 									<Tooltip content={WEBUI_BUILD_HASH}>
 										v{WEBUI_VERSION}
 									</Tooltip>
-
-									{#if $config?.features?.enable_version_update_check}
-										<a
-											href="https://github.com/open-webui/open-webui/releases/tag/v{version.latest}"
-											target="_blank"
-										>
-											{updateAvailable === null
-												? $i18n.t('Checking for updates...')
-												: updateAvailable
-													? `(v${version.latest} ${$i18n.t('available!')})`
-													: $i18n.t('(latest)')}
-										</a>
-									{/if}
 								</div>
 
-								<button
-									class=" underline flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-500"
-									type="button"
-									on:click={() => {
-										showChangelog.set(true);
-									}}
-								>
-									<div>{$i18n.t("See what's new")}</div>
-								</button>
 							</div>
 
-							{#if $config?.features?.enable_version_update_check}
-								<button
-									class=" text-xs px-3 py-1.5 bg-gray-50 hover:bg-gray-100 dark:bg-gray-850 dark:hover:bg-gray-800 transition rounded-lg font-medium"
-									type="button"
-									on:click={() => {
-										checkForVersionUpdates();
-									}}
-								>
-									{$i18n.t('Check for updates')}
-								</button>
-							{/if}
 						</div>
 					</div>
 
@@ -209,40 +176,6 @@
 									{$i18n.t('Discover how to use Prism and seek support from the community.')}
 								</div>
 							</div>
-
-							<a
-								class="flex-shrink-0 text-xs font-medium underline"
-								href="https://docs.openwebui.com/"
-								target="_blank"
-							>
-								{$i18n.t('Documentation')}
-							</a>
-						</div>
-
-						<div class="mt-2 flex flex-wrap gap-2 text-xs">
-							<a
-								class="rounded-full border border-gray-200 px-3 py-1 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-900"
-								href="https://discord.gg/5rJgQTnV4s"
-								target="_blank"
-							>
-								Discord
-							</a>
-
-							<a
-								class="rounded-full border border-gray-200 px-3 py-1 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-900"
-								href="https://x.com"
-								target="_blank"
-							>
-								X
-							</a>
-
-							<a
-								class="rounded-full border border-gray-200 px-3 py-1 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-900"
-								href="https://github.com/open-webui/open-webui"
-								target="_blank"
-							>
-								GitHub
-							</a>
 						</div>
 					</div>
 
@@ -254,11 +187,7 @@
 								</div>
 
 								{#if $config?.license_metadata}
-									<a
-										href="https://docs.openwebui.com/enterprise"
-										target="_blank"
-										class="text-gray-500 mt-0.5"
-									>
+									<div class="text-gray-500 mt-0.5">
 										<span class=" capitalize text-black dark:text-white"
 											>{$config?.license_metadata?.type}
 											license</span
@@ -271,24 +200,16 @@
 										<span class=" font-medium text-black dark:text-white"
 											>{$config?.license_metadata?.seats ?? 'Unlimited'} users.</span
 										>
-									</a>
+									</div>
 									{#if $config?.license_metadata?.html}
 										<div class="mt-0.5">
 											{@html DOMPurify.sanitize($config?.license_metadata?.html)}
 										</div>
 									{/if}
 								{:else}
-									<a
-										class=" text-xs hover:underline"
-										href="https://docs.openwebui.com/enterprise"
-										target="_blank"
-									>
-										<span class="text-gray-500">
-											{$i18n.t(
-												'Upgrade to a licensed plan for enhanced capabilities, including custom theming and branding, and dedicated support.'
-											)}
-										</span>
-									</a>
+									<span class="text-gray-500">
+										{$i18n.t('License')}
+									</span>
 								{/if}
 							</div>
 
@@ -421,13 +342,9 @@
 								/>
 
 								<div class="mt-2 text-xs text-gray-400 dark:text-gray-500">
-									<a
-										href="https://docs.openwebui.com/reference/api-endpoints"
-										target="_blank"
-										class=" text-gray-300 font-medium underline"
-									>
+									<span class="text-gray-400 dark:text-gray-500">
 										{$i18n.t('To learn more about available endpoints, visit our documentation.')}
-									</a>
+									</span>
 								</div>
 							</div>
 						{/if}
@@ -461,14 +378,7 @@
 								>
 									<div>
 										<span class=" font-medium">{$i18n.t('Warning')}:</span>
-										<span
-											><a
-												href="https://docs.openwebui.com/reference/env-configuration#jwt_expires_in"
-												target="_blank"
-												class=" underline"
-												>{$i18n.t('No expiration can pose security risks.')}
-											</a></span
-										>
+										<span>{$i18n.t('No expiration can pose security risks.')}</span>
 									</div>
 								</div>
 							</div>
