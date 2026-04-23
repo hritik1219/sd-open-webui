@@ -22,8 +22,7 @@ _SAFE_DATA_URI_RE = re.compile(r'^data:image/(png|jpeg|gif|webp);base64,', re.IG
 _SAFE_STATIC_PATHS = frozenset(
     {
         '/user.png',
-        '/favicon.png',
-        '/static/favicon.png',
+        '/static/favicon.svg',
     }
 )
 

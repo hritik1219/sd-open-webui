@@ -1640,7 +1640,7 @@ async def get_webhook_profile_image(webhook_id: str, user=Depends(get_verified_u
     webhook = await Channels.get_webhook_by_id(webhook_id)
     if not webhook:
         # Return default favicon if webhook not found
-        return FileResponse(f'{STATIC_DIR}/favicon.png')
+        return FileResponse(f'{STATIC_DIR}/favicon.svg')
 
     if webhook.profile_image_url:
         # Check if it's url or base64
@@ -1665,7 +1665,7 @@ async def get_webhook_profile_image(webhook_id: str, user=Depends(get_verified_u
                 pass
 
     # Return default favicon if no profile image
-    return FileResponse(f'{STATIC_DIR}/favicon.png')
+    return FileResponse(f'{STATIC_DIR}/favicon.svg')
 
 
 @router.get('/{id}/webhooks', response_model=list[ChannelWebhookModel])

@@ -22,7 +22,7 @@
 	export let getModels: Function;
 
 	// General
-	let selectedTheme = SNAPDEAL_THEME;
+	let selectedTheme = 'dark';
 
 	let languages: Awaited<ReturnType<typeof getLanguages>> = [];
 	let lang = $i18n.language;
@@ -115,7 +115,7 @@
 	};
 
 	onMount(async () => {
-		selectedTheme = localStorage.theme ?? SNAPDEAL_THEME;
+		selectedTheme = localStorage.theme ?? 'dark';
 
 		languages = await getLanguages();
 

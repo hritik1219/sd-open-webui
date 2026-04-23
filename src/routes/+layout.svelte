@@ -477,7 +477,7 @@
 				if ($settings?.notificationEnabled ?? false) {
 					new Notification(`${data.title} • Open WebUI`, {
 						body: timeStr,
-						icon: `${WEBUI_BASE_URL}/static/favicon.png`
+						icon: `${WEBUI_BASE_URL}/static/favicon.svg`
 					});
 				}
 			}
@@ -939,7 +939,7 @@
 		// Call visibility change handler initially to set state on load
 		handleVisibilityChange();
 
-		theme.set(localStorage.theme ?? SNAPDEAL_THEME);
+		theme.set(localStorage.theme ?? 'dark');
 
 		mobile.set(window.innerWidth < BREAKPOINT);
 

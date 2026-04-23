@@ -39,7 +39,6 @@
 	import ChatCheck from '../icons/ChatCheck.svelte';
 	import Knobs from '../icons/Knobs.svelte';
 	import { WEBUI_API_BASE_URL } from '$lib/constants';
-	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
 	import {
 		getTopBarActionClasses,
 		getTopBarShellClasses,
@@ -292,24 +291,8 @@
 							}}
 						>
 							<div
-								class="select-none flex items-center transition snapdeal-profile-shell gap-2 pl-1.5 py-0.75 pr-0.75 {isPrismTheme(
-									$theme
-								)
-									? 'hover:bg-white/10'
-									: 'hover:bg-[#fff0f3]'}"
+								class="select-none flex items-center transition gap-2 p-1.5 rounded-xl hover:bg-gray-100/50 dark:hover:bg-gray-900/50"
 							>
-								<div class="hidden md:flex items-center snapdeal-brand-shell px-2.5 py-1.25">
-									<PrismBrand
-										compact
-										iconClassName="h-[1.2rem] w-auto"
-										textClassName="text-[1.3rem]"
-									/>
-								</div>
-
-								<div class="flex md:hidden items-center">
-									<PrismBrand compact iconOnly iconClassName="h-[1rem] w-auto" />
-								</div>
-
 								<div class=" self-center">
 									<span class="sr-only">{$i18n.t('User menu')}</span>
 									<img

@@ -75,7 +75,6 @@
 	import Code from '../icons/Code.svelte';
 	import { slide } from 'svelte/transition';
 	import HotkeyHint from '../common/HotkeyHint.svelte';
-	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
 
 	import {
 
@@ -823,17 +822,12 @@
 						aria-label={$showSidebar ? $i18n.t('Close Sidebar') : $i18n.t('Open Sidebar')}
 					>
 						<div class=" self-center flex items-center justify-center size-7">
-							{#if isSnapdealTheme($theme) || isPrismTheme($theme)}
-								<div class="sidebar-new-chat-icon group-hover:hidden snapdeal-brand-shell p-1">
-									<PrismBrand compact iconOnly iconClassName="h-[0.95rem] w-auto" />
-								</div>
-							{:else}
-								<img
-									src="{WEBUI_BASE_URL}/static/favicon.svg"
-									class="sidebar-new-chat-icon size-6 rounded-full group-hover:hidden"
-									alt=""
-								/>
-							{/if}
+							<img
+								src="{WEBUI_BASE_URL}/static/favicon.svg"
+								class="sidebar-new-chat-icon size-6 rounded-full group-hover:hidden"
+								alt=""
+								draggable="false"
+							/>
 
 							<Sidebar className="size-5 hidden group-hover:flex" />
 						</div>
@@ -1084,33 +1078,27 @@
 						: ''}"
 			>
 				<a
-					class="flex items-center h-full justify-center transition no-drag-region px-2.5 py-1.25 snapdeal-brand-link"
+					class="flex items-center h-full justify-center transition no-drag-region px-2.5 py-1.25"
 					href="/"
 					draggable="false"
 					on:click={newChatHandler}
 				>
-					{#if isSnapdealTheme($theme) || isPrismTheme($theme)}
-						<PrismBrand compact iconClassName="h-[1.2rem] w-auto" textClassName="text-[1.3rem]" />
-					{:else}
-						<img
-							crossorigin="anonymous"
-							src="{WEBUI_BASE_URL}/static/favicon.svg"
-							class="sidebar-new-chat-icon size-6 rounded-full"
-							alt=""
-						/>
-					{/if}
+					<img
+						crossorigin="anonymous"
+						src="{WEBUI_BASE_URL}/static/favicon.svg"
+						class="sidebar-new-chat-icon size-6 rounded-full"
+						alt=""
+					/>
 				</a>
 
-				{#if !(isSnapdealTheme($theme) || isPrismTheme($theme))}
-					<a href="/" class="flex flex-1 px-0.5" on:click={newChatHandler}>
-						<div
-							id="sidebar-webui-name"
-							class=" self-center font-medium text-gray-850 dark:text-white font-primary"
-						>
-							{$WEBUI_NAME}
-						</div>
-					</a>
-				{/if}
+				<a href="/" class="flex flex-1 px-0.5" on:click={newChatHandler}>
+					<div
+						id="sidebar-webui-name"
+						class=" self-center font-medium text-gray-850 dark:text-white font-primary"
+					>
+						{$WEBUI_NAME}
+					</div>
+				</a>
 				<Tooltip
 					content={$showSidebar ? $i18n.t('Close Sidebar') : $i18n.t('Open Sidebar')}
 					placement="bottom"
@@ -1700,16 +1688,6 @@
 							<div
 								class=" flex items-center py-2 px-1.5 w-full transition {isSnapdealTheme($theme)? 'snapdeal-sidebar-profile-row gap-2 pl-1.25 pr-3 py-0.5 rounded-full': isPrismTheme($theme)? 'snapdeal-sidebar-profile-row gap-2 pl-1.25 pr-3 py-0.5 rounded-full': 'rounded-2xl hover:bg-gray-100/50 dark:hover:bg-gray-900/50'}"
 							>
-								{#if isSnapdealTheme($theme) || isPrismTheme($theme)}
-									<div class="self-center shrink-0 snapdeal-sidebar-wordmark-shell px-2.25 py-1">
-										<PrismBrand
-											compact
-											iconClassName="h-[1.2rem] w-auto"
-											textClassName="text-[1.3rem]"
-										/>
-									</div>
-								{/if}
-								
 								<div class="flex items-center gap-3">
 									<div class=" self-center relative">
 										<img

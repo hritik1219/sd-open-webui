@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
-	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
+	import { WEBUI_BASE_URL } from '$lib/constants';
 
 	let selected = '';
 </script>
@@ -28,9 +28,12 @@
 					}
 				}}
 			>
-				<div class="snapdeal-brand-shell p-2">
-					<PrismBrand compact iconOnly iconClassName="h-7 w-auto" />
-				</div>
+				<img
+					src="{WEBUI_BASE_URL}/static/favicon.svg"
+					alt="Home"
+					class="size-7 rounded-full"
+					draggable="false"
+				/>
 			</button>
 		</Tooltip>
 	</div>
@@ -50,9 +53,12 @@
 				selected = '';
 			}}
 		>
-			<div class="snapdeal-brand-shell p-2">
-				<PrismBrand compact iconOnly iconClassName="h-6 w-auto" />
-			</div>
+			<img
+				src="{WEBUI_BASE_URL}/static/favicon.svg"
+				alt="Chat"
+				class="size-6 rounded-full"
+				draggable="false"
+			/>
 		</button>
 	</div>
 
