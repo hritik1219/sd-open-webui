@@ -5,7 +5,7 @@
 	const dispatch = createEventDispatcher();
 
 	import { config, settings, theme, user } from '$lib/stores';
-	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
+	import SaarthiBrand from '$lib/components/branding/SaarthiBrand.svelte';
 	import {
 		PRISM_THEME,
 		SNAPDEAL_THEME,
@@ -184,7 +184,7 @@
 <div class="flex flex-col h-full justify-between text-sm" id="tab-general">
 	<div class="  overflow-y-scroll max-h-[28rem] md:max-h-full">
 		<div class="">
-			<div class=" mb-1 text-sm font-medium">{$i18n.t('WebUI Settings')}</div>
+			<div class=" mb-1 text-sm font-medium">Saarthi Settings</div>
 
 			<div class="flex w-full justify-between">
 				<div class=" self-center text-xs font-medium">{$i18n.t('Theme')}</div>
@@ -202,7 +202,7 @@
 						<option value="oled-dark">🌃 {$i18n.t('OLED Dark')}</option>
 						<option value="light">☀️ {$i18n.t('Light')}</option>
 						<option value={SNAPDEAL_THEME}>Snapdeal</option>
-						<option value={PRISM_THEME}>Prism</option>
+						<option value={PRISM_THEME}>Saarthi</option>
 						{#if $config?.features?.enable_easter_eggs}
 							<option value="her">🌷 Her</option>
 						{/if}
@@ -214,11 +214,11 @@
 				<div class="mt-2 rounded-2xl border border-[#ffd2db] bg-[#fff4f6] px-3 py-2">
 					<div class="flex items-center justify-between gap-3">
 						<div class="shrink-0">
-							<PrismBrand compact iconClassName="h-[1.4rem] w-auto" textClassName="text-[1.8rem]" />
+							<SaarthiBrand compact iconClassName="h-[1.4rem] w-auto" textClassName="text-[1.8rem]" />
 						</div>
 
 						<div class="text-right text-[11px] leading-4 text-[#666666]">
-							Prism branding uses Snapdeal mark across splash, auth, sidebar, and profile surfaces.
+							Saarthi branding uses Snapdeal mark across splash, auth, sidebar, and profile surfaces.
 						</div>
 					</div>
 				</div>
@@ -229,7 +229,7 @@
 					<div class="flex items-center justify-between gap-3">
 						<div class="shrink-0">
 							<div class="snapdeal-brand-shell px-3 py-2">
-								<PrismBrand
+								<SaarthiBrand
 									compact
 									iconClassName="h-[1.35rem] w-auto"
 									textClassName="text-[1.55rem]"
@@ -238,7 +238,7 @@
 						</div>
 
 						<div class="text-right text-[11px] leading-4 text-[#a0a8bb]">
-							Prism theme adds dark glass UI and interactive WebGL background on auth and chat
+							Saarthi theme adds dark glass UI and interactive WebGL background on auth and chat
 							surfaces.
 						</div>
 					</div>
@@ -264,24 +264,7 @@
 					</select>
 				</div>
 			</div>
-			{#if $i18n.language === 'en-US' && !($config?.license_metadata ?? false)}
-				<div
-					class="mb-2 text-xs {($settings?.highContrastMode ?? false)
-						? 'text-gray-800 dark:text-gray-100'
-						: 'text-gray-400 dark:text-gray-500'}"
-				>
-					Couldn't find your language?
-					<a
-						class="font-medium underline {($settings?.highContrastMode ?? false)
-							? 'text-gray-700 dark:text-gray-200'
-							: 'text-gray-300'}"
-						href="https://github.com/open-webui/open-webui/blob/main/docs/CONTRIBUTING.md#-translations-and-internationalization"
-						target="_blank"
-					>
-						Help us translate Prism!
-					</a>
-				</div>
-			{/if}
+			<!-- removed translation promo link -->
 
 			<div>
 				<div class=" py-0.5 flex w-full justify-between">

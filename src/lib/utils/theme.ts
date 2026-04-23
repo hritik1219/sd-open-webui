@@ -1,5 +1,5 @@
 export const SNAPDEAL_THEME = 'snapdeal';
-export const PRISM_THEME = 'prism';
+export const PRISM_THEME = 'saarthi';
 
 export const SNAPDEAL_COLORS = {
 	logo: '#FF2341',
@@ -27,9 +27,9 @@ export const PRISM_COLORS = {
 export const THEME_CLASS_NAMES = ['dark', 'light', 'oled-dark', 'her', SNAPDEAL_THEME, PRISM_THEME];
 
 export const isSnapdealTheme = (value?: string | null) => value === SNAPDEAL_THEME;
-export const isPrismTheme = (value?: string | null) => value === PRISM_THEME;
+export const isSaarthiTheme = (value?: string | null) => value === PRISM_THEME;
 export const isCustomTheme = (value?: string | null) =>
-	isSnapdealTheme(value) || isPrismTheme(value);
+	isSnapdealTheme(value) || isSaarthiTheme(value);
 
 export const isDarkTheme = (value?: string | null, prefersDark = false) => {
 	switch (value) {
@@ -48,11 +48,11 @@ const getThemeVariantClass = (
 	value: string | null | undefined,
 	{
 		snapdeal,
-		prism,
+		saarthi,
 		fallback
 	}: {
 		snapdeal: string;
-		prism: string;
+		saarthi: string;
 		fallback: string;
 	}
 ) => {
@@ -60,8 +60,8 @@ const getThemeVariantClass = (
 		return snapdeal;
 	}
 
-	if (isPrismTheme(value)) {
-		return prism;
+	if (isSaarthiTheme(value)) {
+		return saarthi;
 	}
 
 	return fallback;
@@ -70,133 +70,133 @@ const getThemeVariantClass = (
 export const getInactiveTabClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-muted-tab',
-		prism: 'prism-muted-tab',
+		saarthi: 'saarthi-muted-tab',
 		fallback: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'
 	});
 
 export const getActiveTabClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-active-tab',
-		prism: 'prism-active-tab',
+		saarthi: 'saarthi-active-tab',
 		fallback: ''
 	});
 
 export const getTabRailClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-tab-rail',
-		prism: 'prism-tab-rail',
+		saarthi: 'saarthi-tab-rail',
 		fallback: 'bg-transparent'
 	});
 
 export const getTopBarShellClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-topbar-shell',
-		prism: 'prism-topbar-shell',
+		saarthi: 'saarthi-topbar-shell',
 		fallback: 'bg-transparent'
 	});
 
 export const getTopBarActionClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-topbar-action',
-		prism: 'prism-topbar-action',
+		saarthi: 'saarthi-topbar-action',
 		fallback: 'hover:bg-gray-100 dark:hover:bg-gray-850'
 	});
 
 export const getTopBarRailClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-topbar-rail',
-		prism: 'prism-topbar-rail',
+		saarthi: 'saarthi-topbar-rail',
 		fallback: 'bg-transparent'
 	});
 
 export const getTopBarActiveTabClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-topbar-active-tab',
-		prism: 'prism-topbar-active-tab',
+		saarthi: 'saarthi-topbar-active-tab',
 		fallback: ''
 	});
 
 export const getTopBarInactiveTabClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-topbar-inactive-tab',
-		prism: 'prism-topbar-inactive-tab',
+		saarthi: 'saarthi-topbar-inactive-tab',
 		fallback: 'text-gray-300 dark:text-gray-600 hover:text-gray-700 dark:hover:text-white'
 	});
 
 export const getSidebarActionClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-sidebar-action',
-		prism: 'prism-sidebar-action',
+		saarthi: 'saarthi-sidebar-action',
 		fallback: 'hover:bg-gray-100 dark:hover:bg-gray-900'
 	});
 
 export const getHeaderShellClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-header-shell',
-		prism: 'prism-header-shell',
+		saarthi: 'saarthi-header-shell',
 		fallback: 'bg-transparent'
 	});
 
 export const getHeaderIconButtonClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-header-action',
-		prism: 'prism-header-action',
+		saarthi: 'saarthi-header-action',
 		fallback: 'hover:bg-gray-100 dark:hover:bg-gray-850'
 	});
 
 export const getSearchShellClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-search-shell',
-		prism: 'prism-search-shell',
+		saarthi: 'saarthi-search-shell',
 		fallback: 'bg-transparent'
 	});
 
 export const getMenuPanelClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-menu-panel',
-		prism: 'prism-menu-panel',
+		saarthi: 'saarthi-menu-panel',
 		fallback: 'border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-850 dark:text-white'
 	});
 
 export const getMenuItemClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-menu-item',
-		prism: 'prism-menu-item',
+		saarthi: 'saarthi-menu-item',
 		fallback: 'hover:bg-gray-50 dark:hover:bg-gray-800'
 	});
 
 export const getSoftButtonClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-soft-button',
-		prism: 'prism-soft-button',
+		saarthi: 'saarthi-soft-button',
 		fallback: 'bg-gray-50 dark:text-white dark:bg-gray-900/50 text-black'
 	});
 
 export const getFolderButtonClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-folder-button',
-		prism: 'prism-folder-button',
+		saarthi: 'saarthi-folder-button',
 		fallback: 'hover:bg-gray-100 dark:hover:bg-gray-900'
 	});
 
 export const getIconButtonClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-icon-button',
-		prism: 'prism-icon-button',
+		saarthi: 'saarthi-icon-button',
 		fallback: 'dark:hover:bg-gray-850'
 	});
 
 export const getDialogPanelClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-dialog-panel',
-		prism: 'prism-dialog-panel',
+		saarthi: 'saarthi-dialog-panel',
 		fallback: 'bg-white/95 dark:bg-gray-950/95 border-white dark:border-gray-900'
 	});
 
 export const getDialogSecondaryButtonClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-dialog-secondary',
-		prism: 'prism-dialog-secondary',
+		saarthi: 'saarthi-dialog-secondary',
 		fallback:
 			'bg-gray-100 hover:bg-gray-200 text-gray-800 dark:bg-gray-850 dark:hover:bg-gray-800 dark:text-white'
 	});
@@ -204,7 +204,7 @@ export const getDialogSecondaryButtonClasses = (value?: string | null) =>
 export const getDialogPrimaryButtonClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-primary-button snapdeal-dialog-primary',
-		prism: 'prism-primary-button prism-dialog-primary',
+		saarthi: 'saarthi-primary-button saarthi-dialog-primary',
 		fallback:
 			'bg-gray-900 hover:bg-gray-850 text-gray-100 dark:bg-gray-100 dark:hover:bg-white dark:text-gray-800'
 	});
@@ -212,7 +212,7 @@ export const getDialogPrimaryButtonClasses = (value?: string | null) =>
 export const getPrimaryButtonClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-primary-button',
-		prism: 'prism-primary-button',
+		saarthi: 'saarthi-primary-button',
 		fallback:
 			'bg-gray-900 hover:bg-gray-850 text-gray-100 dark:bg-gray-100 dark:hover:bg-white dark:text-gray-800'
 	});
@@ -220,7 +220,7 @@ export const getPrimaryButtonClasses = (value?: string | null) =>
 export const getSearchCtaButtonClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-search-cta',
-		prism: 'prism-search-cta',
+		saarthi: 'saarthi-search-cta',
 		fallback:
 			'bg-gray-900 hover:bg-gray-850 text-gray-100 dark:bg-gray-100 dark:hover:bg-white dark:text-gray-800'
 	});
@@ -228,14 +228,14 @@ export const getSearchCtaButtonClasses = (value?: string | null) =>
 export const getSelectContentClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-select-content',
-		prism: 'prism-select-content',
+		saarthi: 'saarthi-select-content',
 		fallback: 'bg-white dark:bg-gray-900 dark:text-white border-gray-300/30 dark:border-gray-700/40'
 	});
 
 export const getSelectItemClasses = (value?: string | null) =>
 	getThemeVariantClass(value, {
 		snapdeal: 'snapdeal-select-item',
-		prism: 'prism-select-item',
+		saarthi: 'saarthi-select-item',
 		fallback: 'text-gray-700 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-850'
 	});
 

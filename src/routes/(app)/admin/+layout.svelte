@@ -11,7 +11,7 @@
 		getTopBarInactiveTabClasses,
 		getTopBarRailClasses,
 		getTopBarShellClasses,
-		isPrismTheme,
+		isSaarthiTheme,
 		isSnapdealTheme
 	} from '$lib/utils/theme';
 
@@ -44,7 +44,7 @@
 		<nav class="px-2 pt-1.5 backdrop-blur-xl drag-region select-none">
 			<div
 				class="flex items-center gap-1 {getTopBarShellClasses($theme)} {isSnapdealTheme($theme) ||
-				isPrismTheme($theme)
+				isSaarthiTheme($theme)
 					? 'px-2 py-1'
 					: ''}"
 			>
@@ -73,7 +73,7 @@
 					<div
 						class="flex gap-1 scrollbar-none overflow-x-auto w-fit text-center text-sm font-medium {isSnapdealTheme(
 							$theme
-						) || isPrismTheme($theme)
+						) || isSaarthiTheme($theme)
 							? `pt-1 px-1.5 py-1 ${getTopBarRailClasses($theme)}`
 							: 'rounded-full bg-transparent pt-1'}"
 					>

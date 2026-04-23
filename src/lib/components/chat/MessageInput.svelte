@@ -100,7 +100,7 @@
 	import InputModal from '../common/InputModal.svelte';
 	import Expand from '../icons/Expand.svelte';
 	import QueuedMessageItem from './MessageInput/QueuedMessageItem.svelte';
-	import { getPrimaryButtonClasses, isPrismTheme, isSnapdealTheme } from '$lib/utils/theme';
+	import { getPrimaryButtonClasses, isSaarthiTheme, isSnapdealTheme } from '$lib/utils/theme';
 	import TaskList from './Messages/ResponseMessage/TaskList.svelte';
 
 	const i18n = getContext('i18n');
@@ -467,16 +467,16 @@
 	export let placeholder = '';
 
 	$: snapdealComposerTheme = isSnapdealTheme($theme);
-	$: prismComposerTheme = isPrismTheme($theme);
+	$: saarthiComposerTheme = isSaarthiTheme($theme);
 	$: composerQueueClasses = snapdealComposerTheme
 		? 'mb-1 mx-2 py-0.5 px-1.5 rounded-2xl snapdeal-composer-queue overflow-x-hidden overflow-y-auto max-h-[25vh]'
-		: prismComposerTheme
-			? 'mb-1 mx-2 py-0.5 px-1.5 rounded-2xl prism-composer-queue overflow-x-hidden overflow-y-auto max-h-[25vh]'
+		: saarthiComposerTheme
+			? 'mb-1 mx-2 py-0.5 px-1.5 rounded-2xl saarthi-composer-queue overflow-x-hidden overflow-y-auto max-h-[25vh]'
 			: 'mb-1 mx-2 py-0.5 px-1.5 rounded-2xl bg-white dark:bg-gray-900/60 border border-gray-100 dark:border-gray-800/50 overflow-x-hidden overflow-y-auto max-h-[25vh]';
 	$: composerShellClasses = snapdealComposerTheme
 		? 'flex-1 flex flex-col relative w-full rounded-3xl snapdeal-composer-shell transition px-1.5 dark:text-gray-100'
-		: prismComposerTheme
-			? 'flex-1 flex flex-col relative w-full rounded-3xl prism-composer-shell transition px-1.5 text-white'
+		: saarthiComposerTheme
+			? 'flex-1 flex flex-col relative w-full rounded-3xl saarthi-composer-shell transition px-1.5 text-white'
 			: `flex-1 flex flex-col relative w-full shadow-lg rounded-3xl border ${
 					$temporaryChatEnabled
 						? 'border-dashed border-gray-100 dark:border-gray-800 hover:border-gray-200 focus-within:border-gray-200 hover:dark:border-gray-700 focus-within:dark:border-gray-700'
@@ -484,53 +484,53 @@
 				} transition px-1 bg-white/5 dark:bg-gray-500/5 backdrop-blur-sm dark:text-gray-100`;
 	$: composerIconButtonClasses = snapdealComposerTheme
 		? 'snapdeal-composer-icon rounded-full flex justify-center items-center outline-hidden focus:outline-hidden transition'
-		: prismComposerTheme
-			? 'prism-composer-icon rounded-full flex justify-center items-center outline-hidden focus:outline-hidden transition'
+		: saarthiComposerTheme
+			? 'saarthi-composer-icon rounded-full flex justify-center items-center outline-hidden focus:outline-hidden transition'
 			: 'bg-transparent hover:bg-gray-100 text-gray-700 dark:text-white dark:hover:bg-gray-800 rounded-full flex justify-center items-center outline-hidden focus:outline-hidden transition';
 	$: composerToggleInactiveClasses = snapdealComposerTheme
 		? 'snapdeal-composer-chip'
-		: prismComposerTheme
-			? 'prism-composer-chip'
+		: saarthiComposerTheme
+			? 'saarthi-composer-chip'
 			: 'bg-transparent text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800';
 	$: composerToggleActiveClasses = snapdealComposerTheme
 		? 'snapdeal-composer-chip-active'
-		: prismComposerTheme
-			? 'prism-composer-chip-active'
+		: saarthiComposerTheme
+			? 'saarthi-composer-chip-active'
 			: 'text-sky-500 dark:text-sky-300 bg-sky-50 hover:bg-sky-100 dark:bg-sky-400/10 dark:hover:bg-sky-600/10 border border-sky-200/40 dark:border-sky-500/20';
 	$: composerSecondaryButtonClasses = snapdealComposerTheme
 		? 'snapdeal-composer-icon rounded-full p-1.5 self-center'
-		: prismComposerTheme
-			? 'prism-composer-icon rounded-full p-1.5 self-center'
+		: saarthiComposerTheme
+			? 'saarthi-composer-icon rounded-full p-1.5 self-center'
 			: 'text-gray-500 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-200 transition rounded-full p-1.5 self-center';
 	$: composerAudioButtonClasses = snapdealComposerTheme
 		? 'snapdeal-composer-audio rounded-full p-1.5 self-center'
-		: prismComposerTheme
-			? 'prism-composer-audio rounded-full p-1.5 self-center mr-0.5'
+		: saarthiComposerTheme
+			? 'saarthi-composer-audio rounded-full p-1.5 self-center mr-0.5'
 			: 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200 transition rounded-full p-1.5 self-center mr-0.5';
 	$: composerStopButtonClasses = snapdealComposerTheme
 		? 'snapdeal-composer-stop transition rounded-full p-1.5'
-		: prismComposerTheme
-			? 'prism-composer-stop transition rounded-full p-1.5'
+		: saarthiComposerTheme
+			? 'saarthi-composer-stop transition rounded-full p-1.5'
 			: 'bg-white hover:bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-800 transition rounded-full p-1.5';
 	$: composerPrimaryButtonClasses = snapdealComposerTheme
 		? `${getPrimaryButtonClasses($theme)} transition rounded-full p-1.5 self-center`
-		: prismComposerTheme
+		: saarthiComposerTheme
 			? `${getPrimaryButtonClasses($theme)} transition rounded-full p-1.5 self-center`
 			: 'bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-100 transition rounded-full p-1.5 self-center';
 	$: composerDisabledPrimaryButtonClasses = snapdealComposerTheme
 		? 'snapdeal-composer-icon transition rounded-full p-1.5 self-center opacity-55 cursor-not-allowed text-gray-400'
-		: prismComposerTheme
-			? 'prism-composer-icon transition rounded-full p-1.5 self-center opacity-55 cursor-not-allowed text-white/45'
+		: saarthiComposerTheme
+			? 'saarthi-composer-icon transition rounded-full p-1.5 self-center opacity-55 cursor-not-allowed text-white/45'
 			: 'text-white bg-gray-200 dark:text-gray-900 dark:bg-gray-700 disabled';
 	$: composerDividerClasses = snapdealComposerTheme
 		? 'bg-[rgba(255,35,65,0.14)]'
-		: prismComposerTheme
+		: saarthiComposerTheme
 			? 'bg-white/8'
 			: 'bg-gray-200/50 dark:bg-gray-800/50';
 	$: scrollToBottomButtonClasses = snapdealComposerTheme
 		? 'snapdeal-composer-icon p-1.5 rounded-full pointer-events-auto'
-		: prismComposerTheme
-			? 'prism-composer-icon p-1.5 rounded-full pointer-events-auto'
+		: saarthiComposerTheme
+			? 'saarthi-composer-icon p-1.5 rounded-full pointer-events-auto'
 			: 'bg-white border border-gray-100 dark:border-none dark:bg-white/20 p-1.5 rounded-full pointer-events-auto';
 
 	let visionCapableModels = [];
@@ -1492,8 +1492,8 @@
 													type="button"
 													class={snapdealComposerTheme
 														? 'snapdeal-composer-icon p-1 rounded-lg'
-														: prismComposerTheme
-															? 'prism-composer-icon p-1 rounded-lg'
+														: saarthiComposerTheme
+															? 'saarthi-composer-icon p-1 rounded-lg'
 															: 'p-1 rounded-lg hover:bg-gray-100/50 dark:hover:bg-gray-800/50'}
 													aria-label="Expand input"
 													on:click={async () => {
@@ -1801,8 +1801,8 @@
 												<button
 													class={snapdealComposerTheme
 														? 'snapdeal-composer-chip-active translate-y-[0.5px] px-2 py-1.5 flex gap-1 items-center rounded-full self-center transition'
-														: prismComposerTheme
-															? 'prism-composer-chip-active translate-y-[0.5px] px-2 py-1.5 flex gap-1 items-center rounded-full self-center transition'
+														: saarthiComposerTheme
+															? 'saarthi-composer-chip-active translate-y-[0.5px] px-2 py-1.5 flex gap-1 items-center rounded-full self-center transition'
 															: 'translate-y-[0.5px] px-1 flex gap-1 items-center text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200 rounded-lg self-center transition'}
 													aria-label="Available Tools"
 													type="button"

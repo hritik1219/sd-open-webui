@@ -12,7 +12,7 @@
 	import { sanitizeResponseContent } from '$lib/utils';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import EyeSlash from '$lib/components/icons/EyeSlash.svelte';
-	import { isPrismTheme } from '$lib/utils/theme';
+	import { isSaarthiTheme } from '$lib/utils/theme';
 	const i18n = getContext('i18n');
 
 	export let modelIds = [];
@@ -83,7 +83,7 @@
 		{/if}
 
 		<div
-			class=" mt-2 mb-4 text-3xl text-left flex items-center gap-4 font-primary {isPrismTheme(
+			class=" mt-2 mb-4 text-3xl text-left flex items-center gap-4 font-primary {isSaarthiTheme(
 				$theme
 			)
 				? 'text-white'
@@ -137,7 +137,7 @@
 						{/if}
 					{:else}
 						<div
-							class="{isPrismTheme($theme)
+							class="{isSaarthiTheme($theme)
 								? 'text-gray-400'
 								: 'text-gray-400 dark:text-gray-500'} line-clamp-1 font-p"
 						>

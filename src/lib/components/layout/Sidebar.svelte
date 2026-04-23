@@ -82,7 +82,7 @@
 
 		getSidebarActionClasses,
 
-		isPrismTheme,
+		isSaarthiTheme,
 
 		isSnapdealTheme
 
@@ -797,9 +797,9 @@
 
 			? 'w-[3.45rem] min-w-[3.45rem] pt-1.25 pb-1.25 px-1 snapdeal-sidebar-mini-rail'
 
-			: isPrismTheme($theme)
+			: isSaarthiTheme($theme)
 
-				? 'w-[3.45rem] min-w-[3.45rem] pt-1.25 pb-1.25 px-1 prism-sidebar-mini-rail'
+				? 'w-[3.45rem] min-w-[3.45rem] pt-1.25 pb-1.25 px-1 saarthi-sidebar-mini-rail'
 
 				: 'pt-[7px] pb-2 px-2 hover:bg-gray-50/30 dark:hover:bg-gray-950/30 border-e-[0.5px] border-gray-50 dark:border-gray-850/30'} flex flex-col justify-between text-black dark:text-white h-full z-10 transition-all"
 		id="sidebar"
@@ -982,7 +982,7 @@
 
 									? 'snapdeal-sidebar-mini-profile justify-center p-1'
 
-									: isPrismTheme($theme)
+									: isSaarthiTheme($theme)
 
 										? 'snapdeal-sidebar-mini-profile justify-center p-1'
 
@@ -995,7 +995,7 @@
 
 											? 'size-7 border-2 border-white shadow-sm'
 
-											: isPrismTheme($theme)
+											: isSaarthiTheme($theme)
 
 												? 'size-7 border-2 border-white/85 shadow-[0_10px_18px_rgba(0,0,0,0.18)]'
 
@@ -1039,9 +1039,9 @@
 
 						? 'snapdeal-sidebar-shell'
 
-						: isPrismTheme($theme)
+						: isSaarthiTheme($theme)
 
-							? 'prism-sidebar-shell'
+							? 'saarthi-sidebar-shell'
 
 							: $mobile
 
@@ -1071,9 +1071,9 @@
 
 					? 'snapdeal-sidebar-header'
 
-					: isPrismTheme($theme)
+					: isSaarthiTheme($theme)
 
-						? 'prism-sidebar-header'
+						? 'saarthi-sidebar-header'
 
 						: ''}"
 			>
@@ -1106,7 +1106,7 @@
 					<button
 						class="flex rounded-xl {isSnapdealTheme($theme)
 							? 'size-8'
-							: isPrismTheme($theme)
+							: isSaarthiTheme($theme)
 								? 'size-8'
 								: 'size-8.5'} justify-center items-center transition {getHeaderIconButtonClasses(
 							$theme
@@ -1686,7 +1686,7 @@
 							}}
 						>
 							<div
-								class=" flex items-center py-2 px-1.5 w-full transition {isSnapdealTheme($theme)? 'snapdeal-sidebar-profile-row gap-2 pl-1.25 pr-3 py-0.5 rounded-full': isPrismTheme($theme)? 'snapdeal-sidebar-profile-row gap-2 pl-1.25 pr-3 py-0.5 rounded-full': 'rounded-2xl hover:bg-gray-100/50 dark:hover:bg-gray-900/50'}"
+								class=" flex items-center py-2 px-1.5 w-full transition {isSnapdealTheme($theme)? 'snapdeal-sidebar-profile-row gap-2 pl-1.25 pr-3 py-0.5 rounded-full': isSaarthiTheme($theme)? 'snapdeal-sidebar-profile-row gap-2 pl-1.25 pr-3 py-0.5 rounded-full': 'rounded-2xl hover:bg-gray-100/50 dark:hover:bg-gray-900/50'}"
 							>
 								<div class="flex items-center gap-3">
 									<div class=" self-center relative">
@@ -1694,7 +1694,7 @@
 											src={`${WEBUI_API_BASE_URL}/users/${$user?.id}/profile/image`}
 											class="{isSnapdealTheme($theme)
 												? 'size-7.5 border-[3px] border-white shadow-sm'
-												: isPrismTheme($theme)
+												: isSaarthiTheme($theme)
 													? 'size-7.5 border-[3px] border-white/90 shadow-[0_12px_20px_rgba(0,0,0,0.2)]'
 													: 'size-7'} object-cover rounded-full"
 											alt={$i18n.t('Open User Profile Menu')}

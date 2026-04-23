@@ -2,7 +2,7 @@
 	import { getContext } from 'svelte';
 	const i18n = getContext('i18n');
 
-	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
+	import SaarthiBrand from '$lib/components/branding/SaarthiBrand.svelte';
 
 	import Marquee from './common/Marquee.svelte';
 	import SlideShow from './common/SlideShow.svelte';
@@ -18,7 +18,7 @@
 			<div class="flex space-x-2">
 				<div class=" self-center">
 					<div class="snapdeal-brand-shell px-3 py-2">
-						<PrismBrand compact iconClassName="h-[1.3rem] w-auto" textClassName="text-[1.5rem]" />
+						<SaarthiBrand compact iconClassName="h-[1.3rem] w-auto" textClassName="text-[1.5rem]" />
 					</div>
 				</div>
 			</div>

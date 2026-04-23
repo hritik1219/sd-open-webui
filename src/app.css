@@ -517,146 +517,146 @@ html.snapdeal .snapdeal-muted-tab:hover {
 	color: var(--snapdeal-cta);
 }
 
-html.prism {
+html.saarthi {
 	color-scheme: dark;
-	--prism-bg: #090b10;
-	--prism-surface: rgba(15, 18, 24, 0.86);
-	--prism-surface-strong: #121720;
-	--prism-surface-soft: rgba(255, 255, 255, 0.05);
-	--prism-text: #f5f7fb;
-	--prism-muted: #9aa3b5;
-	--prism-border: rgba(255, 255, 255, 0.12);
-	--prism-border-strong: rgba(255, 255, 255, 0.18);
-	--prism-accent: #ff2341;
-	--prism-accent-alt: #7c5cff;
-	--prism-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
-	--prism-glow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 22px 54px rgba(0, 0, 0, 0.32);
+	--saarthi-bg: #090b10;
+	--saarthi-surface: rgba(15, 18, 24, 0.86);
+	--saarthi-surface-strong: #121720;
+	--saarthi-surface-soft: rgba(255, 255, 255, 0.05);
+	--saarthi-text: #f5f7fb;
+	--saarthi-muted: #9aa3b5;
+	--saarthi-border: rgba(255, 255, 255, 0.12);
+	--saarthi-border-strong: rgba(255, 255, 255, 0.18);
+	--saarthi-accent: #ff2341;
+	--saarthi-accent-alt: #7c5cff;
+	--saarthi-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+	--saarthi-glow: 0 0 0 1px rgba(255, 255, 255, 0.05), 0 22px 54px rgba(0, 0, 0, 0.32);
 }
 
-html.prism body {
+html.saarthi body {
 	background:
 		radial-gradient(circle at 18% 12%, rgba(124, 92, 255, 0.22) 0%, transparent 28%),
 		radial-gradient(circle at 78% 0%, rgba(255, 35, 65, 0.16) 0%, transparent 26%),
 		radial-gradient(circle at 50% 100%, rgba(59, 130, 246, 0.12) 0%, transparent 36%),
 		linear-gradient(180deg, #06070b 0%, #0a0c12 28%, #090b10 100%);
-	color: var(--prism-text);
+	color: var(--saarthi-text);
 }
 
-html.prism ::selection {
+html.saarthi ::selection {
 	background: rgba(124, 92, 255, 0.3);
 }
 
-html.prism .snapdeal-brand-shell,
-html.prism .snapdeal-brand-link,
-html.prism .snapdeal-sidebar-wordmark-shell,
-html.prism .snapdeal-icon-badge {
+html.saarthi .snapdeal-brand-shell,
+html.saarthi .snapdeal-brand-link,
+html.saarthi .snapdeal-sidebar-wordmark-shell,
+html.saarthi .snapdeal-icon-badge {
 	background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(245, 247, 250, 0.94) 100%);
 	border-color: rgba(255, 255, 255, 0.7);
 	box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
 }
 
-html.prism .snapdeal-brand-link:hover {
+html.saarthi .snapdeal-brand-link:hover {
 	background: #ffffff;
 	border-color: rgba(124, 92, 255, 0.28);
 	box-shadow: 0 14px 32px rgba(0, 0, 0, 0.2);
 }
 
-html.prism .snapdeal-profile-shell {
+html.saarthi .snapdeal-profile-shell {
 	background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(245, 247, 250, 0.94) 100%);
 	border: 1px solid rgba(255, 255, 255, 0.62);
 	box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
 }
 
-html.prism .snapdeal-sidebar-profile-row {
+html.saarthi .snapdeal-sidebar-profile-row {
 	background: linear-gradient(180deg, rgba(18, 23, 32, 0.92) 0%, rgba(11, 14, 20, 0.94) 100%);
-	border: 1px solid var(--prism-border);
-	box-shadow: var(--prism-glow);
+	border: 1px solid var(--saarthi-border);
+	box-shadow: var(--saarthi-glow);
 }
 
-html.prism .snapdeal-sidebar-profile-row:hover {
+html.saarthi .snapdeal-sidebar-profile-row:hover {
 	background: linear-gradient(180deg, rgba(22, 27, 38, 0.94) 0%, rgba(13, 16, 23, 0.96) 100%);
 }
 
-html.prism .snapdeal-divider {
+html.saarthi .snapdeal-divider {
 	border-color: rgba(255, 255, 255, 0.08);
 }
 
-html.prism .snapdeal-sidebar-mini-profile {
+html.saarthi .snapdeal-sidebar-mini-profile {
 	background: rgba(255, 255, 255, 0.07);
-	border: 1px solid var(--prism-border);
+	border: 1px solid var(--saarthi-border);
 	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
 }
 
-html.prism .snapdeal-sidebar-mini-profile:hover {
+html.saarthi .snapdeal-sidebar-mini-profile:hover {
 	background: rgba(255, 255, 255, 0.11);
 }
 
-.prism-topbar-shell {
+.saarthi-topbar-shell {
 	background: linear-gradient(135deg, rgba(18, 22, 30, 0.92) 0%, rgba(10, 13, 18, 0.88) 100%);
-	border: 1px solid var(--prism-border);
-	box-shadow: var(--prism-shadow);
+	border: 1px solid var(--saarthi-border);
+	box-shadow: var(--saarthi-shadow);
 	backdrop-filter: blur(20px);
 	border-radius: 1rem;
 }
 
-.prism-topbar-action {
+.saarthi-topbar-action {
 	background: transparent;
 	border: 1px solid transparent;
 	color: rgba(245, 247, 251, 0.88);
 }
 
-.prism-topbar-action:hover {
+.saarthi-topbar-action:hover {
 	background: rgba(255, 255, 255, 0.06);
-	border-color: var(--prism-border);
+	border-color: var(--saarthi-border);
 	color: #fff;
 }
 
-.prism-topbar-rail {
+.saarthi-topbar-rail {
 	background: rgba(255, 255, 255, 0.04);
 	border: 1px solid rgba(255, 255, 255, 0.08);
 	border-radius: 999px;
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
 }
 
-.prism-topbar-active-tab {
+.saarthi-topbar-active-tab {
 	background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.06) 100%);
-	border: 1px solid var(--prism-border-strong);
+	border: 1px solid var(--saarthi-border-strong);
 	box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
-	color: var(--prism-text);
+	color: var(--saarthi-text);
 	border-radius: 999px;
 }
 
-.prism-topbar-inactive-tab {
+.saarthi-topbar-inactive-tab {
 	color: rgba(245, 247, 251, 0.62);
 }
 
-.prism-topbar-inactive-tab:hover {
+.saarthi-topbar-inactive-tab:hover {
 	background: rgba(255, 255, 255, 0.05);
 	color: #fff;
 	border-radius: 999px;
 }
 
-.prism-header-shell {
+.saarthi-header-shell {
 	background: linear-gradient(180deg, rgba(17, 21, 30, 0.9) 0%, rgba(10, 12, 18, 0.9) 100%);
-	border: 1px solid var(--prism-border);
-	box-shadow: var(--prism-glow);
+	border: 1px solid var(--saarthi-border);
+	box-shadow: var(--saarthi-glow);
 	backdrop-filter: blur(18px);
 	border-radius: 1.3rem;
 }
 
-.prism-header-action {
+.saarthi-header-action {
 	background: transparent;
 	border: 1px solid transparent;
 	color: rgba(245, 247, 251, 0.88);
 }
 
-.prism-header-action:hover {
+.saarthi-header-action:hover {
 	background: rgba(255, 255, 255, 0.06);
-	border-color: var(--prism-border);
+	border-color: var(--saarthi-border);
 	color: #fff;
 }
 
-.prism-search-shell {
+.saarthi-search-shell {
 	background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.04) 100%);
 	border: 1px solid rgba(255, 255, 255, 0.12);
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
@@ -664,12 +664,12 @@ html.prism .snapdeal-sidebar-mini-profile:hover {
 	backdrop-filter: blur(12px);
 }
 
-.prism-search-shell:hover {
+.saarthi-search-shell:hover {
 	background: rgba(255, 255, 255, 0.09);
 	border-color: rgba(255, 255, 255, 0.18);
 }
 
-.prism-search-shell:focus-within {
+.saarthi-search-shell:focus-within {
 	background: rgba(255, 255, 255, 0.1);
 	border-color: rgba(124, 92, 255, 0.48);
 	box-shadow:
@@ -677,40 +677,40 @@ html.prism .snapdeal-sidebar-mini-profile:hover {
 		0 0 0 3px rgba(124, 92, 255, 0.12);
 }
 
-.prism-search-trigger {
-	color: var(--prism-text);
+.saarthi-search-trigger {
+	color: var(--saarthi-text);
 }
 
-.prism-search-trigger .prism-search-placeholder {
-	color: var(--prism-muted);
+.saarthi-search-trigger .saarthi-search-placeholder {
+	color: var(--saarthi-muted);
 }
 
-.prism-tab-rail {
+.saarthi-tab-rail {
 	background: rgba(255, 255, 255, 0.04);
 	border: 1px solid rgba(255, 255, 255, 0.08);
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
 	border-radius: 999px;
 }
 
-.prism-active-tab {
+.saarthi-active-tab {
 	background: linear-gradient(180deg, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0.06) 100%);
-	border: 1px solid var(--prism-border-strong);
+	border: 1px solid var(--saarthi-border-strong);
 	box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
-	color: var(--prism-text);
+	color: var(--saarthi-text);
 	border-radius: 999px;
 }
 
-html.prism .prism-muted-tab {
-	color: var(--prism-muted);
+html.saarthi .saarthi-muted-tab {
+	color: var(--saarthi-muted);
 }
 
-html.prism .prism-muted-tab:hover {
+html.saarthi .saarthi-muted-tab:hover {
 	background: rgba(255, 255, 255, 0.06);
 	color: #fff;
 	border-radius: 999px;
 }
 
-.prism-sidebar-shell {
+.saarthi-sidebar-shell {
 	background: linear-gradient(
 		180deg,
 		rgba(7, 9, 13, 0.98) 0%,
@@ -721,85 +721,85 @@ html.prism .prism-muted-tab:hover {
 	box-shadow: 10px 0 28px rgba(0, 0, 0, 0.26);
 }
 
-.prism-sidebar-mini-rail {
+.saarthi-sidebar-mini-rail {
 	background: linear-gradient(180deg, rgba(7, 9, 13, 0.98) 0%, rgba(10, 12, 18, 0.95) 100%);
 	border-right: 1px solid rgba(255, 255, 255, 0.06);
 	box-shadow: 6px 0 18px rgba(0, 0, 0, 0.18);
 }
 
-.prism-sidebar-header {
+.saarthi-sidebar-header {
 	background: linear-gradient(180deg, rgba(15, 18, 24, 0.95) 0%, rgba(10, 12, 18, 0.82) 100%);
 }
 
-.prism-menu-panel {
-	border-color: var(--prism-border);
+.saarthi-menu-panel {
+	border-color: var(--saarthi-border);
 	background: linear-gradient(180deg, rgba(18, 22, 30, 0.96) 0%, rgba(12, 14, 20, 0.98) 100%);
-	color: var(--prism-text);
+	color: var(--saarthi-text);
 	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
 	backdrop-filter: blur(20px);
 }
 
-.prism-menu-item {
-	color: var(--prism-text);
+.saarthi-menu-item {
+	color: var(--saarthi-text);
 	border: 1px solid transparent;
 }
 
-.prism-menu-item:hover {
+.saarthi-menu-item:hover {
 	background: rgba(255, 255, 255, 0.06);
-	border-color: var(--prism-border);
+	border-color: var(--saarthi-border);
 	color: #fff;
 }
 
-.prism-soft-button {
+.saarthi-soft-button {
 	background: rgba(255, 255, 255, 0.05);
-	border: 1px solid var(--prism-border);
-	color: var(--prism-text);
+	border: 1px solid var(--saarthi-border);
+	color: var(--saarthi-text);
 }
 
-.prism-soft-button:hover {
+.saarthi-soft-button:hover {
 	background: rgba(255, 255, 255, 0.1);
 	color: #fff;
 }
 
-.prism-sidebar-action {
+.saarthi-sidebar-action {
 	color: rgba(245, 247, 251, 0.88);
 	border: 1px solid transparent;
 	background: transparent;
 }
 
-.prism-sidebar-action:hover {
+.saarthi-sidebar-action:hover {
 	background: rgba(255, 255, 255, 0.06);
-	border-color: var(--prism-border);
+	border-color: var(--saarthi-border);
 	color: #fff;
 }
 
-.prism-divider {
+.saarthi-divider {
 	border-color: rgba(255, 255, 255, 0.08);
 }
 
-.prism-folder-button {
+.saarthi-folder-button {
 	background: transparent;
 	border: 1px solid transparent;
 	color: rgba(245, 247, 251, 0.88);
 }
 
-.prism-folder-button:hover {
+.saarthi-folder-button:hover {
 	background: rgba(255, 255, 255, 0.06);
 	color: #fff;
 }
 
-.prism-icon-button {
+.saarthi-icon-button {
 	background: rgba(255, 255, 255, 0.05);
-	border: 1px solid var(--prism-border);
-	color: var(--prism-text);
+	border: 1px solid var(--saarthi-border);
+	color: var(--saarthi-text);
 }
 
-.prism-icon-button:hover {
+.saarthi-icon-button:hover {
 	background: rgba(255, 255, 255, 0.1);
 	color: #fff;
 }
 
-.prism-chat-canvas {
+.saarthi-chat-canvas {
 	background:
 		radial-gradient(circle at 50% 8%, rgba(255, 35, 65, 0.16) 0%, transparent 30%),
 		radial-gradient(circle at 16% 0%, rgba(124, 92, 255, 0.2) 0%, transparent 32%),
@@ -812,164 +812,164 @@ html.prism .prism-muted-tab:hover {
 		);
 }
 
-.prism-auth-canvas {
+.saarthi-auth-canvas {
 	background:
 		radial-gradient(circle at 20% 14%, rgba(124, 92, 255, 0.18) 0%, transparent 28%),
 		radial-gradient(circle at 80% 8%, rgba(255, 35, 65, 0.14) 0%, transparent 26%),
 		linear-gradient(180deg, rgba(5, 7, 10, 0.52) 0%, rgba(9, 11, 16, 0.84) 100%);
 }
 
-.prism-auth-panel {
+.saarthi-auth-panel {
 	background: linear-gradient(180deg, rgba(17, 21, 30, 0.84) 0%, rgba(10, 13, 18, 0.9) 100%);
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	box-shadow: 0 30px 70px rgba(0, 0, 0, 0.34);
 	backdrop-filter: blur(20px);
 }
 
-.prism-composer-shell {
+.saarthi-composer-shell {
 	background: linear-gradient(180deg, rgba(17, 21, 30, 0.84) 0%, rgba(10, 12, 18, 0.92) 100%);
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.24);
 	backdrop-filter: blur(20px);
 }
 
-.prism-composer-queue {
+.saarthi-composer-queue {
 	background: rgba(255, 255, 255, 0.04);
 	border: 1px solid rgba(255, 255, 255, 0.08);
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
-.prism-composer-icon {
+.saarthi-composer-icon {
 	background: rgba(255, 255, 255, 0.05);
-	color: var(--prism-text);
+	color: var(--saarthi-text);
 	border: 1px solid rgba(255, 255, 255, 0.08);
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
 }
 
-.prism-composer-icon:hover {
+.saarthi-composer-icon:hover {
 	background: rgba(255, 255, 255, 0.1);
 	color: #fff;
 }
 
-.prism-composer-audio {
+.saarthi-composer-audio {
 	background: linear-gradient(135deg, rgba(255, 35, 65, 0.24) 0%, rgba(124, 92, 255, 0.22) 100%);
 	color: #fff;
 	border: 1px solid rgba(255, 255, 255, 0.12);
 	box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
 }
 
-.prism-composer-audio:hover {
+.saarthi-composer-audio:hover {
 	background: linear-gradient(135deg, rgba(255, 35, 65, 0.32) 0%, rgba(124, 92, 255, 0.28) 100%);
 }
 
-.prism-composer-stop {
+.saarthi-composer-stop {
 	background: rgba(255, 255, 255, 0.92);
 	color: #0c1118;
 	border: 1px solid rgba(255, 255, 255, 0.7);
 	box-shadow: 0 10px 22px rgba(0, 0, 0, 0.2);
 }
 
-.prism-composer-stop:hover {
+.saarthi-composer-stop:hover {
 	background: #fff;
 }
 
-.prism-composer-chip {
+.saarthi-composer-chip {
 	background: transparent;
-	color: var(--prism-muted);
+	color: var(--saarthi-muted);
 	border: 1px solid transparent;
 }
 
-.prism-composer-chip:hover {
+.saarthi-composer-chip:hover {
 	background: rgba(255, 255, 255, 0.06);
 	color: #fff;
 }
 
-.prism-composer-chip-active {
+.saarthi-composer-chip-active {
 	background: rgba(255, 255, 255, 0.08);
 	color: #fff;
 	border: 1px solid rgba(255, 255, 255, 0.14);
 }
 
-.prism-suggestion-kicker {
-	color: var(--prism-muted);
+.saarthi-suggestion-kicker {
+	color: var(--saarthi-muted);
 }
 
-.prism-suggestion-card {
+.saarthi-suggestion-card {
 	background: rgba(255, 255, 255, 0.04);
 	border: 1px solid rgba(255, 255, 255, 0.07);
 	box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
 	backdrop-filter: blur(12px);
 }
 
-.prism-suggestion-card:hover {
+.saarthi-suggestion-card:hover {
 	background: rgba(255, 255, 255, 0.08);
 	border-color: rgba(255, 255, 255, 0.12);
 }
 
-.prism-primary-button {
-	background: linear-gradient(135deg, var(--prism-accent) 0%, var(--prism-accent-alt) 100%);
+.saarthi-primary-button {
+	background: linear-gradient(135deg, var(--saarthi-accent) 0%, var(--saarthi-accent-alt) 100%);
 	color: #fff;
 	border: 1px solid rgba(255, 255, 255, 0.12);
 	box-shadow: 0 14px 32px rgba(74, 46, 173, 0.28);
 }
 
-.prism-primary-button:hover {
+.saarthi-primary-button:hover {
 	filter: brightness(1.05);
 }
 
-.prism-primary-button:disabled {
+.saarthi-primary-button:disabled {
 	opacity: 0.72;
 	box-shadow: none;
 }
 
-.prism-search-cta {
+.saarthi-search-cta {
 	background: rgba(255, 255, 255, 0.94);
 	color: #0c1118;
 	border: 1px solid rgba(255, 255, 255, 0.8);
 	box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
 }
 
-.prism-search-cta:hover {
+.saarthi-search-cta:hover {
 	background: #fff;
 }
 
-.prism-dialog-panel {
+.saarthi-dialog-panel {
 	background: linear-gradient(180deg, rgba(17, 21, 30, 0.94) 0%, rgba(10, 12, 18, 0.98) 100%);
 	border-color: rgba(255, 255, 255, 0.12);
 	box-shadow: 0 28px 60px rgba(0, 0, 0, 0.34);
 }
 
-.prism-dialog-secondary {
+.saarthi-dialog-secondary {
 	background: rgba(255, 255, 255, 0.06);
-	color: var(--prism-text);
+	color: var(--saarthi-text);
 	border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.prism-dialog-secondary:hover {
+.saarthi-dialog-secondary:hover {
 	background: rgba(255, 255, 255, 0.1);
 	color: #fff;
 }
 
-.prism-dialog-primary {
+.saarthi-dialog-primary {
 	color: #fff;
 	border: 1px solid rgba(255, 255, 255, 0.12);
 	box-shadow: 0 14px 28px rgba(74, 46, 173, 0.28);
 }
 
-.prism-select-content {
+.saarthi-select-content {
 	background: linear-gradient(180deg, rgba(18, 22, 30, 0.98) 0%, rgba(10, 12, 18, 0.98) 100%);
 	border-color: rgba(255, 255, 255, 0.12);
-	color: var(--prism-text);
+	color: var(--saarthi-text);
 	box-shadow: 0 24px 56px rgba(0, 0, 0, 0.34);
 	backdrop-filter: blur(20px);
 }
 
-.prism-select-item {
-	color: var(--prism-text);
+.saarthi-select-item {
+	color: var(--saarthi-text);
 	border: 1px solid transparent;
 }
 
-.prism-select-item:hover {
+.saarthi-select-item:hover {
 	background: rgba(255, 255, 255, 0.07);
 	border-color: rgba(255, 255, 255, 0.1);
 	color: #fff;

@@ -19,13 +19,13 @@
 
 	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
 	import { WEBUI_NAME, config, user, socket, theme } from '$lib/stores';
-	import PrismBrand from '$lib/components/branding/PrismBrand.svelte';
-	import PrismBackground from '$lib/components/effects/PrismBackground.svelte';
+	import SaarthiBrand from '$lib/components/branding/SaarthiBrand.svelte';
+	import SaarthiBackground from '$lib/components/effects/SaarthiBackground.svelte';
 	import {
 		getDialogSecondaryButtonClasses,
 		getPrimaryButtonClasses,
 		isCustomTheme,
-		isPrismTheme
+		isSaarthiTheme
 	} from '$lib/utils/theme';
 
 	import { generateInitialsImage, canvasPixelTest, getUserTimezone } from '$lib/utils';
@@ -201,14 +201,14 @@
 
 <div class="w-full h-screen max-h-[100dvh] text-white relative" id="auth-page">
 	<div
-		class="w-full h-full absolute top-0 left-0 {isPrismTheme($theme)
+		class="w-full h-full absolute top-0 left-0 {isSaarthiTheme($theme)
 			? 'bg-[#06070b]'
 			: 'bg-white dark:bg-black'}"
 	></div>
 
-	{#if isPrismTheme($theme)}
+	{#if isSaarthiTheme($theme)}
 		<div class="absolute inset-0 z-0 overflow-hidden">
-			<PrismBackground
+			<SaarthiBackground
 				animationType="3drotate"
 				scale={3.15}
 				glow={1.2}
@@ -221,7 +221,7 @@
 				suspendWhenOffscreen={true}
 				className="pointer-events-none opacity-85"
 			/>
-			<div class="absolute inset-0 prism-auth-canvas pointer-events-none"></div>
+			<div class="absolute inset-0 saarthi-auth-canvas pointer-events-none"></div>
 		</div>
 	{/if}
 
@@ -250,14 +250,14 @@
 				{:else}
 					<div class="my-auto flex flex-col justify-center items-center">
 						<div
-							class={isPrismTheme($theme)
-								? 'sm:max-w-lg my-auto pb-10 w-full dark:text-gray-100 prism-auth-panel rounded-[2rem] px-6 py-7'
+							class={isSaarthiTheme($theme)
+								? 'sm:max-w-lg my-auto pb-10 w-full dark:text-gray-100 saarthi-auth-panel rounded-[2rem] px-6 py-7'
 								: 'sm:max-w-md my-auto pb-10 w-full dark:text-gray-100'}
 						>
 							{#if $config?.metadata?.auth_logo_position === 'center'}
 								<div class="flex justify-center mb-6">
 									<div class="snapdeal-brand-shell px-5 py-3">
-										<PrismBrand iconClassName="h-[2.2rem] w-auto" textClassName="text-[2.2rem]" />
+										<SaarthiBrand iconClassName="h-[2.2rem] w-auto" textClassName="text-[2.2rem]" />
 									</div>
 								</div>
 							{/if}
@@ -605,7 +605,7 @@
 				<div class="flex space-x-2">
 					<div class=" self-center">
 						<div class="snapdeal-brand-shell px-3 py-2">
-							<PrismBrand compact iconClassName="h-[1.3rem] w-auto" textClassName="text-[1.5rem]" />
+							<SaarthiBrand compact iconClassName="h-[1.3rem] w-auto" textClassName="text-[1.5rem]" />
 						</div>
 					</div>
 				</div>

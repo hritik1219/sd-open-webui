@@ -42,7 +42,7 @@
 	import {
 		getTopBarActionClasses,
 		getTopBarShellClasses,
-		isPrismTheme,
+		isSaarthiTheme,
 		isSnapdealTheme
 	} from '$lib/utils/theme';
 
@@ -80,10 +80,10 @@
 
 <nav
 	class="sticky top-0 z-30 w-full {chat?.id
-		? isSnapdealTheme($theme) || isPrismTheme($theme)
+		? isSnapdealTheme($theme) || isSaarthiTheme($theme)
 			? 'pt-1 pb-0.5'
 			: 'pt-0.5 pb-1'
-		: isSnapdealTheme($theme) || isPrismTheme($theme)
+		: isSnapdealTheme($theme) || isSaarthiTheme($theme)
 			? 'pt-1 pb-0.5'
 			: 'pt-1 pb-1'} -mb-12 flex flex-col items-center drag-region"
 >
@@ -92,7 +92,7 @@
 			id="navbar-bg-gradient-to-b"
 			class="{chat?.id ? 'visible' : 'invisible'} {isSnapdealTheme($theme)
 				? 'bg-linear-to-b via-28% to-95% from-[#ffe1e7] via-[#fff6f8] to-transparent'
-				: isPrismTheme($theme)
+				: isSaarthiTheme($theme)
 					? 'bg-linear-to-b via-30% to-95% from-[#12151d]/92 via-[#0d1016]/60 to-transparent'
 					: 'bg-linear-to-b via-40% to-97% from-white/90 via-white/50 to-transparent dark:from-gray-900/90 dark:via-gray-900/50 dark:to-transparent'} pointer-events-none absolute inset-0 -bottom-10 z-[-1]"
 		></div>
@@ -100,14 +100,14 @@
 		<div
 			class="flex max-w-full w-full mx-auto bg-transparent {isSnapdealTheme($theme)
 				? `px-1.5 md:px-2 py-1 ${getTopBarShellClasses($theme)}`
-				: isPrismTheme($theme)
+				: isSaarthiTheme($theme)
 					? `px-1.5 md:px-2 py-1 ${getTopBarShellClasses($theme)}`
 					: 'px-1.5 md:px-2 pt-0.5'}"
 		>
 			<div class="flex items-center w-full max-w-full">
 				{#if $mobile && !$showSidebar}
 					<div
-						class="-translate-x-0.5 mr-1 {isSnapdealTheme($theme) || isPrismTheme($theme)
+						class="-translate-x-0.5 mr-1 {isSnapdealTheme($theme) || isSaarthiTheme($theme)
 							? 'self-center text-white'
 							: 'mt-1 self-start text-gray-600 dark:text-gray-400'} flex flex-none items-center"
 					>
@@ -127,11 +127,11 @@
 				{/if}
 
 				<div
-					class="flex-1 overflow-hidden max-w-full {isSnapdealTheme($theme) || isPrismTheme($theme)
+					class="flex-1 overflow-hidden max-w-full {isSnapdealTheme($theme) || isSaarthiTheme($theme)
 						? 'py-0'
 						: 'py-0.5'}
-			{$showSidebar && !(isSnapdealTheme($theme) || isPrismTheme($theme)) ? 'ml-1' : ''}
-			{isSnapdealTheme($theme) || isPrismTheme($theme) ? '' : 'mt-0.5'}
+			{$showSidebar && !(isSnapdealTheme($theme) || isSaarthiTheme($theme)) ? 'ml-1' : ''}
+			{isSnapdealTheme($theme) || isSaarthiTheme($theme) ? '' : 'mt-0.5'}
 			"
 				>
 					{#if showModelSelector}
@@ -140,7 +140,7 @@
 				</div>
 
 				<div
-					class="{isSnapdealTheme($theme) || isPrismTheme($theme)
+					class="{isSnapdealTheme($theme) || isSaarthiTheme($theme)
 						? 'self-center text-white'
 						: 'self-start text-gray-600 dark:text-gray-400'} flex flex-none items-center"
 				>
@@ -152,7 +152,7 @@
 								<button
 									class="flex cursor-pointer {isSnapdealTheme($theme)
 										? 'px-1.5 py-1.5'
-										: isPrismTheme($theme)
+										: isSaarthiTheme($theme)
 											? 'px-1.5 py-1.5'
 											: 'px-2 py-2'} rounded-xl transition {getTopBarActionClasses($theme)}"
 									id="temporary-chat-button"
@@ -190,7 +190,7 @@
 								<button
 									class="flex cursor-pointer {isSnapdealTheme($theme)
 										? 'px-1.5 py-1.5'
-										: isPrismTheme($theme)
+										: isSaarthiTheme($theme)
 											? 'px-1.5 py-1.5'
 											: 'px-2 py-2'} rounded-xl transition {getTopBarActionClasses($theme)}"
 									id="save-temporary-chat-button"
@@ -213,11 +213,11 @@
 									$theme
 								)
 									? 'px-1.5 py-1.5'
-									: isPrismTheme($theme)
+									: isSaarthiTheme($theme)
 										? 'px-1.5 py-1.5'
 										: 'px-2 py-2'} rounded-xl transition {isSnapdealTheme($theme)
 									? 'text-white'
-									: isPrismTheme($theme)
+									: isSaarthiTheme($theme)
 										? 'text-white'
 										: 'text-gray-600 dark:text-gray-400'} {getTopBarActionClasses($theme)}"
 								on:click={() => {
@@ -247,7 +247,7 @@
 							<button
 								class="flex cursor-pointer {isSnapdealTheme($theme)
 									? 'px-1.5 py-1.5'
-									: isPrismTheme($theme)
+									: isSaarthiTheme($theme)
 										? 'px-1.5 py-1.5'
 										: 'px-2 py-2'} rounded-xl transition {getTopBarActionClasses($theme)}"
 								id="chat-context-menu-button"
@@ -264,7 +264,7 @@
 							<button
 								class="flex cursor-pointer {isSnapdealTheme($theme)
 									? 'px-1.5 py-1.5'
-									: isPrismTheme($theme)
+									: isSaarthiTheme($theme)
 										? 'px-1.5 py-1.5'
 										: 'px-2 py-2'} rounded-xl transition {getTopBarActionClasses($theme)}"
 								on:click={async () => {

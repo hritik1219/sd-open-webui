@@ -288,10 +288,10 @@
 					} else {
 						return e.name;
 					}
-				}, '')} • Prism</title
+				}, '')} • Saarthi</title
 		>
 	{:else}
-		<title>#{channel?.name ?? 'Channel'} • Prism</title>
+		<title>#{channel?.name ?? 'Channel'} • Saarthi</title>
 	{/if}
 </svelte:head>
 

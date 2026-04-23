@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	type PrismAnimationType = 'rotate' | 'hover' | '3drotate';
+	type SaarthiAnimationType = 'rotate' | 'hover' | '3drotate';
 
 	export let height = 3.5;
 	export let baseWidth = 5.5;
-	export let animationType: PrismAnimationType = 'rotate';
+	export let animationType: SaarthiAnimationType = 'rotate';
 	export let glow = 1;
 	export let offset: { x?: number; y?: number } = { x: 0, y: 0 };
 	export let noise = 0.5;
@@ -520,8 +520,8 @@
 			}
 		};
 
-		interface PrismContainer extends HTMLElement {
-			__prismIO?: IntersectionObserver;
+		interface SaarthiContainer extends HTMLElement {
+			__saarthiIO?: IntersectionObserver;
 		}
 
 		if (suspendWhenOffscreen) {
@@ -536,7 +536,7 @@
 
 			io.observe(container);
 			startRAF();
-			(container as PrismContainer).__prismIO = io;
+			(container as SaarthiContainer).__saarthiIO = io;
 		} else {
 			startRAF();
 		}
@@ -555,12 +555,12 @@
 			}
 
 			if (suspendWhenOffscreen) {
-				const io = (container as PrismContainer).__prismIO;
+				const io = (container as SaarthiContainer).__saarthiIO;
 				if (io) {
 					io.disconnect();
 				}
 
-				delete (container as PrismContainer).__prismIO;
+				delete (container as SaarthiContainer).__saarthiIO;
 			}
 
 			if (gl.canvas.parentElement === container) {

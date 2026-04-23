@@ -56667,7 +56667,7 @@
 										})
 									: null,
 								He = x.hljs || x['pre[class*="language-"]'] || { backgroundColor: '#fff' },
-								Ye = isHighlightJs($e) ? 'hljs' : 'prismjs',
+								Ye = isHighlightJs($e) ? 'hljs' : 'saarthijs',
 								Xe = V
 									? Object.assign({}, ze, { style: Object.assign({}, He, j) })
 									: Object.assign({}, ze, {

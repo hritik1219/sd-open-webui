@@ -8,7 +8,7 @@
 		getSearchCtaButtonClasses,
 		getSearchShellClasses,
 		getTopBarActionClasses,
-		isPrismTheme,
+		isSaarthiTheme,
 		isSnapdealTheme
 	} from '$lib/utils/theme';
 
@@ -58,12 +58,12 @@
 </script>
 
 <div
-	class={isSnapdealTheme($theme) || isPrismTheme($theme)
+	class={isSnapdealTheme($theme) || isSaarthiTheme($theme)
 		? 'flex w-full items-center gap-1 flex-wrap'
 		: 'flex flex-col w-full items-start'}
 >
 	<div
-		class={isSnapdealTheme($theme) || isPrismTheme($theme)
+		class={isSnapdealTheme($theme) || isSaarthiTheme($theme)
 			? 'flex flex-1 items-center gap-0.5 min-w-0 flex-wrap'
 			: 'w-full'}
 	>
@@ -73,7 +73,7 @@
 					<div
 						class="max-w-full {($settings?.highContrastMode ?? false)
 							? 'm-1'
-							: 'mr-1'} {isSnapdealTheme($theme) || isPrismTheme($theme)
+							: 'mr-1'} {isSnapdealTheme($theme) || isSaarthiTheme($theme)
 							? `px-2 py-1 ${getSearchShellClasses($theme)}`
 							: ''}"
 					>
@@ -98,7 +98,7 @@
 						>
 							<Tooltip content={$i18n.t('Add Model')}>
 								<button
-									class={isSnapdealTheme($theme) || isPrismTheme($theme)
+									class={isSnapdealTheme($theme) || isSaarthiTheme($theme)
 										? `rounded-full p-1.5 transition ${getTopBarActionClasses($theme)} text-white`
 										: ''}
 									{disabled}
@@ -126,7 +126,7 @@
 						>
 							<Tooltip content={$i18n.t('Remove Model')}>
 								<button
-									class={isSnapdealTheme($theme) || isPrismTheme($theme)
+									class={isSnapdealTheme($theme) || isSaarthiTheme($theme)
 										? `rounded-full p-1.5 transition ${getTopBarActionClasses($theme)} text-white`
 										: ''}
 									{disabled}
@@ -157,12 +157,12 @@
 
 	{#if showSetDefault}
 		<div
-			class={isSnapdealTheme($theme) || isPrismTheme($theme)
+			class={isSnapdealTheme($theme) || isSaarthiTheme($theme)
 				? 'shrink-0'
 				: 'relative text-left mt-[1px] ml-1 text-[0.7rem] text-gray-600 dark:text-gray-400 font-primary'}
 		>
 			<button
-				class={isSnapdealTheme($theme) || isPrismTheme($theme)
+				class={isSnapdealTheme($theme) || isSaarthiTheme($theme)
 					? `rounded-lg px-3 py-2 text-[0.8rem] font-semibold transition ${getSearchCtaButtonClasses($theme)}`
 					: ''}
 				on:click={saveDefaultModel}

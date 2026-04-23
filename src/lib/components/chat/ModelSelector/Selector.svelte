@@ -32,7 +32,7 @@
 		getActiveTabClasses,
 		getInactiveTabClasses,
 		getTabRailClasses,
-		isPrismTheme,
+		isSaarthiTheme,
 		isSnapdealTheme
 	} from '$lib/utils/theme';
 
@@ -529,8 +529,8 @@
 				$theme
 			)
 				? 'snapdeal-search-trigger px-0 text-[0.95rem] font-medium leading-none'
-				: isPrismTheme($theme)
-					? 'prism-search-trigger px-0 text-[0.95rem] font-medium leading-none'
+				: isSaarthiTheme($theme)
+					? 'saarthi-search-trigger px-0 text-[0.95rem] font-medium leading-none'
 					: 'px-0.5'} {($settings?.highContrastMode ?? false)
 				? 'dark:placeholder-gray-100 placeholder-gray-800'
 				: 'placeholder-gray-400'}"
@@ -543,9 +543,9 @@
 				);
 			}}
 		>
-			{#if isSnapdealTheme($theme) || isPrismTheme($theme)}
+			{#if isSnapdealTheme($theme) || isSaarthiTheme($theme)}
 				<Search
-					className={`size-3.5 shrink-0 ${isPrismTheme($theme) ? 'text-white/60' : 'text-[#666666]'}`}
+					className={`size-3.5 shrink-0 ${isSaarthiTheme($theme) ? 'text-white/60' : 'text-[#666666]'}`}
 					strokeWidth="2.25"
 				/>
 			{/if}
@@ -553,8 +553,8 @@
 			<div
 				class="flex-1 truncate {isSnapdealTheme($theme) && !selectedModel
 					? 'snapdeal-search-placeholder'
-					: isPrismTheme($theme) && !selectedModel
-						? 'prism-search-placeholder'
+					: isSaarthiTheme($theme) && !selectedModel
+						? 'saarthi-search-placeholder'
 						: ''}"
 			>
 				{#if selectedModel}
@@ -583,8 +583,8 @@
 								$theme
 							)
 								? 'snapdeal-select-content'
-								: isPrismTheme($theme)
-									? 'prism-select-content'
+								: isSaarthiTheme($theme)
+									? 'saarthi-select-content'
 									: 'bg-white dark:bg-gray-850 dark:text-white'}"
 							transition:flyAndScale
 						>
@@ -593,8 +593,8 @@
 									<div
 										class="flex items-center gap-2.5 mb-1.5 {isSnapdealTheme($theme)
 											? 'mx-2.5 mt-2.5 px-3 py-1.5 snapdeal-search-shell'
-											: isPrismTheme($theme)
-												? 'mx-2.5 mt-2.5 px-3 py-1.5 prism-search-shell'
+											: isSaarthiTheme($theme)
+												? 'mx-2.5 mt-2.5 px-3 py-1.5 saarthi-search-shell'
 												: 'px-4.5 pt-3.5'}"
 									>
 										<Search className="size-4" strokeWidth="2.5" />

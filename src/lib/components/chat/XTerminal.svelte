@@ -29,7 +29,7 @@
 		const systemTerminals = ($terminalServers ?? []).filter((t: any) => t.id);
 		const systemMatch = systemTerminals.find((t: any) => t.id === $selectedTerminalId);
 		if (systemMatch) {
-			// For system terminals, WS goes through Prism backend proxy
+			// For system terminals, WS goes through Saarthi backend proxy
 			return { serverId: systemMatch.id, baseUrl: WEBUI_API_BASE_URL };
 		}
 
@@ -81,7 +81,7 @@
 				const wsBase = base.replace(/^https:/, 'wss:').replace(/^http:/, 'ws:');
 				wsUrl = `${wsBase}/api/terminals/${sessionId}`;
 			} else {
-				// System terminal — proxy through Prism backend
+				// System terminal — proxy through Saarthi backend
 				const base = info.baseUrl.replace(/\/$/, '');
 				authToken = token;
 

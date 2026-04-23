@@ -46,7 +46,7 @@
 
 						<div class="my-2">
 							{$i18n.t(
-								'Your entire contribution will go directly to the plugin developer; Prism does not take any percentage. However, the chosen funding platform might have its own fees.'
+								'Your entire contribution will go directly to the plugin developer; Saarthi does not take any percentage. However, the chosen funding platform might have its own fees.'
 							)}
 						</div>
 

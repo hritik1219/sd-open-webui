@@ -20,7 +20,7 @@
 	} from '$lib/stores';
 	import { sanitizeResponseContent } from '$lib/utils';
 	import { WEBUI_API_BASE_URL } from '$lib/constants';
-	import { isPrismTheme, isSnapdealTheme } from '$lib/utils/theme';
+	import { isSaarthiTheme, isSnapdealTheme } from '$lib/utils/theme';
 
 	import Suggestions from './Suggestions.svelte';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
@@ -76,7 +76,7 @@
 <div
 	class="m-auto w-full max-w-6xl px-2 @2xl:px-20 text-center {isSnapdealTheme($theme)
 		? 'translate-y-2 py-20'
-		: isPrismTheme($theme)
+		: isSaarthiTheme($theme)
 			? 'translate-y-4 py-24'
 			: 'translate-y-6 py-24'}"
 >
@@ -95,7 +95,7 @@
 	<div
 		class="w-full text-3xl text-center flex items-center gap-4 font-primary {isSnapdealTheme($theme)
 			? 'text-[var(--snapdeal-text)]'
-			: isPrismTheme($theme)
+			: isSaarthiTheme($theme)
 				? 'text-white'
 				: 'text-gray-800 dark:text-gray-100'}"
 	>
@@ -161,7 +161,7 @@
 					<div
 						class=" text-3xl @sm:text-3xl line-clamp-1 flex items-center {isSnapdealTheme($theme)
 							? 'tracking-[-0.02em]'
-							: isPrismTheme($theme)
+							: isSaarthiTheme($theme)
 								? 'tracking-[-0.03em]'
 								: ''}"
 						in:fade={{ duration: 100 }}
@@ -231,7 +231,7 @@
 			<div
 				class="text-base font-normal @md:max-w-3xl w-full {isSnapdealTheme($theme)
 					? 'py-2.5'
-					: isPrismTheme($theme)
+					: isSaarthiTheme($theme)
 						? 'py-3.5'
 						: 'py-3'} {atSelectedModel ? 'mt-2' : ''}"
 			>
@@ -276,7 +276,7 @@
 		<div
 			class="mx-auto max-w-2xl font-primary {isSnapdealTheme($theme)
 				? 'mt-3'
-				: isPrismTheme($theme)
+				: isSaarthiTheme($theme)
 					? 'mt-4'
 					: 'mt-2'}"
 			in:fade={{ duration: 200, delay: 200 }}
