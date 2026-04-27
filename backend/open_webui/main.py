@@ -2675,14 +2675,14 @@ async def get_manifest_json():
             'background_color': '#343541',
             'icons': [
                 {
-                    'src': '/static/logo.png',
-                    'type': 'image/png',
+                    'src': '/static/favicon.svg',
+                    'type': 'image/svg+xml',
                     'sizes': '500x500',
                     'purpose': 'any',
                 },
                 {
-                    'src': '/static/logo.png',
-                    'type': 'image/png',
+                    'src': '/static/favicon.svg',
+                    'type': 'image/svg+xml',
                     'sizes': '500x500',
                     'purpose': 'maskable',
                 },
