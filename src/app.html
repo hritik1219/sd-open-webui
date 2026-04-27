@@ -1,161 +1,147 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link
-			rel="icon"
-			type="image/svg+xml"
-			href="/static/favicon.svg"
-			crossorigin="use-credentials"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			href="/static/favicon-96x96.png"
-			sizes="96x96"
-			crossorigin="use-credentials"
-		/>
-		<link
-			rel="icon"
-			type="image/svg+xml"
-			href="/static/favicon.svg"
-			crossorigin="use-credentials"
-		/>
-		<link rel="shortcut icon" href="/static/favicon.ico" crossorigin="use-credentials" />
-		<link
-			rel="apple-touch-icon"
-			sizes="180x180"
-			href="/static/apple-touch-icon.png"
-			crossorigin="use-credentials"
-		/>
-		<link rel="manifest" href="/manifest.json" crossorigin="use-credentials" />
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, interactive-widget=resizes-content"
-		/>
-		<meta name="theme-color" content="#FF2341" />
-		<meta name="robots" content="noindex,nofollow" />
 
-		<script src="/static/loader.js" defer crossorigin="use-credentials"></script>
-		<link rel="stylesheet" href="/static/custom.css" crossorigin="use-credentials" />
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" type="image/svg+xml" href="/static/favicon.svg" crossorigin="use-credentials" />
+	<link rel="icon" type="image/png" href="/static/favicon-96x96.png" sizes="96x96" crossorigin="use-credentials" />
+	<link rel="icon" type="image/svg+xml" href="/static/favicon.svg" crossorigin="use-credentials" />
+	<link rel="shortcut icon" href="/static/favicon.ico" crossorigin="use-credentials" />
+	<link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png" crossorigin="use-credentials" />
+	<link rel="manifest" href="/manifest.json" crossorigin="use-credentials" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+	<meta name="theme-color" content="#FF2341" />
+	<meta name="robots" content="noindex,nofollow" />
 
-		<script>
-			function resizeIframe(obj) {
-				obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+	<script src="/static/loader.js" defer crossorigin="use-credentials"></script>
+	<link rel="stylesheet" href="/static/custom.css" crossorigin="use-credentials" />
+
+	<script>
+		function resizeIframe(obj) {
+			obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+		}
+	</script>
+
+	<script>
+		// On page load or when changing themes, best to add inline in `head` to avoid FOUC
+		(() => {
+			const metaThemeColorTag = document.querySelector('meta[name="theme-color"]');
+			const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+			if (!localStorage?.theme) {
+				localStorage.theme = 'dark';
 			}
-		</script>
 
-		<script>
-			// On page load or when changing themes, best to add inline in `head` to avoid FOUC
-			(() => {
-				const metaThemeColorTag = document.querySelector('meta[name="theme-color"]');
-				const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
+			if (localStorage.theme === 'system') {
+				document.documentElement.classList.add(prefersDarkTheme ? 'dark' : 'light');
+				metaThemeColorTag.setAttribute('content', prefersDarkTheme ? '#171717' : '#ffffff');
+			} else if (localStorage.theme === 'oled-dark') {
+				document.documentElement.style.setProperty('--color-gray-800', '#101010');
+				document.documentElement.style.setProperty('--color-gray-850', '#050505');
+				document.documentElement.style.setProperty('--color-gray-900', '#000000');
+				document.documentElement.style.setProperty('--color-gray-950', '#000000');
+				document.documentElement.classList.add('dark');
+				metaThemeColorTag.setAttribute('content', '#000000');
+			} else if (localStorage.theme === 'light') {
+				document.documentElement.classList.add('light');
+				metaThemeColorTag.setAttribute('content', '#ffffff');
+			} else if (localStorage.theme === 'her') {
+				document.documentElement.classList.add('light');
+				document.documentElement.classList.add('her');
+				metaThemeColorTag.setAttribute('content', '#983724');
+			} else if (localStorage.theme === 'snapdeal') {
+				document.documentElement.classList.add('light');
+				document.documentElement.classList.add('snapdeal');
+				metaThemeColorTag.setAttribute('content', '#FF2341');
+			} else if (localStorage.theme === 'saarthi') {
+				document.documentElement.classList.add('dark');
+				document.documentElement.classList.add('saarthi');
+				metaThemeColorTag.setAttribute('content', '#090B10');
+			} else {
+				document.documentElement.classList.add('dark');
+				metaThemeColorTag.setAttribute('content', '#171717');
+			}
 
-				if (!localStorage?.theme) {
-					localStorage.theme = 'dark';
-				}
+			const preloadHref = document.documentElement.classList.contains('dark')
+				? '/static/favicon.svg'
+				: '/static/favicon.svg';
+			const preload = document.createElement('link');
+			preload.rel = 'preload';
+			preload.as = 'image';
+			preload.href = preloadHref;
+			preload.setAttribute('fetchpriority', 'high');
+			document.head.appendChild(preload);
 
+			window.matchMedia('(prefers-color-scheme: dark)').addListener((e) => {
 				if (localStorage.theme === 'system') {
-					document.documentElement.classList.add(prefersDarkTheme ? 'dark' : 'light');
-					metaThemeColorTag.setAttribute('content', prefersDarkTheme ? '#171717' : '#ffffff');
-				} else if (localStorage.theme === 'oled-dark') {
-					document.documentElement.style.setProperty('--color-gray-800', '#101010');
-					document.documentElement.style.setProperty('--color-gray-850', '#050505');
-					document.documentElement.style.setProperty('--color-gray-900', '#000000');
-					document.documentElement.style.setProperty('--color-gray-950', '#000000');
-					document.documentElement.classList.add('dark');
-					metaThemeColorTag.setAttribute('content', '#000000');
-				} else if (localStorage.theme === 'light') {
-					document.documentElement.classList.add('light');
-					metaThemeColorTag.setAttribute('content', '#ffffff');
-				} else if (localStorage.theme === 'her') {
-					document.documentElement.classList.add('light');
-					document.documentElement.classList.add('her');
-					metaThemeColorTag.setAttribute('content', '#983724');
-				} else if (localStorage.theme === 'snapdeal') {
-					document.documentElement.classList.add('light');
-					document.documentElement.classList.add('snapdeal');
-					metaThemeColorTag.setAttribute('content', '#FF2341');
-				} else if (localStorage.theme === 'saarthi') {
-					document.documentElement.classList.add('dark');
-					document.documentElement.classList.add('saarthi');
-					metaThemeColorTag.setAttribute('content', '#090B10');
-				} else {
-					document.documentElement.classList.add('dark');
-					metaThemeColorTag.setAttribute('content', '#171717');
-				}
-
-				window.matchMedia('(prefers-color-scheme: dark)').addListener((e) => {
-					if (localStorage.theme === 'system') {
-						if (e.matches) {
-							document.documentElement.classList.add('dark');
-							document.documentElement.classList.remove('light');
-							metaThemeColorTag.setAttribute('content', '#171717');
-						} else {
-							document.documentElement.classList.add('light');
-							document.documentElement.classList.remove('dark');
-							metaThemeColorTag.setAttribute('content', '#ffffff');
-						}
+					if (e.matches) {
+						document.documentElement.classList.add('dark');
+						document.documentElement.classList.remove('light');
+						metaThemeColorTag.setAttribute('content', '#171717');
+					} else {
+						document.documentElement.classList.add('light');
+						document.documentElement.classList.remove('dark');
+						metaThemeColorTag.setAttribute('content', '#ffffff');
 					}
-				});
-			})();
-		</script>
-
-		<title>Saarthi</title>
-
-		%sveltekit.head%
-	</head>
-
-	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents">%sveltekit.body%</div>
-
-		<div
-			id="splash-screen"
-			style="position: fixed; z-index: 100; top: 0; left: 0; width: 100%; height: 100%"
-		>
-			<style type="text/css" nonce="">
-				html {
-					overflow-y: scroll !important;
 				}
-			</style>
+			});
+		})();
+	</script>
 
-			<div id="splash-screen-inner">
-				<img id="splash-logo" src="/static/favicon.svg" alt="Saarthi" crossorigin="use-credentials" />
-			</div>
+	<title>Saarthi</title>
 
-			<!-- <span style="position: absolute; bottom: 32px; left: 50%; margin: -36px 0 0 -36px">
+	%sveltekit.head%
+</head>
+
+<body data-sveltekit-preload-data="hover">
+	<div style="display: contents">%sveltekit.body%</div>
+
+	<div id="splash-screen" style="position: fixed; z-index: 100; top: 0; left: 0; width: 100%; height: 100%">
+		<style type="text/css" nonce="">
+			html {
+				overflow-y: scroll !important;
+			}
+		</style>
+
+		<div id="splash-screen-inner">
+			<img id="splash-logo" src="/static/favicon.svg" alt="Saarthi" crossorigin="use-credentials" />
+		</div>
+
+		<!-- <span style="position: absolute; bottom: 32px; left: 50%; margin: -36px 0 0 -36px">
 				Footer content
 			</span> -->
-		</div>
-	</body>
+	</div>
+</body>
 
-	<style type="text/css" nonce="">
-		html {
-			overflow-y: hidden !important;
-			overscroll-behavior-y: none;
-		}
+<style type="text/css" nonce="">
+	html {
+		overflow-y: hidden !important;
+		overscroll-behavior-y: none;
+	}
 
-		#splash-screen {
-			background: #fff;
-		}
+	#splash-screen {
+		background: #fff;
+	}
 
-		html.dark #splash-screen {
-			background: #000;
-		}
+	html.dark #splash-screen {
+		background: #000;
+	}
 
-		#splash-screen-inner {
-			position: absolute;
-			inset: 0;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			padding: 2rem;
-		}
+	#splash-screen-inner {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 2rem;
+	}
 
-		#splash-logo {
-			width: 96px;
-			max-width: 80vw;
-			height: auto;
-		}
-	</style>
+	#splash-logo {
+		width: 96px;
+		max-width: 80vw;
+		height: auto;
+	}
+</style>
+
 </html>
